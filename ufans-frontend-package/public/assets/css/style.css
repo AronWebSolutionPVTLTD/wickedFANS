@@ -1,37 +1,41 @@
 body {
   /* font-family: 'Maven Pro', sans-serif!important; */
-  font-family: Roboto, sans-serif !important;
+  font-family: "Maven Pro", sans-serif !important;
 }
 :root {
-  --primary-color: #e34398;
+  --primary-color: #E34498; /*changed*/
   --secondary-color: #ffffff;
   --tertiary-color: #242529;
   --quaternary-color: #8a96a3;
   --quinary-color: #dee2e6;
   --senary-color: #000;
   --septenary-color: #ddd;
-  --button-hover-color : #e34398;
+  --button-hover-color :  #E34498;  /* #A85CF9;*/
 }
 .theme-color {
   color: var(--primary-color);
-} 
-a:not(.btn), a.primary {
-  text-decoration: none;
-  color: var(--primary-color) !important;
 }
-.media a, .right-sidebar-menu-item a {
-  color: var(--tertiary-color) !important;
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+body a {
+  color: #E34498;
+ 
 }
 a:hover {
   color: var(--primary-color) !important;
   text-decoration: none !important;
 }
-.ecom-navbar .ecom-nav-link li a {
-  border: 1px solid var(--primary-color) !important;
-}
 a:focus,a:active{
   text-decoration: none !important;
-  /* color: #007bff !important; */
+  color: #007bff !important;
+}
+
+body .text-primary {
+  color: #E34498!important;
 }
 /*.sign-in.form-section {
     width: 350px;
@@ -1426,7 +1430,7 @@ button.g-icon:focus {
 }
 
 .btn-primary:hover {
-  /* background-color: transparent; */
+  background-color: transparent;
 }
 
 .post-header {
@@ -6613,10 +6617,10 @@ input.authentication-input {
     background-image: none;
   }
   .drawer__wrapper {
-    top: 48px !important;
+    top: 0px !important;
     right: 0;
     bottom: 0px;
-    /* height: 91% !important; */
+    height: 91% !important;
     width: 100%;
     max-width: 300px;
     z-index: 999;
@@ -6824,11 +6828,11 @@ input.authentication-input {
   }
   header {
     position: fixed;
-    /* top: auto; */
+    top: auto;
     bottom: 0;
     width: 100%;
     height: 48px;
-    /* background-color: var(--secondary-color); */
+    background-color: var(--secondary-color);
     border-bottom: 1px solid rgba(138, 150, 163, 0.25);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.16);
   }
@@ -7201,7 +7205,7 @@ input.authentication-input {
   }
   header {
     position: fixed;
-    /* top: auto; */
+    top: auto;
     bottom: 0;
     width: 100%;
     height: 48px;
@@ -7560,7 +7564,7 @@ input.authentication-input {
     height: 150px;
   }
   .drawer__wrapper {
-    top: 48px !important;
+    top: 0px !important;
     right: 0;
     bottom: 0px;
     height: 100% !important;
@@ -7680,8 +7684,8 @@ input.authentication-input {
   } */
 
 .btn-primary:hover {
-  /* background-color: transparent !important; */
-  /* border-color: transparent !important; */
+  background-color: transparent !important;
+  border-color: transparent !important;
 }
 
 .btn-primary:focus {
@@ -7922,8 +7926,8 @@ input.authentication-input {
 .country-sec .btn-primary:hover,
 .country-sec .btn-primary:focus,
 .country-sec .btn-primary:active {
-  /* background-color: transparent !important; */
-  /* color: var(--quaternary-color) !important; */
+  background-color: transparent !important;
+  color: var(--quaternary-color) !important;
 }
 
 .following-tab-sec {
@@ -9412,15 +9416,24 @@ button {
 }
 
 .btn.gradient-btn.gradientcolor {
-  /* background-image: linear-gradient(
+  background-image: linear-gradient(
     to right,
-    #a097b4, #e34398, #6b8dd6, #e34398
-  ); */
-  background-color: #e34398;
-  color: white !important;
+    #f08dbc, #e44499, #ea6cab, #e330d5 
+    /* #667eea,
+    #6730e3,
+    #6b8dd6,  change
+    #6730e3 */
+  );
   /* box-shadow: 0 0px 9px 0 rgba(116, 79, 168, 0.75); */
 }
-
+/* .btn.gradient-btn.gradientcolor {
+  background-image: linear-gradient(
+    to right,
+    #e44499, #e759a2, #ea6cab, #ed7db4, #f08dbc, #f29dc5, #f4acce, #f5bbd6
+    
+  );
+  
+} */
 .btn.gradient-btn.commentBtn {
   width: 36px !important;
   height: 36px;
@@ -11444,8 +11457,7 @@ display: none;
 }
 .profile-logo-sec img{
   max-width: 100%;
-  height: 80px;
-  width: 200px;
+  height: 3em;
 }
 
 
@@ -11504,7 +11516,4 @@ button.main-header-menu.icon-with-round-hover img{
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.awssld__content {
-  background: none !important;
 }
