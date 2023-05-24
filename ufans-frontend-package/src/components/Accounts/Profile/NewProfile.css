@@ -507,10 +507,13 @@
     justify-content: center;
     width: 100%;
     left: 0;
+    z-index: 999;
+    cursor: pointer;
 }
 
 .profile-video-icon {
-    max-width: 2.5em;
+    z-index: 999;
+    /* max-width: 2.5em; */
 }
 
 .profile-video-post-box {

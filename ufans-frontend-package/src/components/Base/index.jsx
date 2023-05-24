@@ -116,6 +116,7 @@ import NewHomeIndex from "../NewHome/NewHomeIndex";
 import AllLiveStreaming from "../LiveStreaming/AllLiveStreaming";
 import NewJoinLiveVideoIndex from "../LiveStreaming/NewJoinLiveVideoIndex";
 import NewSingleCommentIndex from "../NewHome/NewSingleView/NewSingleCommentIndex";
+import NewSingleStoryIndex from "../NewHome/NewSingleView/NewSingleStoryIndex";
 import NewEcomIndex from "../NewEcom/NewEcomIndex";
 import NewChatIndex from "../Chat/NewChatIndex";
 import MobileChatRoom from "../Chat/MobileChatRoom";
@@ -830,6 +831,13 @@ class App extends Component {
             authentication={this.state.authentication}
             path={"/home"}
             component={NewHomeIndex}
+            layout={MainLayout}
+          />
+
+          <PrivateRoute
+            authentication={this.state.authentication}
+            path={"/story/:post_unique_id"}
+            component={NewSingleStoryIndex}
             layout={MainLayout}
           />
 

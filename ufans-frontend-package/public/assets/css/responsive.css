@@ -1610,8 +1610,8 @@ Version: 1.0
     top: -25px;
   }
   .post-video-size {
-    height: 10em !important;
-    min-height: 15em;
+    /* height: 10em !important;
+    min-height: 15em; */
   }
 
   .three-cols.model-prof-photo-sec.model-prof-video-sec {

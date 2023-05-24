@@ -57,17 +57,17 @@
 .comment-profile-details p {
     /* color: #9896A1; */
     font-size: 16px;
-    margin-top: 12px;
+    margin-top: 2px;
 }
 
 .comment-reply-btn button {
     background-color: transparent;
     color: var(--primary-color);
     border: none;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 400;
     padding: 0;
-    margin-top: 12px;
+    /* margin-top: 12px; */
 }
 
 .comment-reply-btn button:hover,
@@ -161,7 +161,7 @@
 }
 
 .comment-profile-end .time-text{
-    font-size: 12px!important;
+    font-size: 13px!important;
 }
 
 .new-single-post-view-footer .new-feed-footer-action-btn-sec{
@@ -174,7 +174,7 @@
 }
 
 .new-single-post-view-time-sec .time-text{
-    font-size: 12px!important;
+    font-size: 13px!important;
     color: #9896A1;
     margin-bottom: 0;
 }
@@ -203,4 +203,11 @@
 
 .new-single-post-comments-input-sec .form-control::placeholder{
     font-size: 0.8em;
+}
+
+.comment-footer {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 4px;
 }

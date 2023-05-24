@@ -1,13 +1,13 @@
 .new-home-page-sec {
   margin-top: 48px;
-  margin-bottom: 4em;
+  /* margin-bottom: 4em; */
 }
 
 .new-home-page-box {
   min-height: 100vh;
   background-color: var(--secondary-color);
   display: flex;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .new-home-page-left {
@@ -240,7 +240,7 @@
 .new-feed-user-btn-sec {
   display: flex;
   align-items: center;
-  gap: 3em;
+  gap: 2em;
 }
 
 .feed-post-dropdown .dropdown-item {
@@ -419,13 +419,13 @@
 }
 
 .new-feed-post-time-sec {
-  padding-top: 0.5em;
+  /* padding-top: 0.5em; */
 }
 
 .new-feed-post-time-sec p {
   color: #9896A1;
   margin-bottom: 0;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -622,11 +622,11 @@
 
 .new-feed-post-img {
   
-  height: 30em;
+  height: 100%;
   object-fit: contain;
   width: 100%;
   z-index: 999;
-  position: absolute;
+  position: relative;
 }
 
 .awssld__content:after {
@@ -717,4 +717,10 @@
   height:12em;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.new-single-post-view-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
 }

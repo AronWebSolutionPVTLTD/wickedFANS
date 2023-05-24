@@ -136,7 +136,7 @@ Version: 7.0
     display: none;
    }
    .new-home-page-left{
-    padding-right: 0!important;
+    /* padding-right: 0!important; */
     width:100%!important;
    }
    .mobile-visible{
@@ -357,7 +357,7 @@ Version: 7.0
    }
    /*Home Page CSS*/
    .new-home-page-sec{
-    margin-top: 0!important;
+    /* margin-top: 0!important; */
    }
    .new-feed-header-sec {
     padding: 1em!important;
