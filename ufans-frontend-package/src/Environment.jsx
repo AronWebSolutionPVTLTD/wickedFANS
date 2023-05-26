@@ -16,9 +16,9 @@ import {
 
 // const apiUrl = "http://localhost:8000/api/user/"; // Local Mode
 
-//const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/user/`;
-const apiUrl = `https://wickedfans.com/admin/api/user/`;
 
+//const apiUrl = `https://wickedfans.com/admin/api/user/`;
+const apiUrl = `${process.env.REACT_APP_BACKEND_URL}/api/user/`;
 const Environment = {
   postMethod: async (action, object) => {
     let userId =
