@@ -11198,9 +11198,9 @@ button {
   text-transform: none !important;
 }
 
-.video-bg-black{
+/* .video-bg-black{
   background-color: #000;
-}
+} */
 
 .Notification__item__message___3NDDt{
 padding-right: 3em !important;
@@ -11521,8 +11521,8 @@ button.main-header-menu.icon-with-round-hover img{
 }
 /* .awssld__content {
   background: none !important;
-} */
-.awssld--active {
+} 
+ .awssld--active {
   visibility: visible;
   z-index: 2;
 }
@@ -11533,16 +11533,13 @@ button.main-header-menu.icon-with-round-hover img{
   width: 100%;
   height: 100%;
   background: url(https://assets.imgix.net/unsplash/citystreet.jpg?auto=compress&w=1600) no-repeat top;
+   
   background-size: cover;
-    overflow: hidden;
-    /* -webkit-filter: blur(15px);
-    -moz-filter: blur(15px);
-    -o-filter: blur(15px);
-    -ms-filter: blur(15px); */
-    filter: blur(15px);
-    /* -webkit-transform: scale(1.2); */
-    transform: scale(1.2);
+  overflow: hidden;
+  filter: blur(15px);
+  transform: scale(1.2);
 }
+
 .awssld__content > div {
   height: 100%;
-}
+} */
