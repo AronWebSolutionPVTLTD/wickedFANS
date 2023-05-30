@@ -11543,3 +11543,28 @@ button.main-header-menu.icon-with-round-hover img{
 .awssld__content > div {
   height: 100%;
 } */
+
+.awssld {
+  /* max-height: calc(100vh - 100px); */
+}
+
+.awssld__wrapper {
+  /* max-height: calc(100vh - 100px); */
+}
+
+.awssld__container {
+  padding-bottom: 0 !important;
+  height: 100% !important;
+}
+
+.awssld--active {
+  display: block !important;
+}
+
+.awssld__content, .awssld__box {
+  position: relative !important;
+}
+
+.awssld__box:not(.awssld--active) {
+  display: none !important;
+}

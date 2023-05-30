@@ -36,10 +36,8 @@ var settings = {
     {
       breakpoint: 1024,
       settings: {
-        slidesToShow: 5,
-        slidesToScroll: 5,
-        infinite: true,
-        dots: false,
+        slidesToShow: 3,
+        slidesToScroll: 3,
       },
     },
     {
@@ -82,14 +80,14 @@ const NewFeatureStoryIndex = (props) => {
 
   return (
     <>
-      <div className="new-feature-story-sec">
+      <div className="row new-feature-story-sec">
         <div className="new-feature-story-card">
           {props.userStories.loading ? (
             <StorySliderLoader />
           ) : (
             <Slider {...settings}>
               <div>
-                <Link>
+                <Link to="#">
                   <div className="new-feature-story-item">
                     <div
                       className="new-feature-story-img-sec"

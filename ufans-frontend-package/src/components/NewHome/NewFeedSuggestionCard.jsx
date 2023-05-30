@@ -18,7 +18,6 @@ import { fetchPostSuggesstionStart } from "../../store/actions/HomeAction";
 import Skeleton from "react-loading-skeleton";
 
 const NewFeedSuggestionCard = (props) => {
-
   const [isPremium, setIsPremium] = useState(false);
   useEffect(() => {
     props.dispatch(fetchPostSuggesstionStart());
@@ -94,7 +93,6 @@ const NewFeedSuggestionCard = (props) => {
                   setIsPremium(true);
                   props.dispatch(fetchPostSuggesstionStart({ premium: 1 }));
                 }}
-
               ></i>
             </Button>
           </div>
@@ -105,12 +103,10 @@ const NewFeedSuggestionCard = (props) => {
           //   {/* {t('loading')} */}
           // </div>
           <div className="new-feed-suggestion-card">
-            {[...Array(3)].map(() => (
-              <>
-
+            {[...Array(3)].map((item, i) => (
+              <div key={i}>
                 <Skeleton className="new-feed-suggestion-bg-img-loader" />
-
-              </>
+              </div>
             ))}
           </div>
         ) : props.postSug.data.users.length > 0 ? (

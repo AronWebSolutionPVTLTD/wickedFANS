@@ -228,8 +228,8 @@
 }
 
 .awssld__content:after {
-    z-index: 0;
-    content: "";
+    /* z-index: 0;
+    content: ""; */
     position: absolute;
     width: 100%;
     height: 100%;
