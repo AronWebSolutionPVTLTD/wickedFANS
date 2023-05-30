@@ -54,9 +54,9 @@ const StoryUploadModal = (props) => {
   return (
     <>
       <div
-        class={`modal custom-modal fade`}
+        className={`modal custom-modal fade`}
         id="addStoryModal"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="addStoryModal"
         aria-hidden="true"

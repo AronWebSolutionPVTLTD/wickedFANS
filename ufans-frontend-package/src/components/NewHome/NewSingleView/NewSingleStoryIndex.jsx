@@ -8,6 +8,7 @@ import {
   Form,
   Image,
   Media,
+  Modal,
   InputGroup,
 } from "react-bootstrap";
 import AwesomeSlider from "react-awesome-slider";
@@ -58,6 +59,8 @@ const NewSingleStoryIndex = (props) => {
   const [skipRender, setSkipRender] = useState(true);
   const [lastPostId, setLastPostId] = useState(null);
   const [selectedComment, setSelectedComment] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const closeReportModeModal = () => {
     setReportMode(false);
@@ -78,7 +81,6 @@ const NewSingleStoryIndex = (props) => {
 
   useEffect(() => {
     if (!props.singlePost.loading && props.singlePost.data.post.postFiles) {
-      console.log("singlePost", props.singlePost);
       setFiles(
         props.singlePost.data.post.postFiles.map((file) => ({
           ...file,
@@ -188,6 +190,11 @@ const NewSingleStoryIndex = (props) => {
     props.dispatch(saveBookmarkStart({ post_id: post.post_id }));
   };
 
+  const handleImageClick = (image) => {
+    setIsModalOpen(true);
+    setSelectedImage(image);
+  };
+
   return (
     <>
       <div className="new-home-page-sec">
@@ -198,7 +205,7 @@ const NewSingleStoryIndex = (props) => {
                 <HomeLoader />
               ) : (
                 <div className="new-home-page-box row">
-                  <div className="new-home-page-left col-sm-12 col-md-12 col-lg-8 col-12">
+                  <div className="new-home-page-left col-sm-9 col-md-9 col-lg-6 col-12">
                     <Link to={`/home`}>
                       <div className="back-icon">
                         <i className="fas fa-chevron-left"></i> Home
@@ -336,6 +343,9 @@ const NewSingleStoryIndex = (props) => {
                                     <Image
                                       className="new-feed-post-img"
                                       src={file.post_file}
+                                      onClick={() =>
+                                        handleImageClick(file.post_file)
+                                      }
                                     />
                                   </div>
                                 ) : file.file_type === "video" ? (
@@ -706,6 +716,19 @@ const NewSingleStoryIndex = (props) => {
           user_id={props.singlePost.data.post.data.post.user_id}
         />
       ) : null}
+      <Modal
+        className="modal-dialog-center"
+        centered
+        show={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+      >
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body className="new-feed-image-modal-body">
+          <div>
+            <Image className="new-feed-post-img" src={selectedImage} />
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

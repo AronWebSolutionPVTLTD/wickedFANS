@@ -103,8 +103,7 @@ const NewHomeSearch = (props) => {
     return <>{renderSearch()}</>;
   }
 
-  return null
-
+  return null;
 };
 
 const mapStateToPros = (state) => ({
