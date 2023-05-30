@@ -11538,11 +11538,11 @@ button.main-header-menu.icon-with-round-hover img{
   overflow: hidden;
   filter: blur(15px);
   transform: scale(1.2);
-}
+} */
 
 .awssld__content > div {
-  height: 100%;
-} */
+  width: 100%;
+}
 
 .awssld {
   /* max-height: calc(100vh - 100px); */
