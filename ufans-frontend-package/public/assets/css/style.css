@@ -6617,10 +6617,10 @@ input.authentication-input {
     background-image: none;
   }
   .drawer__wrapper {
-    top: 0px !important;
+    /* top: 0px !important; */
     right: 0;
     bottom: 0px;
-    height: 91% !important;
+    height: 100% !important;
     width: 100%;
     max-width: 300px;
     z-index: 999;
@@ -6721,7 +6721,7 @@ input.authentication-input {
     font-size: 0px;
   }
   .lists {
-    margin: 0px 0px;
+    /* margin: 0px 0px; */
   }
   .home-screen {
     margin-top: 0px;
@@ -7476,7 +7476,7 @@ input.authentication-input {
     padding: 0px 16px;
   }
   .lists {
-    margin: 0px 0px;
+    /* margin: 0px 0px; */
   }
   .listing-tab .tab .nav-tabs li {
     width: 25%;
@@ -7564,7 +7564,7 @@ input.authentication-input {
     height: 150px;
   }
   .drawer__wrapper {
-    top: 0px !important;
+    /* top: 0px !important; */
     right: 0;
     bottom: 0px;
     height: 100% !important;
@@ -7589,7 +7589,7 @@ input.authentication-input {
     padding-right: 15px;
   }
   .edit-profile {
-    padding: 0px 0px;
+    /* padding: 0px 0px; */
   }
   section#tabs {
     margin-top: 0px !important;

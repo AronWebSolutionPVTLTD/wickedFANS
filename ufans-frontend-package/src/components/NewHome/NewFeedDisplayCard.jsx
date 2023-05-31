@@ -73,6 +73,41 @@ const NewFeedDisplayCard = (props) => {
     setSelectedImage(image);
   };
 
+  const feedMedia = (file) => {
+    return (
+      <>
+        {file.file_type === "image" ? (
+          <div style={{ height: "100%" }}>
+            <img
+              className="new-feed-post-img"
+              src={file.post_file}
+              onClick={() => handleImageClick(file.post_file)}
+            />
+          </div>
+        ) : file.file_type === "video" ? (
+          <div style={{ height: "100%" }}>
+            <ReactPlayer
+              // light={postFile.preview_file}
+              url={file.post_file}
+              controls={true}
+              // width="100%"
+              height="100%"
+              playing={false}
+              muted={false}
+              autoPlay={false}
+              config={{
+                file: {
+                  attributes: { controlsList: "nodownload" },
+                },
+              }}
+              className="post-video-size"
+            />
+          </div>
+        ) : null}
+      </>
+    );
+  };
+
   return (
     <>
       <div className="new-feed-display-card">
@@ -172,88 +207,25 @@ const NewFeedDisplayCard = (props) => {
             }}
           ></p>
         </div>
-        {/* <Link to={`/post/${post.post_unique_id}`}> */}
         <div className="new-feed-body-sec">
-          <AutoplaySlider
-            organicArrows={false}
-            bullets={true}
-            play={false}
-            cancelOnInteraction={false}
-            interval={6000}
-            mobileTouch={true}
-          >
-            {post.postFiles &&
-              post.postFiles.map((file, i) => (
-                <div key={i}>
-                  {file.file_type === "image" ? (
-                    <div style={{ height: "100%" }}>
-                      <img
-                        className="new-feed-post-img"
-                        src={file.post_file}
-                        onClick={() => handleImageClick(file.post_file)}
-                      />
-                    </div>
-                  ) : file.file_type === "video" ? (
-                    <div style={{ height: "100%" }}>
-                      <ReactPlayer
-                        // light={postFile.preview_file}
-                        url={file.post_file}
-                        controls={true}
-                        // width="100%"
-                        height="100%"
-                        playing={false}
-                        muted={false}
-                        autoPlay={false}
-                        config={{
-                          file: {
-                            attributes: { controlsList: "nodownload" },
-                          },
-                        }}
-                        className="post-video-size"
-                      />
-                      {/* {!files[i].playing && (
-                        <div
-                          className="profile-video-icon-sec"
-                          onClick={() =>
-                            setFiles((prevFiles) =>
-                              prevFiles.map((item, idx) =>
-                                i === idx ? { ...item, playing: true } : item
-                              )
-                            )
-                          }
-                        >
-                          <Image
-                            className="profile-video-icon"
-                            src={
-                              window.location.origin + "/assets/images/new-home/icon/video-icon.png"
-                            }
-                          />
-                        </div>
-                      </div>
-                      : file.file_type === "audio" ?
-                        <div>
-                          <Image
-                            src={
-                              window.location.origin + "/assets/images/new-home/icon/audio-icon.png"
-                            }
-                            className="post-view-image"
-                          />
-                          {/* <div className="profile-video-icon-sec">
-                            <Image
-                              className="profile-audio-icon"
-                              src={
-                                window.location.origin + "/assets/images/new-home/icon/audio-icon.png"
-                              }
-                            />
-                          </div> */}
-                      {/* <ReactPlayer url='https://www.youtube.com/watch?v=ysz5S6PUM-U' /> */}
-                    </div>
-                  ) : null}
-                </div>
+          {post.postFiles &&
+            post.postFiles.length < 2 &&
+            feedMedia(post.postFiles[0])}
+          {post.postFiles && post.postFiles.length >= 2 && (
+            <AutoplaySlider
+              organicArrows={false}
+              bullets={true}
+              play={false}
+              cancelOnInteraction={false}
+              interval={6000}
+              mobileTouch={true}
+            >
+              {post.postFiles.map((file, i) => (
+                <div key={i}>{feedMedia(file)}</div>
               ))}
-          </AutoplaySlider>
+            </AutoplaySlider>
+          )}
         </div>
-        {/* </Link> */}
         <div className="new-feed-footer-sec">
           <div className="new-feed-footer-action-btn-sec">
             <div className="new-feed-footer-action-left-sec">
