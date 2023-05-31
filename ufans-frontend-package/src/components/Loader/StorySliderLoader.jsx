@@ -4,9 +4,9 @@ import ContentLoader from "react-content-loader";
 const StorySliderLoader = (props) => (
   <ContentLoader
     speed={2}
-    width={1200}
+    width={500}
     height={200}
-    viewBox="0 0 1200 200"
+    viewBox="0 0 530 200"
     // backgroundColor="#f3f3f3"
     // foregroundColor="#ecebeb"
     backgroundColor={
@@ -17,20 +17,16 @@ const StorySliderLoader = (props) => (
     }
     {...props}
   >
-    <rect x="20" y="130" rx="0" ry="0" width="0" height="9" />
-    <circle cx="50" cy="90" r="45" />
-    <rect x="0" y="145" rx="0" ry="0" width="95" height="15" />
-    <rect x="60" y="109" rx="0" ry="0" width="28" height="22" />
-    <circle cx="165" cy="90" r="45" />
-    <rect x="120" y="145" rx="0" ry="0" width="95" height="15" />
-    <circle cx="280" cy="90" r="45" />
-    <rect x="235" y="145" rx="0" ry="0" width="95" height="15" />
-    <circle cx="395" cy="90" r="45" />
-    <rect x="350" y="145" rx="0" ry="0" width="95" height="15" />
-    <circle cx="505" cy="90" r="45" />
-    <rect x="460" y="145" rx="0" ry="0" width="95" height="15" />
-    <circle cx="618" cy="90" r="45" />
-    <rect x="570" y="145" rx="0" ry="0" width="95" height="15" />
+    <circle cx="50" cy="80" r="40" />
+    <rect x="5" y="145" rx="0" ry="0" width="85" height="15" />
+    <circle cx="160" cy="80" r="40" />
+    <rect x="115" y="145" rx="0" ry="0" width="85" height="15" />
+    <circle cx="270" cy="80" r="40" />
+    <rect x="225" y="145" rx="0" ry="0" width="85" height="15" />
+    <circle cx="380" cy="80" r="40" />
+    <rect x="335" y="145" rx="0" ry="0" width="85" height="15" />
+    <circle cx="490" cy="80" r="40" />
+    <rect x="445" y="145" rx="0" ry="0" width="85" height="15" />
   </ContentLoader>
 );
 

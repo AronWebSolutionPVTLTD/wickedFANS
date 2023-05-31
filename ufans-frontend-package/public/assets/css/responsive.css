@@ -408,7 +408,7 @@ Version: 1.0
     width: 100%;
   }
   .explore-tab-sec {
-    margin-top: 2em !important;
+    margin-top: 48px !important;
   }
   .live-streaming-post-sec .bookmarkes-list img {
     margin-right: 0.5em;
@@ -545,7 +545,7 @@ Version: 1.0
     margin-right: 15px;
   }
   .notification-page {
-    margin-top: 2em !important;
+    /* margin-top: 2em !important; */
   }
   .resp-sapce-center {
     justify-content: space-between !important;
@@ -554,7 +554,7 @@ Version: 1.0
     margin-top: 20px !important;
   }
   .wallet-sec {
-    padding-top: 35px !important;
+    /* padding-top: 35px !important; */
   }
   /* .wallet-header-card h5 {
     margin-bottom: 2em !important;
@@ -567,7 +567,7 @@ Version: 1.0
     width: 100%;
   }
   .card-list-sec {
-    margin-top: 45px !important;
+    /* margin-top: 45px !important; */
     margin-bottom: 2em;
   }
 
@@ -1160,7 +1160,7 @@ Version: 1.0
     justify-content: left;
   }
   .referrals-sec {
-    margin-top: 4em !important;
+    /* margin-top: 4em !important; */
   }
   .referrals-social-link-sec {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -1219,7 +1219,7 @@ Version: 1.0
     grid-template-columns: repeat(1, 1fr) !important;
   }
   .ecom-sec {
-    margin-top: 0 !important;
+    /* margin-top: 0 !important; */
     min-height: 50vh !important;
     background-position: 60% 100% !important;
   }
@@ -1819,7 +1819,7 @@ Version: 1.0
     gap: 2em;
   }
   .new-home-sec {
-    padding: 15px !important;
+    padding: 48px 15px 15px 15px !important;
   }
   .user-right-content-sec {
     grid-template-columns: repeat(1, 1fr) !important;
@@ -1894,7 +1894,7 @@ Version: 1.0
     display: none;
   }
   .new-settings-sec {
-    padding-top: 2em !important;
+    /* padding-top: 2em !important; */
   }
   .new-settings-sidebar {
     width: 100% !important;
@@ -1972,7 +1972,7 @@ Version: 1.0
     gap: 2em;
   }
   .new-explore-sec {
-    padding-top: 3em !important;
+    /* padding-top: 3em !important; */
   }
   .new-explore-tab-header-sec .nav {
     grid-template-columns: repeat(2, 1fr);

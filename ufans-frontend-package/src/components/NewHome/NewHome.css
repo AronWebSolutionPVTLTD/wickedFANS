@@ -723,7 +723,6 @@
 .new-single-post-view-footer {
   position: sticky;
   bottom: 0;
-  z-index: 1000;
 }
 
 .new-feed-sec {

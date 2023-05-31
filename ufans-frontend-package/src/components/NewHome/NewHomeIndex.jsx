@@ -155,7 +155,9 @@ const NewHomeIndex = (props) => {
                       {/* <NewFeedIndex /> */}
 
                       {props.posts.loading ? (
-                        <HomeLoader />
+                        <div className="row" style={{ display: "block" }}>
+                          <HomeLoader />
+                        </div>
                       ) : props.posts.data.posts.length > 0 ? (
                         <InfiniteScroll
                           dataLength={props.posts.data.posts}
