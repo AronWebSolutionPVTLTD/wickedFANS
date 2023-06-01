@@ -25,6 +25,7 @@ const LandingFooter = (props) => {
     setLanguage(input.value);
     localStorage.setItem("lang", input.value);
     // window.location.reload();
+    console.log("=======",configuration)
   };
 
   return (
@@ -146,7 +147,7 @@ const LandingFooter = (props) => {
                   <div className="footer-widget">
                     <div className="footer-widget">
                       <div className="footer-widget-heading">
-                        <h3>{t("discover")}</h3>
+                        <h3>{t("legal_str")}</h3>
                       </div>
                       <ul className="list-unstyled">
                         {configuration
@@ -277,7 +278,7 @@ const LandingFooter = (props) => {
                       </ul>
                     </div>
                   </div>
-                  {configuration.get("configData.is_multilanguage_enabled") ==
+                  {/* {configuration.get("configData.is_multilanguage_enabled") ==
                   1 ? (
                     <div className="select-lang-drop-down">
                       <select
@@ -306,8 +307,8 @@ const LandingFooter = (props) => {
                     </div>
                   ) : (
                     ""
-                  )}
-                </Col>
+                  )} */}
+                </Col> 
               </Row>
             </div>
           </Container>

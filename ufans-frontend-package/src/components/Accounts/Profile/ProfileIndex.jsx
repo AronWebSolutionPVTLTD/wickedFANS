@@ -54,9 +54,13 @@ const ProfileIndex = (props) => {
   const [activeSec, setActiveSec] = useState("all");
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isReadMore, setIsReadMore] = useState(true);
+  const toggleReadMore = () => {setIsReadMore(!isReadMore)};
 
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(12);
+
+
 
   useEffect(() => {
     props.dispatch(fetchPostsStart({ type: "all", skip: 0, take: take }));
@@ -113,6 +117,17 @@ const ProfileIndex = (props) => {
     setAnchorEl(null);
   };
 
+  const countChar = (val) => {
+    var len = val.length;
+    if (len >= 500) {
+      val = val.substring(0, 500);
+      return val
+      console.log("------", val);
+    } else {
+      console.log(500 - len);
+    }
+  }
+
   const open = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
 
@@ -125,12 +140,14 @@ const ProfileIndex = (props) => {
           <div className="new-home-box">
             <div className="new-home-sidebar">
               <div className="profile-logo-sec">
-                <Image
+                <p className="profile-logo-img"></p>
+
+                {/* <Image
                   className="profile-logo-img"
                   src={`${configuration.get("configData.site_logo")}`}
                   width="200"
                   height="80"
-                />
+                /> */}
               </div>
               <div className="sibebar-header-sec">
                 {props.profile.data.featured_story ? (
@@ -193,9 +210,9 @@ const ProfileIndex = (props) => {
                     )}
                   </span>
                 </h4>
-                <Link to="#" className="sidebar-user-name">
+                {/* <Link to="#" className="sidebar-user-name">
                   {props.profile.data.email}
-                </Link>
+                </Link> */}
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">
                     <h5>{props.profile.data.total_posts}</h5>
@@ -454,15 +471,15 @@ const ProfileIndex = (props) => {
                                 </ul>
                             </div> */}
               {props.profile.data.youtube_link ||
-              props.profile.data.pinterest_link ||
-              props.profile.data.linkedin_link ||
-              props.profile.data.snapchat_link ||
-              props.profile.data.twitter_link ||
-              props.profile.data.instagram_link ||
-              props.profile.data.amazon_wishlist ||
-              props.profile.data.facebook_link ||
-              props.profile.data.twitch_link ||
-              props.profile.data.website ? (
+                props.profile.data.pinterest_link ||
+                props.profile.data.linkedin_link ||
+                props.profile.data.snapchat_link ||
+                props.profile.data.twitter_link ||
+                props.profile.data.instagram_link ||
+                props.profile.data.amazon_wishlist ||
+                props.profile.data.facebook_link ||
+                props.profile.data.twitch_link ||
+                props.profile.data.website ? (
                 <div className="sidebar-social-links">
                   <ul className="list-unstyled">
                     {props.profile.data.youtube_link && (
@@ -658,8 +675,13 @@ const ProfileIndex = (props) => {
                 <div className="user-right-info">
                   <div className="user-info-desc">
                     <p>
-                      {props.profile.data.about_formatted}
-                      {/* <a href="#">Read More</a> */}
+
+                      {isReadMore ? props.profile.data.about_formatted.slice(0, 300) : props.profile.data.about_formatted}
+                      {props.profile.data.about_formatted.length > 150 &&
+                        <span onClick={toggleReadMore} style={{color:'#E54296',fontSize:'14px',cursor:'pointer'}}>
+                          {isReadMore ? '...read more' : ' ...show less'}
+                        </span>
+                      }
                     </p>
                   </div>
                   <div className="user-info-list">
@@ -878,15 +900,15 @@ const ProfileIndex = (props) => {
                   </ul>
                 </div>
                 {props.profile.data.youtube_link ||
-                props.profile.data.pinterest_link ||
-                props.profile.data.linkedin_link ||
-                props.profile.data.snapchat_link ||
-                props.profile.data.twitter_link ||
-                props.profile.data.instagram_link ||
-                props.profile.data.amazon_wishlist ||
-                props.profile.data.facebook_link ||
-                props.profile.data.twitch_link ||
-                props.profile.data.website ? (
+                  props.profile.data.pinterest_link ||
+                  props.profile.data.linkedin_link ||
+                  props.profile.data.snapchat_link ||
+                  props.profile.data.twitter_link ||
+                  props.profile.data.instagram_link ||
+                  props.profile.data.amazon_wishlist ||
+                  props.profile.data.facebook_link ||
+                  props.profile.data.twitch_link ||
+                  props.profile.data.website ? (
                   <div className="sidebar-social-links">
                     <ul className="list-unstyled">
                       {props.profile.data.youtube_link && (
@@ -1116,7 +1138,7 @@ const ProfileIndex = (props) => {
                             </span>
                           </Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
+                        {/* <Nav.Item>
                           <Nav.Link
                             eventKey="audio"
                             onClick={(event) =>
@@ -1134,7 +1156,7 @@ const ProfileIndex = (props) => {
                             </span>
                             <span className="resp-display-none">Musics</span>
                           </Nav.Link>
-                        </Nav.Item>
+                        </Nav.Item> */}
                       </Nav>
                     </Col>
                     <Col sm={12}>

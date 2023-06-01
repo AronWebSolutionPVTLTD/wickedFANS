@@ -8221,6 +8221,11 @@ input.authentication-input {
   max-width: 30em;
   margin-bottom: 2em;
 }
+.landing-main-wrapper{
+  background-size: 50%;
+    background-repeat: no-repeat;
+    background-image: url('../images/bg.png');
+}
 
 .landing-main-wrapper {
   padding-top: 4em;
@@ -9636,6 +9641,10 @@ button {
   border-radius: 5px;
   height: 550px;
   object-fit: cover;
+  /* extra added */
+  position: relative;
+  left: -72px;
+
 }
 
 .auth-img-left-sec {
