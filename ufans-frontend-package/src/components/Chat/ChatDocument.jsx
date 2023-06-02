@@ -4,6 +4,7 @@ import { Image } from 'react-bootstrap';
 
 const ChatDocument = (props) => {
 
+  
   return (
     <div className="chat-document-container">
       <svg viewBox="0 0 16 16" className="chat-document-icon">
