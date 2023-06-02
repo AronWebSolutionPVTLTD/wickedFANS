@@ -420,6 +420,7 @@
     "category" : "Category",
     "discover": "Discover",
     "language": "Language",
+    "legal_str" : "Legal",
     "go_live_description_placeholder": "Enter the content here...",
     "i_agree_to": "I agree to",
     "terms_conditions": "Terms & Conditions",

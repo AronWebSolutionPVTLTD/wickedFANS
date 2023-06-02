@@ -42,6 +42,7 @@
     gap: 1em;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 2em;
+    padding-top: 1em;
 }
 
 .sidebar-user-img-sec {
@@ -76,8 +77,10 @@
 }
 
 .sidebar-user-img {
-    height: 7em;
-    width: 7em;
+    /* height: 7em;
+    width: 7em; */
+    height: 10em;
+    width: 10em;
     object-fit: cover;
 }
 
@@ -258,8 +261,10 @@
 .user-info-desc p {
     color: #9896A1;
     margin-bottom: 0;
-    font-size: 1.3em;
-    font-weight: 400;
+    /* font-size: 1.3em; */
+    font-size: 1.7em;
+    /* font-weight: 400; */
+    font-weight: 500;
     padding-right: 1em;
 }
 

@@ -30,7 +30,9 @@ import { createNotification } from "react-redux-notify/lib/modules/Notifications
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
+
 let chatSocket;
+// = io();
 
 const NewChatRoom = (props) => {
   const history = useHistory();
@@ -129,19 +131,20 @@ const NewChatRoom = (props) => {
 
   const chatSocketConnect = (to_user_id) => {
     // check the socket url is configured
-    console.log("chatSocket", chatSocketUrl);
     console.log("Input ID", to_user_id);
+    
     if (chatSocketUrl) {
       chatSocket = io(chatSocketUrl, {
-        query: `commonid:'user_id_${userId}_to_user_id_${props.selectedUser.user_id}',myid:${userId}`,
+        query: `commonid:'user_id_${userId}_to_user_id_${props.selectedUser.user_id}',myid=${userId}`,
       });
-      console.log("chatSocket", chatSocket);
+      console.log("chatSocket 222", chatSocket);
       chatSocket.emit("update sender", {
         commonid: `user_id_${userId}_to_user_id_${props.selectedUser.user_id}`,
         myid: userId,
       });
+      console.log("chatSocket 333", chatSocket);
       chatSocket.on("message", (newData) => {
-        console.log(newData);
+        console.log("Input ID 444",newData);
         setNewMsg(true);
         props.dispatch(updateChatMessagesSuccess(newData));
       });
@@ -151,6 +154,7 @@ const NewChatRoom = (props) => {
 
   // Message Send
   const handleMessageSubmit = ({ msgAmount = 0, fileType = "text", chatAssets = [] }) => {
+    
     if ((message && message.trim()) || chatAssets.length > 0) {
       const now = new Date();
       const date = `${("0" + now.getDate()).slice(-2)} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()}`;
@@ -169,10 +173,13 @@ const NewChatRoom = (props) => {
         time_formatted: time,
         amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
       }
+      console.log("fffff",chatData)
       chatSocket.emit("message", chatData);
-
+      console.log("fffff++++++",chatData)
       setMessage("");
       props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
+      
+      console.log("==========",chatData)
       setNewChatUpload(false);
       setShowEmojis(false);
       messageField.current.focus();

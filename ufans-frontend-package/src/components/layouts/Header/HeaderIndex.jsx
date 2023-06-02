@@ -21,9 +21,11 @@ const HeaderIndex = (props) => {
 
   const [loginModal, setLoginModal] = useState(false);
   const [signupModal, setSignupModal] = useState(false);
+  const pro_pic = localStorage.getItem("user_picture")
 
   useEffect(() => {
     console.log("Inside");
+    
     let chatSocketUrl = configuration.get("configData.chat_socket_url");
     if (chatSocketUrl === "") {
       console.log("no keys configured");
@@ -64,6 +66,7 @@ const HeaderIndex = (props) => {
           `',myid:` +
           localStorage.getItem("userId"),
       });
+      console.log("header file check socket",chatSocket)
       chatSocket.emit("notification update", {
         commonid: "user_id_" + localStorage.getItem("userId"),
         myid: localStorage.getItem("userId"),
@@ -119,7 +122,7 @@ const HeaderIndex = (props) => {
                 <Image
                   src={
                     window.location.origin +
-                    "/assets/images/icons/new/home-new-1.svg"
+                    "/assets/images/home_icon_link.png"
                   }
                 />
               </Link>
@@ -142,20 +145,13 @@ const HeaderIndex = (props) => {
                 />
               </Link>
 
-              {configuration.get("configData.is_one_to_many_call_enabled") ==
+              {/* {configuration.get("configData.is_one_to_many_call_enabled") ==
               1 ? (
                 <Link
                   to={"/live-videos"}
                   className="main-header-menu icon-with-round-hover"
                   onClick={() => setIsVisible(false)}
                 >
-                  {/* <Image
-                    src={
-                      window.location.origin +
-                      "/assets/images/icons/live-streaming.png"
-                    }
-                  /> */}
-                  {/* <i className="bx bx-tv bx-lg"></i> */}
                   <Image
                     src={
                       window.location.origin +
@@ -165,7 +161,7 @@ const HeaderIndex = (props) => {
                 </Link>
               ) : (
                 ""
-              )}
+              )} */}
 
               {localStorage.getItem("is_content_creator") == 2 ? (
                 <Link
@@ -275,12 +271,19 @@ const HeaderIndex = (props) => {
                   src={window.location.origin + "/assets/images/icons/user.svg"}
                 /> */}
                 {/* <i className='bx bx-user-circle bx-lg'></i> */}
+                {pro_pic ?
+                <Image
+                      src={localStorage.getItem("user_picture")}
+                      style={{width:'24px',height:'24px',borderRadius:'50%'}}
+                    />
+                :
                 <Image
                   src={
                     window.location.origin +
                     "/assets/images/icons/new/user-new-1.svg"
                   }
-                />
+                />    
+                }
               </Button>
             </nav>
 

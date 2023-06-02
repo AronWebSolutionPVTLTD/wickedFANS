@@ -124,7 +124,7 @@ const NewChatUploadModal = (props) => {
                           accepted: "image/*",
                           typeText: "Images",
                         })}
-                    >Images</Link>
+                    >Image</Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Link
@@ -138,7 +138,7 @@ const NewChatUploadModal = (props) => {
                           accepted: "video/*",
                           typeText: "Videos",
                         })}
-                    >Videos</Link>
+                    >Video</Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Link
@@ -152,9 +152,9 @@ const NewChatUploadModal = (props) => {
                           accepted: "audio/*",
                           typeText: "Music",
                         })}
-                    >Music</Link>
+                    >Voice</Link>
                   </Nav.Item>
-                  <Nav.Item>
+                  {/* <Nav.Item>
                     <Link
                       to="#"
                       disabled={chatMessage.chatAssets.length > 0}
@@ -167,7 +167,7 @@ const NewChatUploadModal = (props) => {
                           typeText: "Document",
                         })}
                     >Document</Link>
-                  </Nav.Item>
+                  </Nav.Item> */}
                 </Nav>
               </Col>
               <Col sm={12}>
