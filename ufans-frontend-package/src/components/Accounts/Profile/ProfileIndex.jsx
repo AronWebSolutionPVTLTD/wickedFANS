@@ -748,7 +748,7 @@ const ProfileIndex = (props) => {
                           </Link>
                         </Media>
                       )}
-                      {props.profile.data.height && (
+                      {/* {props.profile.data.height && (
                         <Media as="li">
                           <Link to="#">
                             <Image
@@ -761,8 +761,8 @@ const ProfileIndex = (props) => {
                             <span>{props.profile.data.height_formatted}</span>
                           </Link>
                         </Media>
-                      )}
-                      {props.profile.data.weight && (
+                      )} */}
+                      {/* {props.profile.data.weight && (
                         <Media as="li">
                           <Link to="#">
                             <Image
@@ -775,7 +775,7 @@ const ProfileIndex = (props) => {
                             <span>{props.profile.data.weight_formatted}</span>
                           </Link>
                         </Media>
-                      )}
+                      )} */}
                       {props.profile.data.address ? (
                         <Media as="li">
                           <Link to="#">

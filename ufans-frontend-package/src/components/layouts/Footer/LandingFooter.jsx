@@ -156,7 +156,7 @@ const LandingFooter = (props) => {
                             <Media
                               as="li"
                               key={"sp-" + static_page.static_page_unique_id}
-                            >
+                            > 
                               <Link
                                 to={`/page/${static_page.static_page_unique_id}`}
                                 key={static_page.static_page_unique_id}

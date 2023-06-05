@@ -138,7 +138,7 @@ const NewFeedDisplayCard = (props) => {
             <div className="new-feed-post-time-sec">
               <p>{post.created}</p>
             </div>
-            <Button className="sent-tip-btn" onClick={() => setSendTip(true)}>
+            {/* <Button className="sent-tip-btn" onClick={() => setSendTip(true)}>
               <Image
                 className="sent-tip-icon"
                 src={
@@ -146,8 +146,8 @@ const NewFeedDisplayCard = (props) => {
                   "/assets/images/feed-story/sent-tip-1.svg"
                 }
               />
-              <span>Tips</span>
-            </Button>
+              <span>Tipsdddd</span>
+            </Button> */}
             <Dropdown className="feed-post-dropdown">
               <Dropdown.Toggle
                 variant="success"
@@ -265,6 +265,16 @@ const NewFeedDisplayCard = (props) => {
                   }
                 />
                 <span>{post.total_comments}</span>
+              </Button>
+              <Button className="new-feed-wishlist-btn send_tip_custom_button" onClick={() => setSendTip(true)}>
+                <Image
+                  className="new-feed-wishlist-icon"
+                  src={
+                    window.location.origin +
+                    "/assets/images/feed-story/sent-tip-1.svg"
+                  }
+                />
+                <span>SEND TIP</span>
               </Button>
             </div>
             <div className="new-feed-footer-action-right-sec">
