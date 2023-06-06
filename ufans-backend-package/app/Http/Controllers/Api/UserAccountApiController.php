@@ -1462,9 +1462,9 @@ class UserAccountApiController extends Controller
 
                         $user_subscription = new \App\Models\UserSubscription;
 
-                        $change_expiry_user_ids = \App\Models\UserSubscriptionPayment::where('user_subscription_id', 0)->where('to_user_id', $request->id)->pluck('from_user_id');
+                        //$change_expiry_user_ids = \App\Models\UserSubscriptionPayment::where('user_subscription_id', 0)->where('to_user_id', $request->id)->pluck('from_user_id');
 
-                        \App\Models\Follower::whereIn('user_id', $change_expiry_user_ids)->where('follower_id', $request->id)->delete();
+                        // \App\Models\Follower::whereIn('user_id', $change_expiry_user_ids)->where('follower_id', $request->id)->delete();
 
                         \App\Models\UserSubscriptionPayment::where('user_subscription_id', 0)->where('to_user_id', $request->id)->update(['is_current_subscription' => NO, 'expiry_date' => date('Y-m-d H:i:s'), 'cancel_reason' => 'Model added subscription']);
 
@@ -1474,9 +1474,9 @@ class UserAccountApiController extends Controller
 
                         if($request->monthly_amount > 0.00 || $request->yearly_amount > 0.00) {
 
-                            $change_expiry_user_ids = \App\Models\UserSubscriptionPayment::where('user_subscription_id', 0)->where('to_user_id', $request->id)->pluck('from_user_id')->implode(',') ?? "";
+                          //  $change_expiry_user_ids = \App\Models\UserSubscriptionPayment::where('user_subscription_id', 0)->where('to_user_id', $request->id)->pluck('from_user_id')->implode(',') ?? "";
 
-                            \App\Models\Follower::whereIn('follower_id', [$change_expiry_user_ids])->where('user_id', $request->id)->delete();
+                         //   \App\Models\Follower::whereIn('follower_id', [$change_expiry_user_ids])->where('user_id', $request->id)->delete();
                             
                             \App\Models\UserSubscriptionPayment::where('user_subscription_id', 0)->where('to_user_id', $request->id)->update(['is_current_subscription' => NO, 'expiry_date' => date('Y-m-d H:i:s'), 'cancel_reason' => 'Model added subscription']);
                         }

@@ -46,9 +46,7 @@ const EditProfileCard = (props) => {
   })
 
   useEffect(() => {
-    console.log("++++++++++++++++++++++++",props.profile.data.categories)
     if (props.profile.loading) props.dispatch(fetchUserDetailsStart());
-    console.log("gggggg",props.profile.data.categories)
   }, []);
 
   const handleUsernameValidation = (event, username, value) => {

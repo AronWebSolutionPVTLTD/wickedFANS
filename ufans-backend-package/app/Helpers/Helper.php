@@ -610,8 +610,8 @@ class Helper {
      * @method upload_file
      */
     
-    public static function storage_upload_file($input_file, $folder_path = COMMON_FILE_PATH, $name = "", $extension = YES) {
-
+    public static function storage_upload_file($input_file, $folder_path = COMMON_FILE_PATH, $name = "", $extension = YES, $admin="") {
+   
         if(!$input_file) {
 
             return "";
@@ -647,10 +647,12 @@ class Helper {
 
         Storage::putFileAs($public_folder_path, $input_file, $file_name);
 
-        $storage_file_path = $folder_path.$file_name;
+        $storage_file_path = "app/public/".$folder_path.$file_name;
 
-        $url = asset(Storage::url($storage_file_path));
-    
+        if($admin!='')
+            $url = asset($admin.Storage::url($storage_file_path));
+        else
+            $url = asset(Storage::url($storage_file_path));
         return $url;
 
     }
@@ -718,7 +720,7 @@ class Helper {
 
         Storage::putFileAs($public_folder_path, $input_file, $file_name);
 
-        $storage_file_path = $folder_path.$file_name;
+        $storage_file_path = "app/public/".$folder_path.$file_name;
 
         $url = asset(Storage::url($storage_file_path));
     
