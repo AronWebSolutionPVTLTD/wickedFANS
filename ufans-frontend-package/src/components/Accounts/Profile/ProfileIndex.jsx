@@ -674,6 +674,7 @@ const ProfileIndex = (props) => {
               <div className="user-right-content-sec">
                 <div className="user-right-info">
                   <div className="user-info-desc">
+                  {props.profile.data.about_formatted ?
                     <p>
 
                       {isReadMore ? props.profile.data.about_formatted.slice(0, 300) : props.profile.data.about_formatted}
@@ -683,6 +684,9 @@ const ProfileIndex = (props) => {
                         </span>
                       }
                     </p>
+                    :
+                    null
+                    }
                   </div>
                   <div className="user-info-list">
                     <ul className="list-unstyled">
@@ -748,7 +752,7 @@ const ProfileIndex = (props) => {
                           </Link>
                         </Media>
                       )}
-                      {props.profile.data.height && (
+                      {props.profile.data.height &&  (
                         <Media as="li">
                           <Link to="#">
                             <Image

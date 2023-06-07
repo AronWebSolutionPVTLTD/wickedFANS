@@ -103,7 +103,7 @@ class AdminSettingController extends Controller
                            
                             Helper::storage_delete_file($file->value, FILE_PATH_SITE);
 
-                            $file_path = Helper::storage_upload_file($request->file($key) , FILE_PATH_SITE);    
+                            $file_path = Helper::storage_upload_file($request->file($key) , FILE_PATH_SITE, "","","admin"); 
 
                             $result = \App\Models\Settings::where('key' ,'=', $key)->update(['value' => $file_path]); 
 

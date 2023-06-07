@@ -135,7 +135,7 @@ const NewChatRoom = (props) => {
     
     if (chatSocketUrl) {
       chatSocket = io(chatSocketUrl, {
-        query: `commonid:'user_id_${userId}_to_user_id_${props.selectedUser.user_id}',myid=${userId}`,
+        query: `commonid:'user_id_${userId}_to_user_id_${props.selectedUser.user_id}',myid:${userId}`,
       });
       console.log("chatSocket 222", chatSocket);
       chatSocket.emit("update sender", {

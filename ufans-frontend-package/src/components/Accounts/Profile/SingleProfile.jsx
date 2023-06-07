@@ -74,7 +74,8 @@ const SingleProfile = (props) => {
   const [sendTip, setSendTip] = useState(false);
   const [subscrptionPayment, setPaymentModal] = useState(false);
   const [showUnfollow, setShowUnfollow] = useState(false);
-
+  const [isReadMore, setIsReadMore] = useState(true);
+  const toggleReadMore = () => {setIsReadMore(!isReadMore)};
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(12);
 
@@ -963,10 +964,20 @@ const SingleProfile = (props) => {
                     </div>
                   </div>
                   <div className="user-info-desc">
+                    {userDetails.data.user.about_formatted?
                     <p>
-                      {userDetails.data.user.about_formatted}
-                      {/* <a href="#">Read More</a> */}
+                      {/* {userDetails.data.user.about_formatted}
+                      <a href="#">Read More</a> */}
+                      {isReadMore ? userDetails.data.user.about_formatted.slice(0, 300) : userDetails.data.user.about_formatted}
+                      {userDetails.data.user.about_formatted.length > 150 &&
+                        <span onClick={toggleReadMore} style={{color:'#E54296',fontSize:'14px',cursor:'pointer'}}>
+                          {isReadMore ? '...read more' : ' ...show less'}
+                        </span>
+                      }
                     </p>
+                    :
+                    null
+                    }
                   </div>
                   <div className="user-info-list">
                     <ul className="list-unstyled">
@@ -1602,7 +1613,7 @@ const SingleProfile = (props) => {
                               <span className="resp-display-none"> Videos</span>
                             </Nav.Link>
                           </Nav.Item>
-                          <Nav.Item>
+                          {/* <Nav.Item>
                             <Nav.Link
                               eventKey="audio"
                               onClick={(event) =>
@@ -1620,8 +1631,8 @@ const SingleProfile = (props) => {
                               </span>
                               <span className="resp-display-none">Musics</span>
                             </Nav.Link>
-                          </Nav.Item>
-                          {userDetails.data.user.is_content_creator == 2 && (
+                          </Nav.Item> */}
+                          {/* {userDetails.data.user.is_content_creator == 2 && (
                             <Nav.Item>
                               <Nav.Link
                                 eventKey="product"
@@ -1641,7 +1652,7 @@ const SingleProfile = (props) => {
                                 <span className="resp-display-none">Store</span>
                               </Nav.Link>
                             </Nav.Item>
-                          )}
+                          )} */}
                         </Nav>
                       </Col>
                       {activeSec === "product" ? (

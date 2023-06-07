@@ -541,7 +541,6 @@
   color: var(--secondary-color);
 }
 
-
 .new-feed-suggestion-box .slick-prev:before {
   font-family: "Font Awesome 5 Free";
   content: "\f104";
