@@ -7,6 +7,8 @@ import {
   ADD_MONEY_VIA_CARD_START,
   ADD_MONEY_VIA_PAYPAL_START,
   GENERATE_STRIPE_PAYMENT_START,
+  ADD_MONEY_VIA_BTCPAY_START,
+  GENERATE_BTCPAY_PAYMENT_START,
 } from "../actions/ActionConstant";
 
 import { createNotification } from "react-redux-notify";
@@ -26,6 +28,8 @@ import {
   addMoneyViaPaypalFailure,
   generateStripePaymentSuccess,
   generateStripePaymentFailure,
+  generateBtcpayPaymentSuccess,
+  generateBtcpayPaymentFailure,
 } from "../actions/WalletAction";
 import { checkLogoutStatus } from "../actions/ErrorAction";
 
@@ -143,16 +147,78 @@ function* addMoneyViaPaypalAPI() {
 
 function* generateStripePaymentAPI(action) {
   try {
-    const response = yield api.postMethod("wallets_generate_stripe_payment", action.data);
+    const response = yield api.postMethod(
+      "wallets_generate_stripe_payment",
+      action.data
+    );
     if (response.data.success) {
       yield put(generateStripePaymentSuccess(response.data.data));
     } else {
       yield put(generateStripePaymentFailure(response.data.error));
-      yield put(createNotification(getErrorNotificationMessage(response.data.error)));
+      yield put(
+        createNotification(getErrorNotificationMessage(response.data.error))
+      );
     }
   } catch (error) {
     yield put(generateStripePaymentFailure(error));
-    yield put(createNotification(getErrorNotificationMessage(error.response.data.error)));
+    yield put(
+      createNotification(getErrorNotificationMessage(error.response.data.error))
+    );
+  }
+}
+
+function* addMoneyViaBtcpayAPI() {
+  try {
+    const inputData = yield select((state) => state.wallet.addMoneyInput.data);
+    const response = yield api.postMethod(
+      "wallets_add_money_by_paypal",
+      inputData
+    );
+    if (response.data.success) {
+      yield put(addMoneyViaPaypalSuccess(response.data.data));
+      const notificationMessage = getSuccessNotificationMessage(
+        response.data.message
+      );
+      yield put(createNotification(notificationMessage));
+      window.location.assign("/wallet");
+    } else {
+      yield put(addMoneyViaPaypalFailure(response.data.error));
+      const notificationMessage = getErrorNotificationMessage(
+        response.data.error
+      );
+      yield put(createNotification(notificationMessage));
+    }
+  } catch (error) {
+    yield put(addMoneyViaPaypalFailure(error));
+    const notificationMessage = getErrorNotificationMessage(
+      error.response.data.error
+    );
+    yield put(createNotification(notificationMessage));
+  }
+}
+
+function* generateBtcpayPaymentAPI(action) {
+  try {
+    const response = yield api.postMethod(
+      "wallets_generate_btcpay_payment",
+      action.data
+    );
+    console.log("generateBtcpayPaymentAPI - Response: ", response);
+    if (response.data.success) {
+      yield put(generateBtcpayPaymentSuccess(response.data.data));
+      window.location.href = response.data.data.checkoutLink;
+    } else {
+      yield put(generateBtcpayPaymentFailure(response.data.error));
+      yield put(
+        createNotification(getErrorNotificationMessage(response.data.error))
+      );
+    }
+  } catch (error) {
+    console.log("generateBtcpayPaymentAPI - Error: ", error);
+    yield put(generateBtcpayPaymentFailure(error));
+    yield put(
+      createNotification(getErrorNotificationMessage(error.response.data.error))
+    );
   }
 }
 
@@ -163,5 +229,7 @@ export default function* pageSaga() {
     yield takeLatest(ADD_MONEY_VIA_CARD_START, addMoneyViaCardAPI),
     yield takeLatest(ADD_MONEY_VIA_PAYPAL_START, addMoneyViaPaypalAPI),
     yield takeLatest(GENERATE_STRIPE_PAYMENT_START, generateStripePaymentAPI),
+    yield takeLatest(ADD_MONEY_VIA_BTCPAY_START, addMoneyViaBtcpayAPI),
+    yield takeLatest(GENERATE_BTCPAY_PAYMENT_START, generateBtcpayPaymentAPI),
   ]);
 }

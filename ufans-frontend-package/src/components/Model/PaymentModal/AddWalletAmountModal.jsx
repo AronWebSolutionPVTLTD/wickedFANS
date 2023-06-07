@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   InputGroup,
   FormControl,
@@ -10,20 +10,26 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import AddCardModalSec from './AddCardModalSec';
-import PaymentMethodCard from './PaymentMethodCard';
-import { connect } from 'react-redux';
-import { translate, t } from 'react-multi-lang';
-import WalletAmountSec from './WalletAmountSec';
-import { addMoneyViaCardStart, addMoneyViaPaypalStart, fetchWalletDetailsStart, generateStripePaymentStart } from '../../../store/actions/WalletAction';
-import { getErrorNotificationMessage } from '../../helper/NotificationMessage';
-import { createNotification } from 'react-redux-notify';
-import { fetchAllTransactionStart } from '../../../store/actions/TransactionAction';
-import configuration from 'react-global-configuration';
+import axios from "axios";
+import AddCardModalSec from "./AddCardModalSec";
+import PaymentMethodCard from "./PaymentMethodCard";
+import { connect } from "react-redux";
+import { translate, t } from "react-multi-lang";
+import WalletAmountSec from "./WalletAmountSec";
+import {
+  addMoneyViaCardStart,
+  addMoneyViaPaypalStart,
+  fetchWalletDetailsStart,
+  generateStripePaymentStart,
+  generateBtcpayPaymentStart,
+} from "../../../store/actions/WalletAction";
+import { getErrorNotificationMessage } from "../../helper/NotificationMessage";
+import { createNotification } from "react-redux-notify";
+import { fetchAllTransactionStart } from "../../../store/actions/TransactionAction";
+import configuration from "react-global-configuration";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from '@stripe/react-stripe-js';
-import StripePaymentSec from './StripePaymentSec';
-
+import { Elements } from "@stripe/react-stripe-js";
+import StripePaymentSec from "./StripePaymentSec";
 
 const AddWalletAmountModal = (props) => {
   const stripePromise = loadStripe(
@@ -43,12 +49,17 @@ const AddWalletAmountModal = (props) => {
     event.preventDefault();
     if (paymentType === "CARD") {
       if (amount < 1)
-        props.dispatch(createNotification(getErrorNotificationMessage(t("add_wallet_min_amount"))));
+        props.dispatch(
+          createNotification(
+            getErrorNotificationMessage(t("add_wallet_min_amount"))
+          )
+        );
       else
-        props.dispatch(generateStripePaymentStart({
-          amount: amount,
-        }));
-
+        props.dispatch(
+          generateStripePaymentStart({
+            amount: amount,
+          })
+        );
     }
   };
 
@@ -78,8 +89,21 @@ const AddWalletAmountModal = (props) => {
     this.props.dispatch(createNotification(notificationMessage));
   };
 
+  const handleBtcpay = (amount) => {
+    props.dispatch(
+      generateBtcpayPaymentStart({
+        amount: amount,
+        redirectURL: `${process.env.REACT_APP_URL}/wallet`,
+      })
+    );
+  };
+
   useEffect(() => {
-    if (!skipRender && !props.addAmount.loading && Object.keys(props.addAmount.successData).length > 0) {
+    if (
+      !skipRender &&
+      !props.addAmount.loading &&
+      Object.keys(props.addAmount.successData).length > 0
+    ) {
       props.dispatch(fetchWalletDetailsStart());
       props.dispatch(fetchAllTransactionStart());
       props.closepaymentsModal();
@@ -88,13 +112,17 @@ const AddWalletAmountModal = (props) => {
   }, [props.addAmount]);
 
   useEffect(() => {
-    if (!skipRender && !props.generateStripe.loading && Object.keys(props.generateStripe.data).length > 0) {
+    if (
+      !skipRender &&
+      !props.generateStripe.loading &&
+      Object.keys(props.generateStripe.data).length > 0
+    ) {
       setClientSecret(props.generateStripe.data.clientSecret);
     }
   }, [props.generateStripe]);
 
   const appearance = {
-    theme: 'stripe',
+    theme: "stripe",
   };
 
   const options = {
@@ -106,9 +134,11 @@ const AddWalletAmountModal = (props) => {
     <>
       <div className="payment-modal-sec">
         <Modal
-          className={`modal-dialog-center user-list-free-modal payment-modal-res ${nullData.includes(localStorage.getItem("theme")) ?
-            "" : "dark-theme-modal"
-            }`}
+          className={`modal-dialog-center user-list-free-modal payment-modal-res ${
+            nullData.includes(localStorage.getItem("theme"))
+              ? ""
+              : "dark-theme-modal"
+          }`}
           size="xl"
           centered
           show={props.paymentsModal}
@@ -118,8 +148,10 @@ const AddWalletAmountModal = (props) => {
             {/* <Modal.Title>User List</Modal.Title> *
           </Modal.Header> */}
           <Modal.Body className="wallet-card-body">
-            <Button className="modal-close"
-              onClick={() => props.closepaymentsModal()}>
+            <Button
+              className="modal-close"
+              onClick={() => props.closepaymentsModal()}
+            >
               <i className="fa fa-times" />
             </Button>
             <div className="payment-modal-body">
@@ -133,29 +165,31 @@ const AddWalletAmountModal = (props) => {
                   showWallet={false}
                 />
                 <Col md={12} xl={5}>
-                  {showAddCard ?
-                    <AddCardModalSec
-                      setShowAddCard={setShowAddCard}
-                    />
-                    : clientSecret && paymentType === "CARD" ?
-                      <Elements options={options} stripe={stripePromise}>
-                        <StripePaymentSec
-                          clientSecret={clientSecret}
-                          back={()=>setClientSecret("")}
-                        />
-                      </Elements>
-                      : <WalletAmountSec
-                        amount={amount}
-                        paymentType={paymentType}
-                        setAmount={setAmount}
-                        handleSubmit={handleSubmit}
-                        paypalOnSuccess={paypalOnSuccess}
-                        paypalOnError={paypalOnError}
-                        paypalOnCancel={paypalOnCancel}
-                        buttonDisable={props.generateStripe.buttonDisable}
-                        loadingButtonContent={props.generateStripe.loadingButtonContent}
+                  {showAddCard ? (
+                    <AddCardModalSec setShowAddCard={setShowAddCard} />
+                  ) : clientSecret && paymentType === "CARD" ? (
+                    <Elements options={options} stripe={stripePromise}>
+                      <StripePaymentSec
+                        clientSecret={clientSecret}
+                        back={() => setClientSecret("")}
                       />
-                  }
+                    </Elements>
+                  ) : (
+                    <WalletAmountSec
+                      amount={amount}
+                      paymentType={paymentType}
+                      setAmount={setAmount}
+                      handleSubmit={handleSubmit}
+                      paypalOnSuccess={paypalOnSuccess}
+                      paypalOnError={paypalOnError}
+                      paypalOnCancel={paypalOnCancel}
+                      buttonDisable={props.generateStripe.buttonDisable}
+                      loadingButtonContent={
+                        props.generateStripe.loadingButtonContent
+                      }
+                      handleBtcpay={handleBtcpay}
+                    />
+                  )}
                 </Col>
               </Row>
             </div>
@@ -164,11 +198,12 @@ const AddWalletAmountModal = (props) => {
       </div>
     </>
   );
-}
+};
 
 const mapStateToPros = (state) => ({
   addAmount: state.wallet.addMoneyInput,
   generateStripe: state.wallet.generateStripe,
+  profile: state.users.profile,
 });
 
 function mapDispatchToProps(dispatch) {

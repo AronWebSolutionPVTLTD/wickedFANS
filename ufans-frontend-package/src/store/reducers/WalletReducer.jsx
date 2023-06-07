@@ -14,6 +14,9 @@ import {
   GENERATE_STRIPE_PAYMENT_SUCCESS,
   GENERATE_STRIPE_PAYMENT_START,
   GENERATE_STRIPE_PAYMENT_FAILURE,
+  GENERATE_BTCPAY_PAYMENT_SUCCESS,
+  GENERATE_BTCPAY_PAYMENT_START,
+  GENERATE_BTCPAY_PAYMENT_FAILURE,
 } from "../actions/ActionConstant";
 
 const initialState = {
@@ -38,7 +41,14 @@ const initialState = {
     error: false,
     buttonDisable: false,
     loadingButtonContent: null,
-  }
+  },
+  generateBtcpay: {
+    data: {},
+    loading: true,
+    error: false,
+    buttonDisable: false,
+    loadingButtonContent: null,
+  },
 };
 
 const WalletReducer = (state = initialState, action) => {
@@ -186,9 +196,9 @@ const WalletReducer = (state = initialState, action) => {
           loading: true,
           error: false,
           buttonDisable: true,
-          loadingButtonContent: "Loading"
-        }
-      }
+          loadingButtonContent: "Loading",
+        },
+      };
     case GENERATE_STRIPE_PAYMENT_SUCCESS:
       return {
         ...state,
@@ -198,8 +208,8 @@ const WalletReducer = (state = initialState, action) => {
           error: false,
           buttonDisable: false,
           loadingButtonContent: null,
-        }
-      }
+        },
+      };
     case GENERATE_STRIPE_PAYMENT_FAILURE:
       return {
         ...state,
@@ -209,8 +219,41 @@ const WalletReducer = (state = initialState, action) => {
           error: action.error,
           buttonDisable: false,
           loadingButtonContent: null,
-        }
-      }
+        },
+      };
+    case GENERATE_BTCPAY_PAYMENT_START:
+      return {
+        ...state,
+        generateBtcpay: {
+          data: {},
+          loading: true,
+          error: false,
+          buttonDisable: true,
+          loadingButtonContent: "Loading",
+        },
+      };
+    case GENERATE_BTCPAY_PAYMENT_SUCCESS:
+      return {
+        ...state,
+        generateBtcpay: {
+          data: action.data,
+          loading: false,
+          error: false,
+          buttonDisable: false,
+          loadingButtonContent: null,
+        },
+      };
+    case GENERATE_BTCPAY_PAYMENT_FAILURE:
+      return {
+        ...state,
+        generateBtcpay: {
+          data: {},
+          loading: false,
+          error: action.error,
+          buttonDisable: false,
+          loadingButtonContent: null,
+        },
+      };
     default:
       return state;
   }

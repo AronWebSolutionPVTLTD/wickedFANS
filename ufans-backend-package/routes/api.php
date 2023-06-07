@@ -178,6 +178,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
 
         Route::post('wallets_add_money_by_bank_account', 'Api\WalletApiController@user_wallets_add_money_by_bank_account');
 
+        Route::post('wallets_generate_btcpay_payment', 'Api\WalletApiController@user_wallets_generate_btcpay_payment');
+
         Route::post('wallets_history', 'Api\WalletApiController@user_wallets_history');
 
         Route::post('wallets_history_for_add', 'Api\WalletApiController@user_wallets_history_for_add');
@@ -701,4 +703,6 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
     Route::get('admin_demo_update', 'Api\DemoController@admin_demo_update');
 
     Route::get('admin_demo_login_check', 'Api\DemoController@admin_demo_login_check');
+
+    Route::post('btcpay/webhook', 'Api\BtcpayPaymentController@webhook');
 });

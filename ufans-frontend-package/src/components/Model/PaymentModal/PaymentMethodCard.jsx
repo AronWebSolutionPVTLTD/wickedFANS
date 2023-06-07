@@ -18,7 +18,11 @@ import { fetchWalletDetailsStart } from "../../../store/actions/WalletAction";
 import AddWalletAmountModal from "../../Model/PaymentModal/AddWalletAmountModal";
 
 const PaymentMethodCard = (props) => {
-  const { showWallet = true, cardElements = {}, setCardComplete = () => { } } = props;
+  const {
+    showWallet = true,
+    cardElements = {},
+    setCardComplete = () => {},
+  } = props;
 
   const [isOnlyWalletPayment, setIsOnlyWalletPayment] = useState(
     configuration.get("configData.is_only_wallet_payment")
@@ -86,8 +90,8 @@ const PaymentMethodCard = (props) => {
           {isOnlyWalletPayment == 0 || !showWallet ? (
             <>
               {configuration.get("configData.is_ccbill_enabled") == 1 &&
-                configuration.get("configData.flex_form_id") !== "" &&
-                configuration.get("configData.salt_key") !== "" ? (
+              configuration.get("configData.flex_form_id") !== "" &&
+              configuration.get("configData.salt_key") !== "" ? (
                 <label
                   className="card"
                   onClick={() => changePaymentType("CCBILL")}
@@ -102,7 +106,7 @@ const PaymentMethodCard = (props) => {
                 </label>
               ) : null}
               {configuration.get("configData.is_paypal_enabled") == 1 &&
-                configuration.get("configData.PAYPAL_ID") !== "" ? (
+              configuration.get("configData.PAYPAL_ID") !== "" ? (
                 <label
                   className="card"
                   onClick={() => changePaymentType("PAYPAL")}
@@ -126,14 +130,14 @@ const PaymentMethodCard = (props) => {
                 </label>
               ) : null}
               {configuration.get("configData.is_stripe_enabled") == 1 &&
-                configuration.get("configData.stripe_publishable_key") !== "" &&
-                configuration.get("configData.stripe_secret_key") !== "" ? (
+              configuration.get("configData.stripe_publishable_key") !== "" &&
+              configuration.get("configData.stripe_secret_key") !== "" ? (
                 <label
                   className="card"
                   onClick={() => changePaymentType("CARD")}
                 >
-                  <div className="paypal-logo-img">
-                    <h5 className="wallet-payment-title mb-3">Card</h5>
+                  <div className="card-logo-img">
+                    <span className="wallet-payment-title">Card</span>
                   </div>
 
                   <input
@@ -141,6 +145,32 @@ const PaymentMethodCard = (props) => {
                     className="radio"
                     type="radio"
                     checked={props.paymentType === "CARD"}
+                  />
+                </label>
+              ) : null}
+              {configuration.get("configData.is_btcpay_enabled") == 1 &&
+              configuration.get("configData.btcpay_api_key") !== "" ? (
+                <label
+                  className="card"
+                  onClick={() => changePaymentType("BTCPAY")}
+                >
+                  <div className="btcpay-logo-img">
+                    <img
+                      src={
+                        window.location.origin +
+                        "/assets/images/btcpay-logo.png"
+                      }
+                      alt=""
+                      height={28}
+                    />
+                    <span className="btcpay-payment-title">BTCPAY</span>
+                  </div>
+
+                  <input
+                    name="plan"
+                    className="radio"
+                    type="radio"
+                    checked={props.paymentType === "BTCPAY"}
                   />
                 </label>
               ) : null}

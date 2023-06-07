@@ -1519,3 +1519,19 @@
   color: var(--secondary-color) !important;
   outline: none !important;
 }
+
+.card-logo-img {
+  padding: 3px 0;
+}
+
+.btcpay-logo-img {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.btcpay-payment-title {
+  font-size: 1.2em;
+  font-weight: 400;
+  font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif;
+}

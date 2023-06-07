@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Http;
+
 use App\Http\Controllers\Controller;
 
 use DB, Log, Hash, Validator, Exception, Setting, Helper;
@@ -18,11 +20,12 @@ class WalletApiController extends Controller
 {
     protected $loginUser, $skip, $take;
 
-	public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
 
         Log::info(url()->current());
 
-        Log::info("Request Data".print_r($request->all(), true));
+        Log::info("Request Data" . print_r($request->all(), true));
 
         $this->loginUser = User::find($request->id);
 
@@ -33,7 +36,6 @@ class WalletApiController extends Controller
         $this->timezone = $this->loginUser->timezone ?? "America/New_York";
 
         $request->request->add(['timezone' => $this->timezone]);
-
     }
 
     /**
@@ -50,16 +52,16 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_index(Request $request) {
+    public function user_wallets_index(Request $request)
+    {
 
         try {
 
             $user_wallet = \App\Models\UserWallet::firstWhere('user_id', $request->id);
 
-            if(!$user_wallet) {
+            if (!$user_wallet) {
 
                 $user_wallet = \App\Models\UserWallet::create(['user_id' => $request->id, 'total' => 0.00, 'used' => 0.00, 'remaining' => 0.00]);
-
             }
 
             $data['user_wallet'] = $user_wallet;
@@ -69,13 +71,11 @@ class WalletApiController extends Controller
             $data['user_withdrawals_min_amount_formatted'] = formatted_amount(Setting::get('user_withdrawals_min_amount', 10));
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
-	}
+    }
 
     /**
      * @method user_wallets_history()
@@ -91,7 +91,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_history(Request $request) {
+    public function user_wallets_history(Request $request)
+    {
 
         try {
 
@@ -106,15 +107,13 @@ class WalletApiController extends Controller
             $data['total'] = \App\Models\UserWalletPayment::where('user_id', $request->id)->count() ?? 0;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
-	/**
+    /**
      * @method user_wallets_add_money_by_stripe()
      *
      * @uses Delete user account based on user id
@@ -128,7 +127,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_add_money_by_stripe(Request $request) {
+    public function user_wallets_add_money_by_stripe(Request $request)
+    {
 
         try {
 
@@ -147,14 +147,13 @@ class WalletApiController extends Controller
 
             $amount = $request->amount / 100;
 
-            if(Setting::get('is_only_wallet_payment')) {
+            if (Setting::get('is_only_wallet_payment')) {
 
                 $amount = $amount;
 
                 $request->request->add([
                     'tokens' => $amount / Setting::get('token_amount'),
                 ]);
-
             }
 
             $request->request->add([
@@ -168,26 +167,22 @@ class WalletApiController extends Controller
 
             $payment_response = PaymentRepo::user_wallets_payment_save($request)->getData();
 
-            if($payment_response->success) {
+            if ($payment_response->success) {
 
                 DB::commit();
 
                 return $this->sendResponse(api_success(117), 117, $payment_response->data);
-
             } else {
 
                 throw new Exception($payment_response->error, $payment_response->error_code);
-
             }
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             DB::rollback();
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
-	}
+    }
 
     /**
      * @method user_wallets_add_money_by_paypal()
@@ -203,7 +198,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_add_money_by_paypal(Request $request) {
+    public function user_wallets_add_money_by_paypal(Request $request)
+    {
 
         try {
 
@@ -222,14 +218,13 @@ class WalletApiController extends Controller
 
             $amount = $request->amount;
 
-            if(Setting::get('is_only_wallet_payment')) {
+            if (Setting::get('is_only_wallet_payment')) {
 
                 $amount = $request->amount * Setting::get('token_amount');
 
                 $request->request->add([
                     'tokens' => $request->amount,
                 ]);
-
             }
 
             $request->request->add([
@@ -243,28 +238,24 @@ class WalletApiController extends Controller
 
             $payment_response = PaymentRepo::user_wallets_payment_save($request)->getData();
 
-            if($payment_response->success) {
+            if ($payment_response->success) {
 
                 DB::commit();
 
                 return $this->sendResponse(api_success(117), 117, $payment_response->data);
-
             } else {
 
                 throw new Exception($payment_response->error, $payment_response->error_code);
-
             }
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             DB::rollback();
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
-	/**
+    /**
      * @method user_wallets_add_money_by_bank_account()
      *
      * @uses Delete user account based on user id
@@ -278,7 +269,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_add_money_by_bank_account(Request $request) {
+    public function user_wallets_add_money_by_bank_account(Request $request)
+    {
 
         try {
 
@@ -287,17 +279,17 @@ class WalletApiController extends Controller
             // Validation start
 
             $rules = [
-            	// 'bank_statement_picture' => 'required|mimes:jpg,png,jpeg',
+                // 'bank_statement_picture' => 'required|mimes:jpg,png,jpeg',
                 'payment_id' => 'required',
-            	'amount' => 'required|numeric|min:1',
+                'amount' => 'required|numeric|min:1',
                 'user_billing_account_id' => 'nullable|exists:user_billing_accounts,id'
-            	];
+            ];
 
             Helper::custom_validator($request->all(), $rules, $custom_errors = []);
 
             // Validation end
 
-            if(!$request->user_billing_account_id) {
+            if (!$request->user_billing_account_id) {
 
                 $user_billing_account = \App\Models\UserBillingAccount::where('user_id', $request->id)->firstWhere('is_default', YES);
 
@@ -315,27 +307,22 @@ class WalletApiController extends Controller
 
             $payment_response = PaymentRepo::user_wallets_payment_save($request)->getData();
 
-            if($payment_response->success) {
+            if ($payment_response->success) {
 
                 DB::commit();
 
                 return $this->sendResponse(api_success(133), 133, $payment_response->data);
-
             } else {
 
                 throw new Exception($payment_response->error, $payment_response->error_code);
-
             }
-
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             DB::rollback();
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
-	}
+    }
 
     /**
      * @method user_wallets_history_for_add()
@@ -351,7 +338,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_history_for_add(Request $request) {
+    public function user_wallets_history_for_add(Request $request)
+    {
 
         try {
 
@@ -364,12 +352,10 @@ class WalletApiController extends Controller
             $data['total'] = $total_query->count() ?? 0;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -386,7 +372,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_history_for_sent(Request $request) {
+    public function user_wallets_history_for_sent(Request $request)
+    {
 
         try {
 
@@ -401,12 +388,10 @@ class WalletApiController extends Controller
             $data['total'] = $total_query->count() ?? 0;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -423,7 +408,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_history_for_received(Request $request) {
+    public function user_wallets_history_for_received(Request $request)
+    {
 
         try {
 
@@ -438,12 +424,10 @@ class WalletApiController extends Controller
             $data['total'] = $total_query->count() ?? 0;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -460,11 +444,12 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_payment_view(Request $request) {
+    public function user_wallets_payment_view(Request $request)
+    {
 
         try {
 
-            $rules = [ 'user_wallet_payment_unique_id' => 'required|exists:user_wallet_payments,unique_id'];
+            $rules = ['user_wallet_payment_unique_id' => 'required|exists:user_wallet_payments,unique_id'];
 
             Helper::custom_validator($request->all(), $rules);
 
@@ -475,12 +460,10 @@ class WalletApiController extends Controller
             $data['wallet_payment'] = $wallet_payment;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
 
@@ -498,7 +481,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_wallets_send_money(Request $request) {
+    public function user_wallets_send_money(Request $request)
+    {
 
         try {
 
@@ -507,9 +491,9 @@ class WalletApiController extends Controller
             // Validation start
 
             $rules = [
-                        'to_user_id' => 'required|exists:users,id',
-                        'amount' => 'required|numeric|min:1'
-                    ];
+                'to_user_id' => 'required|exists:users,id',
+                'amount' => 'required|numeric|min:1'
+            ];
 
             $custom_errors = ['to_user_id' => api_error(143)];
 
@@ -521,10 +505,9 @@ class WalletApiController extends Controller
 
             $to_user = \App\Models\User::Approved()->firstWhere('id', $request->to_user_id);
 
-            if(!$to_user) {
+            if (!$to_user) {
 
                 throw new Exception(api_error(130), 130);
-
             }
 
             // Check the user has enough balance
@@ -533,7 +516,7 @@ class WalletApiController extends Controller
 
             $remaining = $user_wallet->remaining ?? 0;
 
-            if($remaining < $request->amount) {
+            if ($remaining < $request->amount) {
                 throw new Exception(api_error(131), 131);
             }
 
@@ -544,12 +527,12 @@ class WalletApiController extends Controller
                 'paid_amount' => $request->amount,
                 'payment_type' => WALLET_PAYMENT_TYPE_PAID,
                 'amount_type' => WALLET_AMOUNT_TYPE_MINUS,
-                'payment_id' => 'DD-'.rand()
+                'payment_id' => 'DD-' . rand()
             ]);
 
             $payment_response = PaymentRepo::user_wallets_payment_save($request)->getData();
 
-            if($payment_response->success) {
+            if ($payment_response->success) {
 
                 // Update the to user
 
@@ -561,7 +544,7 @@ class WalletApiController extends Controller
                     'paid_amount' => $request->amount,
                     'payment_type' => WALLET_PAYMENT_TYPE_CREDIT,
                     'amount_type' => WALLET_AMOUNT_TYPE_ADD,
-                    'payment_id' => 'CD-'.rand(),
+                    'payment_id' => 'CD-' . rand(),
                     'usage_type' => USAGE_TYPE_SEND_MONEY
                 ];
 
@@ -571,14 +554,14 @@ class WalletApiController extends Controller
 
                 $to_user_payment_response = PaymentRepo::user_wallets_payment_save($to_user_request)->getData();
 
-                if($to_user_payment_response->success) {
+                if ($to_user_payment_response->success) {
 
 
                     $wallet_message = tr('wallet_money_send_message');
 
-                    $wallet_message = str_replace("<%request_amount%>", formatted_amount($request->amount?? '0.00'),$wallet_message);
+                    $wallet_message = str_replace("<%request_amount%>", formatted_amount($request->amount ?? '0.00'), $wallet_message);
 
-                    $wallet_message = str_replace("<%user_name%>", $user_wallet->user->name??'',$wallet_message);
+                    $wallet_message = str_replace("<%user_name%>", $user_wallet->user->name ?? '', $wallet_message);
 
                     $email_data['subject'] = Setting::get('site_name');
 
@@ -599,24 +582,19 @@ class WalletApiController extends Controller
                     DB::commit();
 
                     return $this->sendResponse(api_success(138), 138, $payment_response->data);
-
                 } else {
                     throw new Exception($to_user_payment_response->error, $to_user_payment_response->error_code);
                 }
-
             } else {
 
                 throw new Exception($payment_response->error, $payment_response->error_code);
-
             }
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             DB::rollback();
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -633,7 +611,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function admin_account_details(Request $request) {
+    public function admin_account_details(Request $request)
+    {
 
         try {
 
@@ -642,15 +621,13 @@ class WalletApiController extends Controller
             $data = \App\Models\Settings::whereIn('key', $admin_account_keys)->get();
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
-     /**
+    /**
      * @method user_withdrawals_index()
      *
      * @uses wallet details
@@ -664,34 +641,33 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_withdrawals_index(Request $request) {
+    public function user_withdrawals_index(Request $request)
+    {
 
         try {
 
-           $base_query = $total_query = \App\Models\UserWithdrawal::where('user_id', $request->id);
+            $base_query = $total_query = \App\Models\UserWithdrawal::where('user_id', $request->id);
 
             $history = $base_query->skip($this->skip)->take($this->take)->orderBy('created_at', 'desc')->get();
 
             $history = $history->map(function ($value, $key) use ($request) {
 
-                        $value->cancel_btn_status = in_array($value->status, [WITHDRAW_INITIATED, WITHDRAW_ONHOLD]) ? YES : NO;
+                $value->cancel_btn_status = in_array($value->status, [WITHDRAW_INITIATED, WITHDRAW_ONHOLD]) ? YES : NO;
 
-                        $value->created = common_date($value->created_at, $this->timezone, 'd M Y');
+                $value->created = common_date($value->created_at, $this->timezone, 'd M Y');
 
-                        return $value;
-                    });
+                return $value;
+            });
 
             $data['history'] = $history ?? [];
 
             $data['total'] = $total_query->count() ?? 0;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -708,11 +684,12 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_withdrawals_view(Request $request) {
+    public function user_withdrawals_view(Request $request)
+    {
 
         try {
 
-            $rules = [ 'user_withdrawal_id' => 'required|exists:user_withdrawals,id'];
+            $rules = ['user_withdrawal_id' => 'required|exists:user_withdrawals,id'];
 
             $custom_errors = ['user_withdrawal_id.exists' => api_error(257)];
 
@@ -723,12 +700,10 @@ class WalletApiController extends Controller
             $data['user_withdrawal'] = $user_withdrawal;
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -744,7 +719,8 @@ class WalletApiController extends Controller
      *
      * @return JSON Response
      */
-    public function user_withdrawals_search(Request $request) {
+    public function user_withdrawals_search(Request $request)
+    {
 
         try {
 
@@ -759,14 +735,13 @@ class WalletApiController extends Controller
             $search_key = $request->search_key;
 
             $base_query = $total_query = \App\Models\UserWithdrawal::where('user_withdrawals.user_id', $request->id)
-                            ->where(function($query) use($search_key) {
+                ->where(function ($query) use ($search_key) {
 
-                                $query->orWhere('payment_id','LIKE','%'.$search_key.'%');
+                    $query->orWhere('payment_id', 'LIKE', '%' . $search_key . '%');
 
-                                $query->orWhere('requested_amount','LIKE','%'.$search_key.'%');
-                                $query->orWhere('paid_amount','LIKE','%'.$search_key.'%');
-
-                            });
+                    $query->orWhere('requested_amount', 'LIKE', '%' . $search_key . '%');
+                    $query->orWhere('paid_amount', 'LIKE', '%' . $search_key . '%');
+                });
 
             $user_withdrawals = $base_query->skip($this->skip)->take($this->take)->get();
 
@@ -775,13 +750,10 @@ class WalletApiController extends Controller
             $data['total'] = $total_query->count();
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
-
         }
-
     }
 
     /**
@@ -798,7 +770,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_withdrawals_send_request(Request $request) {
+    public function user_withdrawals_send_request(Request $request)
+    {
 
         try {
 
@@ -808,7 +781,7 @@ class WalletApiController extends Controller
 
             $rules = [
                 'requested_amount' => 'nullable|numeric|min:1',
-                'user_billing_account_id' => 'required|exists:user_billing_accounts,id,user_id,'.$request->id
+                'user_billing_account_id' => 'required|exists:user_billing_accounts,id,user_id,' . $request->id
             ];
 
             Helper::custom_validator($request->all(), $rules, $custom_errors = []);
@@ -831,24 +804,23 @@ class WalletApiController extends Controller
 
             // }
 
-            if($remaining <= 0) {
+            if ($remaining <= 0) {
 
                 throw new Exception(api_error($error_code), $error_code);
-
             }
 
             $requested_amount = $request->requested_amount ?: $user_wallet->remaining;
 
             $user_withdrawals_min_amount = Setting::get('user_withdrawals_min_amount', 10);
 
-            if($requested_amount < $user_withdrawals_min_amount) {
+            if ($requested_amount < $user_withdrawals_min_amount) {
 
                 $min_amount_formatted = formatted_amount($user_withdrawals_min_amount);
 
                 throw new Exception(api_error(143, $min_amount_formatted), 143);
             }
 
-            if($remaining < $request->requested_amount) {
+            if ($remaining < $request->requested_amount) {
 
                 throw new Exception(api_error(170), 170);
             }
@@ -858,7 +830,7 @@ class WalletApiController extends Controller
 
             $user_withdrawals_min_balance = Setting::get('user_withdrawals_min_balance', 10);
 
-            if($balance_wallet < $user_withdrawals_min_balance) {
+            if ($balance_wallet < $user_withdrawals_min_balance) {
 
                 $min_balance_formatted = formatted_amount($user_withdrawals_min_balance);
 
@@ -879,16 +851,14 @@ class WalletApiController extends Controller
 
             $amount = $request->requested_amount ?? 0;
 
-            if(Setting::get('is_only_wallet_payment')) {
+            if (Setting::get('is_only_wallet_payment')) {
 
                 $user_withdrawal->requested_token = $amount;
 
                 $user_withdrawal->requested_amount = $user_withdrawal->requested_token * Setting::get('token_amount');
-
             } else {
 
                 $user_withdrawal->requested_amount = $amount;
-
             }
 
             $user_withdrawal->status = USER_WALLET_PAYMENT_INITIALIZE;
@@ -910,8 +880,8 @@ class WalletApiController extends Controller
                 'paid_amount' => $request->requested_amount * Setting::get('token_amount'),
                 'payment_type' => WALLET_PAYMENT_TYPE_WITHDRAWAL,
                 'amount_type' => WALLET_AMOUNT_TYPE_MINUS,
-                'payment_id' => 'WDP-'.rand(),
-                'payment_mode'=>PAYMENT_MODE_WALLET,
+                'payment_id' => 'WDP-' . rand(),
+                'payment_mode' => PAYMENT_MODE_WALLET,
                 'usage_type' => USAGE_TYPE_WITHDRAW,
                 'tokens' => $request->requested_amount,
                 'paid_status' => USER_WALLET_PAYMENT_INITIALIZE
@@ -923,7 +893,7 @@ class WalletApiController extends Controller
 
             $withdraw_request_response = PaymentRepo::user_wallets_payment_save($withdraw_request)->getData();
 
-            if($withdraw_request_response->success) {
+            if ($withdraw_request_response->success) {
 
                 $user_wallet_payment = $withdraw_request_response->data;
 
@@ -934,19 +904,16 @@ class WalletApiController extends Controller
                 DB::commit();
 
                 return $this->sendResponse(api_success(248), 248, $user_withdrawal);
-
             } else {
 
                 throw new Exception($withdraw_request_response->error, $withdraw_request_response->error_code);
             }
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             DB::rollback();
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -963,7 +930,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_withdrawals_cancel_request(Request $request) {
+    public function user_withdrawals_cancel_request(Request $request)
+    {
 
         try {
 
@@ -972,9 +940,9 @@ class WalletApiController extends Controller
             // Validation start
 
             $rules = [
-                    'user_withdrawal_id' => 'required|numeric|exists:user_withdrawals,id',
-                    'cancel_reason' => 'nullable'
-                ];
+                'user_withdrawal_id' => 'required|numeric|exists:user_withdrawals,id',
+                'cancel_reason' => 'nullable'
+            ];
 
             Helper::custom_validator($request->all(), $rules, $custom_errors = []);
 
@@ -984,14 +952,14 @@ class WalletApiController extends Controller
 
             $user_withdrawal = \App\Models\UserWithdrawal::where('user_id', $request->id)->where('user_withdrawals.id', $request->user_withdrawal_id)->first();
 
-            if(!$user_withdrawal) {
+            if (!$user_withdrawal) {
                 throw new Exception(api_error(140), 140);
             }
 
 
             // Check the cancel eligibility
 
-            if(in_array($user_withdrawal->status, [WITHDRAW_PAID, WITHDRAW_DECLINED, WITHDRAW_CANCELLED])) {
+            if (in_array($user_withdrawal->status, [WITHDRAW_PAID, WITHDRAW_DECLINED, WITHDRAW_CANCELLED])) {
                 throw new Exception(api_error(141), 141);
             }
 
@@ -1009,7 +977,7 @@ class WalletApiController extends Controller
 
             $user_wallet_payment = \App\Models\UserWalletPayment::where('id', $user_withdrawal->user_wallet_payment_id)->first();
 
-            if($user_wallet_payment) {
+            if ($user_wallet_payment) {
 
                 $user_wallet_payment->status = USER_WALLET_PAYMENT_CANCELLED;
 
@@ -1021,14 +989,12 @@ class WalletApiController extends Controller
             $data = [];
 
             return $this->sendResponse(api_success(249), 249, $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             DB::rollback();
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -1045,7 +1011,8 @@ class WalletApiController extends Controller
      * @return json with boolean output
      */
 
-    public function user_withdrawals_check(Request $request) {
+    public function user_withdrawals_check(Request $request)
+    {
 
         try {
 
@@ -1053,14 +1020,13 @@ class WalletApiController extends Controller
 
             $user_wallet = \App\Models\UserWallet::where('user_id', $request->id)->first();
 
-            if(!$user_wallet) {
+            if (!$user_wallet) {
                 $user_wallet = \App\Models\UserWallet::create(['user_id' => $request->id, 'total' => 0.00, 'used' => 0.00, 'remaining' => 0.00]);
-
             }
 
             $user_withdrawals_min_amount = Setting::get('user_withdrawals_min_amount', 10);
 
-            if($user_wallet->remaining < $user_withdrawals_min_amount) {
+            if ($user_wallet->remaining < $user_withdrawals_min_amount) {
 
                 $min_amount_formatted = formatted_amount($user_withdrawals_min_amount);
 
@@ -1068,12 +1034,10 @@ class WalletApiController extends Controller
             }
 
             return $this->sendResponse($message = "", $code = "", $user_wallet);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
     /**
@@ -1090,7 +1054,8 @@ class WalletApiController extends Controller
      * @return json data
      */
 
-    public function user_wallets_generate_stripe_payment(Request $request) {
+    public function user_wallets_generate_stripe_payment(Request $request)
+    {
 
         try {
             // Validation start
@@ -1105,14 +1070,13 @@ class WalletApiController extends Controller
 
             $amount = $request->amount;
 
-            if(Setting::get('is_only_wallet_payment')) {
+            if (Setting::get('is_only_wallet_payment')) {
 
                 $amount = $request->amount * Setting::get('token_amount');
 
                 $request->request->add([
                     'tokens' => $request->amount,
                 ]);
-
             }
 
 
@@ -1120,14 +1084,13 @@ class WalletApiController extends Controller
 
             $stripe_secret_key = Setting::get('stripe_secret_key');
 
-            if(!$stripe_secret_key) {
+            if (!$stripe_secret_key) {
 
                 throw new Exception(api_error(107), 107);
-
-            } 
+            }
 
             \Stripe\Stripe::setApiKey($stripe_secret_key);
-           
+
             $currency_code = Setting::get('currency_code', 'USD') ?: "USD";
 
             $total = intval(round($amount * 100));
@@ -1151,20 +1114,131 @@ class WalletApiController extends Controller
             ]);
 
             $data = [
-                'currency_code' => $currency_code, 
-                'amount' => $request->amount, 
-                'tokens' => $request->tokens, 
+                'currency_code' => $currency_code,
+                'amount' => $request->amount,
+                'tokens' => $request->tokens,
                 'tokens_formatted' => formatted_amount($request->tokens),
                 'clientSecret' => $stripe_payment_intent->client_secret
             ];
 
             return $this->sendResponse($message = "", $code = "", $data);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError($e->getMessage(), $e->getCode());
         }
-
     }
 
+    /**
+     * @method user_wallets_generate_btcpay_payment()
+     *
+     * @uses Generate btcpay invoice for wallet payment
+     *
+     * @created Volodymyr S
+     *
+     * @updated Volodymyr S
+     *
+     * @param object $request
+     *
+     * @return json data
+     */
+
+    public function user_wallets_generate_btcpay_payment(Request $request)
+    {
+
+        try {
+
+            DB::beginTransaction();
+
+            // Validation start
+
+            $rules = [
+                'amount' => 'required|numeric|min:1',
+                'redirectURL' => 'required'
+            ];
+
+            Helper::custom_validator($request->all(), $rules, $custom_errors = []);
+
+            $user = User::find($request->id);
+
+            if (!$user) {
+                throw new Exception(api_error(1002), 1002);
+            }
+
+            $btcpay_mode = str_replace("\r", "", envfile('BTCPAY_MODE'));
+
+            $btcpay_api_key = str_replace("\r", "", ($btcpay_mode == 'test' ? envfile('BTCPAY_TEST_API_KEY') : envfile('BTCPAY_LIVE_API_KEY')));
+
+            $btcpay_store_id = str_replace("\r", "", ($btcpay_mode == 'test' ? envfile('BTCPAY_TEST_STORE_ID') : envfile('BTCPAY_LIVE_STORE_ID')));
+
+            $btcpay_endpoint = $btcpay_mode == 'test' ? 'https://testnet.demo.btcpayserver.org' : 'https://mainnet.demo.btcpayserver.org';
+
+            if (!$btcpay_api_key || !$btcpay_store_id) {
+                return $this->sendError('BTCPAY API Key or STORE ID not found', 500);
+            }
+
+            // Validation end
+
+            $amount = $request->amount;
+
+            if (Setting::get('is_only_wallet_payment')) {
+
+                $amount = $request->amount * Setting::get('token_amount');
+
+                $request->request->add([
+                    'tokens' => $request->amount,
+                ]);
+            }
+
+            // Create a Btcpay invoice
+
+            $btcpayInvoiceResponse = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => ('token ' . $btcpay_api_key),
+            ])->post($btcpay_endpoint . '/api/v1/stores/' . $btcpay_store_id . '/invoices', [
+                'metadata' => [
+                    'buyerEmail' => $user->email
+                ],
+                'checkout' => [
+                    'redirectURL' => $request->redirectURL,
+                    'redirectAutomatically' => TRUE,
+                ],
+                'receipt' => ['enabled' => TRUE],
+                'amount' => $request->amount,
+                'currency' => 'USD'
+            ]);
+
+            $btcpayInvoiceData = $btcpayInvoiceResponse->json();
+
+            $request->request->add([
+                'payment_id' => $btcpayInvoiceData['id'],
+                'paid_status' => USER_WALLET_PAYMENT_INITIALIZE,
+                'usage_type' => USAGE_TYPE_RECHARGE,
+                'total' => $amount,
+                'user_pay_amount' => $amount,
+                'paid_amount' => $amount,
+                'payment_mode' => BTCPAY,
+            ]);
+
+            $payment_response = PaymentRepo::user_wallets_payment_save($request)->getData();
+
+            if ($payment_response->success) {
+
+                DB::commit();
+
+                $response_data = $payment_response->data;
+
+                $response_data->checkoutLink = $btcpayInvoiceData['checkoutLink'];
+
+                return $this->sendResponse(api_success(117), 117, $response_data);
+            } else {
+
+                throw new Exception($payment_response->error, $payment_response->error_code);
+            }
+        } catch (Exception $e) {
+
+            DB::rollback();
+
+            return $this->sendError($e->getMessage(), $e->getCode());
+        }
+    }
 }

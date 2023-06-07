@@ -14,6 +14,9 @@ import {
   GENERATE_STRIPE_PAYMENT_START,
   GENERATE_STRIPE_PAYMENT_SUCCESS,
   GENERATE_STRIPE_PAYMENT_FAILURE,
+  GENERATE_BTCPAY_PAYMENT_START,
+  GENERATE_BTCPAY_PAYMENT_SUCCESS,
+  GENERATE_BTCPAY_PAYMENT_FAILURE,
 } from "./ActionConstant";
 
 // Get Wallet Details actions.
@@ -112,19 +115,40 @@ export function generateStripePaymentStart(data) {
   return {
     type: GENERATE_STRIPE_PAYMENT_START,
     data,
-  }
+  };
 }
 
 export function generateStripePaymentSuccess(data) {
   return {
     type: GENERATE_STRIPE_PAYMENT_SUCCESS,
     data,
-  }
+  };
 }
 
 export function generateStripePaymentFailure(error) {
   return {
     type: GENERATE_STRIPE_PAYMENT_FAILURE,
     error,
-  }
+  };
+}
+
+export function generateBtcpayPaymentStart(data) {
+  return {
+    type: GENERATE_BTCPAY_PAYMENT_START,
+    data,
+  };
+}
+
+export function generateBtcpayPaymentSuccess(data) {
+  return {
+    type: GENERATE_BTCPAY_PAYMENT_SUCCESS,
+    data,
+  };
+}
+
+export function generateBtcpayPaymentFailure(error) {
+  return {
+    type: GENERATE_BTCPAY_PAYMENT_FAILURE,
+    error,
+  };
 }
