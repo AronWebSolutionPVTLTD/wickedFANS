@@ -11578,14 +11578,6 @@ button.main-header-menu.icon-with-round-hover img{
   display: none !important;
 }
 
-
-
-/* .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary {
-  background: #e344982b !important;
-  padding: 8px 18px !important;
-  border-radius: 50px !important;
-} */
-
 .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary:hover {
   background: #e344982b !important;
   padding: 5px 10px !important;

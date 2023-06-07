@@ -203,8 +203,6 @@
   background: transparent !important;
 }
 
-
-
 .new-feed-user-btn-sec .sent-tip-btn span {
   color: var(--tertiary-color);
   font-size: 1.6em;
@@ -214,8 +212,6 @@
 .sent-tip-btn .sent-tip-icon {
   width: 2.2em;
 }
-
-
 
 .feed-post-dropdown .feed-post-dropdown-btn {
   border: 0 !important;
@@ -544,7 +540,6 @@
   padding: 4px 10px;
   color: var(--secondary-color);
 }
-
 
 .new-feed-suggestion-box .slick-prev:before {
   font-family: "Font Awesome 5 Free";
