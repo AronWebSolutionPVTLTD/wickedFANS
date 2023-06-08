@@ -1043,7 +1043,7 @@ const SingleProfile = (props) => {
                           </Link>
                         </Media>
                       )}
-                      {userDetails.data.user.height ? (
+                      {userDetails.data.user.height > 0 && (
                         <Media as="li">
                           <Link to="#">
                             <Image
@@ -1058,8 +1058,8 @@ const SingleProfile = (props) => {
                             </span>
                           </Link>
                         </Media>
-                      ) : null}
-                      {userDetails.data.user.weight ? (
+                      )}
+                      {userDetails.data.user.weight > 0 && (
                         <Media as="li">
                           <Link to="#">
                             <Image
@@ -1074,7 +1074,7 @@ const SingleProfile = (props) => {
                             </span>
                           </Link>
                         </Media>
-                      ) : null}
+                      )}
                       {userDetails.data.user.address ? (
                         <Media as="li">
                           <Link to="#">

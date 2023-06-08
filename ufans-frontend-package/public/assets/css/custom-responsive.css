@@ -548,3 +548,10 @@ Version: 7.0
         padding-bottom: 6em!important;
     }
 }
+
+
+@media only screen and (min-width: 100px) and (max-width: 767px) {
+    .landing-main-wrapper {
+        background-image: unset;
+    }
+}

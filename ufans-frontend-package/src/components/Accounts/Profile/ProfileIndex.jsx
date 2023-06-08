@@ -761,7 +761,7 @@ const ProfileIndex = (props) => {
                           </Link>
                         </Media>
                       )}
-                      {props.profile.data.height &&  (
+                      {props.profile.data.height > 0 && (
                         <Media as="li">
                           <Link to="#">
                             <Image
@@ -775,7 +775,7 @@ const ProfileIndex = (props) => {
                           </Link>
                         </Media>
                       )}
-                      {props.profile.data.weight && (
+                      {props.profile.data.weight > 0 && (
                         <Media as="li">
                           <Link to="#">
                             <Image
