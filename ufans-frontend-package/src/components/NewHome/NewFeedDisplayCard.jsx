@@ -146,7 +146,7 @@ const NewFeedDisplayCard = (props) => {
                   "/assets/images/feed-story/sent-tip-1.svg"
                 }
               />
-              <span>Tipsdddd</span>
+              <span>Tips</span>
             </Button> */}
             <Dropdown className="feed-post-dropdown">
               <Dropdown.Toggle
@@ -271,7 +271,7 @@ const NewFeedDisplayCard = (props) => {
                   className="new-feed-wishlist-icon"
                   src={
                     window.location.origin +
-                    "/assets/images/feed-story/sent-tip-1.svg"
+                    "/assets/images/feed-story/circuler_dollar_icon.png"
                   }
                 />
                 <span>SEND TIP</span>

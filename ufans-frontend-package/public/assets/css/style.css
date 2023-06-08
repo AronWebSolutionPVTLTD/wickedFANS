@@ -11456,7 +11456,6 @@ background: #F1F6FF;
   text-align: center;
 }
 
-
 #livestream-thumbnail{
 display: none;
 }
@@ -11470,7 +11469,6 @@ display: none;
   max-width: 100%;
   height: 3em;
 }
-
 
 .error-msg{
   margin-bottom: -20px;
@@ -11528,6 +11526,7 @@ button.main-header-menu.icon-with-round-hover img{
   align-items: center;
   justify-content: center;
 }
+
 /* .awssld__content {
   background: none !important;
 } 
@@ -11580,13 +11579,19 @@ button.main-header-menu.icon-with-round-hover img{
 
 .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary:hover {
   background: #e344982b !important;
-  padding: 5px 10px !important;
-  border-radius: 50px !important;
+}
+
+.new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary {
+ padding: 5px !important;
+ border-radius: 50px !important;
 }
 
 .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary img {
-  width: 16px;
+  width: 22px;
 }
 .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary span {
-  font-size:14px;
+  font-size:16px;
 }
+
+
+

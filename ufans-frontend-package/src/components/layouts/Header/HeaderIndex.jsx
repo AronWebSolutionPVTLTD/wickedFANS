@@ -350,7 +350,7 @@ const HeaderIndex = (props) => {
           <div className="drawer__wrapper">
             <div className="drawer__header">
               <div className="drawer__title">
-                <Link to="#" className="l-sidebar__avatar" data-name="Profile">
+                <Link to={"/profile"} onClick={() => setIsVisible(!isVisible)} className="l-sidebar__avatar" data-name="Profile">
                   <span className="sidebar-hamburger-user-profile">
                     <Image
                       src={localStorage.getItem("user_picture")}
