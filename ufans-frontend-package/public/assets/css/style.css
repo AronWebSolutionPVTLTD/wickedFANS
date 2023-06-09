@@ -7093,7 +7093,8 @@ input.authentication-input {
     padding: 0px 16px;
   }
   .edit-save {
-    padding: 8px 16px 48px;
+    /* padding: 8px 16px 48px; */
+    padding: 28px 16px 48px;
   }
   .edit-input-wrapper {
     padding: 0 15px 24px;
