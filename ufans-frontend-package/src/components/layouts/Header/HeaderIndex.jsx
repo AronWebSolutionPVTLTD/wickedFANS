@@ -122,8 +122,9 @@ const HeaderIndex = (props) => {
                 <Image
                   src={
                     window.location.origin +
-                    "/assets/images/home_icon_link.png"
+                    "/assets/images/icons/new/icon.svg"
                   }
+                  style={{width: '32px'}}
                 />
               </Link>
               <Link
@@ -477,13 +478,13 @@ const HeaderIndex = (props) => {
                   </Link>
                 )}
 
-                <Link
+                {/* <Link
                   to={"/ecom"}
                   className="sidebar-menus-item"
                   data-name="ecommerce"
                   onClick={() => setIsVisible(!isVisible)}
                 >
-                  {/* <i className="fas fa-shopping-bag"></i> */}
+               
                   <Image
                     src={
                       window.location.origin +
@@ -492,7 +493,7 @@ const HeaderIndex = (props) => {
                     alt={configuration.get("configData.site_name")}
                   />
                   {t("ecommerce")}
-                </Link>
+                </Link> */}
 
                 <Link
                   to={"/stories"}
