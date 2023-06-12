@@ -258,11 +258,15 @@ const SingleProfile = (props) => {
         ) : (
           <div className="new-home-box">
             <div className="new-home-sidebar">
-              <div className="profile-logo-sec">
-                <Image
+            <div className="profile-logo-sec">
+                <p className="profile-logo-img"></p>
+
+                {/* <Image
                   className="profile-logo-img"
                   src={`${configuration.get("configData.site_logo")}`}
-                />
+                  width="200"
+                  height="80"
+                /> */}
               </div>
               <div className="sibebar-header-sec">
                 {userDetails.data.user.featured_story ? (

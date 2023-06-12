@@ -185,9 +185,14 @@ img {
     padding-top: 50px;
 }
 @media (max-width:767px) {
+  .sign-up-right-content {
+    width: 600px !important;
+    margin: auto !important;
+  }
+
     .content-wrapper, .main-footer {
-    margin-left: 0;
-}
+     margin-left: 0;
+    }
 .sidebar-open .content-wrapper, .sidebar-open .main-footer {
     -webkit-transform: translate(230px, 0);
     -ms-transform: translate(230px, 0);
@@ -15001,4 +15006,10 @@ img.away, img.busy, img.offline, img.online {
   .sign-up-left-content {
     padding: 2em 5em;
   }
+}
+
+/*kamal*/
+.sign-up-right-content {
+  width: 600px;
+  margin: auto;
 }
