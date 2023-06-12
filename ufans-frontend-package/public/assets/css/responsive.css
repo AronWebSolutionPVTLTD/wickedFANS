@@ -333,6 +333,7 @@ Version: 1.0
     display: none;
   }
   .landing-main-wrapper {
+    background: unset; /*extra added line*/
     min-height: 60vh;
   }
   /* .home-screen.home-sec .tab-home-post-slider .slick-track{

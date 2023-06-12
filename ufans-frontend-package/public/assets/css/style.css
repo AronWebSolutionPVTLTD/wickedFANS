@@ -8223,7 +8223,7 @@ input.authentication-input {
   margin-bottom: 2em;
 }
 .landing-main-wrapper{
-  background-size: 50%;
+    background-size: 50%;
     background-repeat: no-repeat;
     background-image: url('../images/bg.png');
 }

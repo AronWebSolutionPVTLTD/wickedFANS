@@ -10,7 +10,7 @@
 
     <div class="row">
 
-        <div class="col-md-12 col-xl-6 col-lg-6 padding-left-zero">
+        <!-- <div class="col-md-12 col-xl-6 col-lg-6 padding-left-zero">
 
             <div class="sign-up-left-content text-center">
 
@@ -18,7 +18,6 @@
 
                 <p>{{Setting::get('tag_name')}}</p>
 
-                <!-- <img src="{{asset('images/auth/sign_up.svg')}}" alt="sign-up-img"/> -->
                 <div class="login-slider owl-carousel">
 
                     <div>
@@ -35,9 +34,9 @@
 
             </div>
 
-        </div>
+        </div> -->
 
-        <div class="col-md-12 col-xl-6 col-lg-6">
+        <div class="col-md-12 col-xl-12 col-lg-12">
 
             <div class="sign-up-right-content">
 
