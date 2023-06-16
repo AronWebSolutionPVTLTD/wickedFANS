@@ -39,6 +39,7 @@
     "gapi-script": "^1.2.0",
     "google-maps-react": "^2.0.2",
     "jquery": "^3.6.0",
+    "mdb-react-ui-kit": "^6.1.0",
     "multiselect-react-dropdown": "^1.6.11",
     "react": "^16.13.1",
     "react-add-to-calendar": "^0.1.5",

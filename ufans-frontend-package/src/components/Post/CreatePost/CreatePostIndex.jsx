@@ -28,7 +28,7 @@ import PostEditor from "../postMentions/PostEditor";
 import { stateToHTML } from "draft-js-export-html";
 import { Multiselect } from "multiselect-react-dropdown";
 import ContentCreatorSteps from "./ContentCreatorSteps";
-import axios from "axios";
+
 
 const CreatePostIndex = (props) => {
 
@@ -64,6 +64,19 @@ const CreatePostIndex = (props) => {
 
   const [videoPreview, setVideoPreview] = useState({ previewVideo: "" });
 
+  const [checked, setChecked] = React.useState(false);
+  const [inputs,setInputs] = useState({
+    opt_1:"",
+    opt_2:"",
+    opt_3:"",
+    opt_4:""
+  })
+
+  const [amount, setAmount] = useState('');
+
+
+
+
   useEffect(() => {
     props.dispatch(fetchPostCategoriesStart());
   }, []);
@@ -81,11 +94,11 @@ const CreatePostIndex = (props) => {
       });
     }
   }, [!props.fileUpload.loading]);
-  
+
   useEffect(() => {
     if (props.fileRemove.loading === false) {
       let files = [];
-      if(props.fileRemove.data.post_file.length > 0) {
+      if (props.fileRemove.data.post_file.length > 0) {
         props.fileRemove.data.post_file.map((value, i) => {
           files.push(value);
         });
@@ -111,10 +124,10 @@ const CreatePostIndex = (props) => {
   const handleChangeImage = (event, fileType) => {
     let data_array = [];
 
-    [...event.target.files].forEach((file,key) => {
+    [...event.target.files].forEach((file, key) => {
 
-      let name = 'file['+key+']';
-      
+      let name = 'file[' + key + ']';
+
       data_array[name] = file;
 
     });
@@ -131,10 +144,10 @@ const CreatePostIndex = (props) => {
   const handleChangeVideo = (event, fileType) => {
     let data_array = [];
 
-    [...event.target.files].forEach((file,key) => {
+    [...event.target.files].forEach((file, key) => {
 
-      let name = 'file['+key+']';
-      
+      let name = 'file[' + key + ']';
+
       data_array[name] = file;
 
     });
@@ -153,10 +166,10 @@ const CreatePostIndex = (props) => {
   const handleChangeAudio = (event, fileType) => {
     let data_array = [];
 
-    [...event.target.files].forEach((file,key) => {
+    [...event.target.files].forEach((file, key) => {
 
-      let name = 'file['+key+']';
-      
+      let name = 'file[' + key + ']';
+
       data_array[name] = file;
 
     });
@@ -170,7 +183,7 @@ const CreatePostIndex = (props) => {
     props.dispatch(postFileUploadStart(data_array));
   };
 
-  const handleClose = (event,post_file) => {
+  const handleClose = (event, post_file) => {
     event.preventDefault();
     if (props.fileUpload.loadingButtonContent !== null) {
       const notificationMessage = getErrorNotificationMessage(
@@ -190,36 +203,61 @@ const CreatePostIndex = (props) => {
     }
   };
 
+  const handleChange = (e) => {
+    //alert(e.target.checked)
+    setChecked(e.target.checked);
+  }
+
+  const handleInputChange = (e) => {
+    e.preventDefault()
+    const {value,name} = e.target
+    
+    setInputs((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleAmountChange  = (e) => {
+    e.preventDefault()
+    const {value,name} = e.target
+    setAmount(value)
+  }
+  
+  
+  
+
   const handleSubmit = (event) => {
-    event.preventDefault();
-    if (fileUploadStatus) {
-      props.dispatch(
-        savePostStart({
-          content: editorHtmlContent,
-          amount: inputData.amount ? inputData.amount : "",
-          post_file_id: inputData.post_file_id ? inputData.post_file_id : "",
-          preview_file: inputData.preview_file ? inputData.preview_file : "",
-          category_ids: inputData.category_ids
-            ? inputData.category_ids
-            : [],
-            video_preview_file: inputData.video_preview_file ? inputData.video_preview_file : "",
-        })
-      );
-    } else {
-      // props.dispatch(
-      //   savePostStart({
-      //     content: editorHtmlContent,
-      //     amount: inputData.amount ? inputData.amount : "",
-      //     category_ids: inputData.category_ids
-      //       ? inputData.category_ids
-      //       : [],
-      //   })
-      // );
-      const notificationMessage = getErrorNotificationMessage(
-        "Please upload media files"
-      );
-      props.dispatch(createNotification(notificationMessage));
-    }
+    console.log('-----------',event)
+    // event.preventDefault();
+    // if (fileUploadStatus) {
+    //   props.dispatch(
+    //     savePostStart({
+    //       content: editorHtmlContent,
+    //       amount: inputData.amount ? inputData.amount : "",
+    //       post_file_id: inputData.post_file_id ? inputData.post_file_id : "",
+    //       preview_file: inputData.preview_file ? inputData.preview_file : "",
+    //       category_ids: inputData.category_ids
+    //         ? inputData.category_ids
+    //         : [],
+    //       video_preview_file: inputData.video_preview_file ? inputData.video_preview_file : "",
+    //     })
+    //   );
+    // } else {
+    //   // props.dispatch(
+    //   //   savePostStart({
+    //   //     content: editorHtmlContent,
+    //   //     amount: inputData.amount ? inputData.amount : "",
+    //   //     category_ids: inputData.category_ids
+    //   //       ? inputData.category_ids
+    //   //       : [],
+    //   //   })
+    //   // );
+    //   const notificationMessage = getErrorNotificationMessage(
+    //     "Please upload media files"
+    //   );
+    //   props.dispatch(createNotification(notificationMessage));
+    // }
   };
 
   const setValues = (inputValue) => {
@@ -310,8 +348,8 @@ const CreatePostIndex = (props) => {
                           {props.fileUpload.loadingButtonContent !== null
                             ? props.fileUpload.loadingButtonContent
                             : props.savePost.loadingButtonContent !== null
-                            ? props.savePost.loadingButtonContent
-                            : t("post")}
+                              ? props.savePost.loadingButtonContent
+                              : t("post")}
                         </Button>
                       ) : (
                         <Button
@@ -353,7 +391,7 @@ const CreatePostIndex = (props) => {
                         getEditorRawContent={setEditorContentstate}
                         getEditorHtmlContent={setEditorHtmlContent}
                         dispatch={props.dispatch}
-                        // searchUser={props.searchUser}
+                      // searchUser={props.searchUser}
                       />
                     </div>
                   </div>
@@ -361,7 +399,7 @@ const CreatePostIndex = (props) => {
 
                 <Col sm={12} md={6} className="mt-3 mt-lg-4">
                   {props.postCategories.data.post_categories &&
-                  props.postCategories.data.post_categories.length > 0 ? (
+                    props.postCategories.data.post_categories.length > 0 ? (
                     <>
                       <Form.Group className="mb-0">
                         <Form.Label className="edit-input-label mb-3 mb-lg-3">
@@ -463,16 +501,16 @@ const CreatePostIndex = (props) => {
                         <Row>
                           <Col sm={12} md={6} className="mb-3 mb-lg-4">
                             <div className="post-img-preview-sec m-0">
-                            <div className="post-img-preview-sec my-3 my-lg-4">
-                              <video
-                                autoplay
-                                controls
-                                id="myVideo"
-                                className="user-profile1 w-100"
-                              >
-                                <source src={videoPreview.previewVideo} type="video/mp4" />
-                              </video>
-                            </div>
+                              <div className="post-img-preview-sec my-3 my-lg-4">
+                                <video
+                                  autoplay
+                                  controls
+                                  id="myVideo"
+                                  className="user-profile1 w-100"
+                                >
+                                  <source src={videoPreview.previewVideo} type="video/mp4" />
+                                </video>
+                              </div>
                             </div>
                           </Col>
                         </Row>
@@ -596,65 +634,134 @@ const CreatePostIndex = (props) => {
                   ) : (
                     ""
                   )}
-                  {previewImage && postFileData ? 
+                  {previewImage && postFileData ?
                     <Row>
-                      {postFileData.map((image , index) => (
-                      <Col sm={12} md={6}>
-                        <div className="post-img-preview-sec">
-                          <Link to="#" onClick={(event) => handleClose(event, image)}>
-                            <i className="far fa-times-circle"></i>
-                          </Link>
-                          <Image
-                            alt="#"
-                            src={image}
-                            className="post-video-preview"
-                          />
-                        </div>
-                      </Col>
+                      {postFileData.map((image, index) => (
+                        <Col sm={12} md={6}>
+                          <div className="post-img-preview-sec">
+                            <Link to="#" onClick={(event) => handleClose(event, image)}>
+                              <i className="far fa-times-circle"></i>
+                            </Link>
+                            <Image
+                              alt="#"
+                              src={image}
+                              className="post-video-preview"
+                            />
+                          </div>
+                        </Col>
                       ))}
                     </Row>
-                  : null}
+                    : null}
                   {videoPreviewUrl && postFileData ? (
                     <Row>
-                      {postFileData.map((video , index) => (
-                      <Col sm={12} md={12}>
-                        <div key={index} className="post-img-preview-sec my-3 my-lg-4">
-                          <video
-                            autoplay
-                            controls
-                            id="myVideo"
-                            className="user-profile1 create-post-video"
-                          >
-                            <source src={video} type="video/mp4" />
-                          </video>
-                          <Link to="#" onClick={(event) => handleClose(event, video)} className="close-video">
-                            <i className="far fa-window-close"></i>
-                          </Link>
-                        </div>
-                      </Col>
+                      {postFileData.map((video, index) => (
+                        <Col sm={12} md={12}>
+                          <div key={index} className="post-img-preview-sec my-3 my-lg-4">
+                            <video
+                              autoplay
+                              controls
+                              id="myVideo"
+                              className="user-profile1 create-post-video"
+                            >
+                              <source src={video} type="video/mp4" />
+                            </video>
+                            <Link to="#" onClick={(event) => handleClose(event, video)} className="close-video">
+                              <i className="far fa-window-close"></i>
+                            </Link>
+                          </div>
+                        </Col>
                       ))}
                     </Row>
                   ) : null}
                   {audioThumbnail && postFileData ? (
                     <Row>
-                      {postFileData.map((audio , index) => (
-                      <Col sm={12} md={12}>
-                        <div className="post-img-preview-sec">
-                          <audio
-                            controls
-                            id="myVideo"
-                            className="user-profile1"
-                          >
-                            <source src={audio} type="audio/mp3" />
-                          </audio>
-                          <Link to="#" onClick={(event) => handleClose(event, audio)} className="close-audio">
-                            <i className="far fa-window-close"></i>
-                          </Link>
-                        </div>
-                      </Col>
+                      {postFileData.map((audio, index) => (
+                        <Col sm={12} md={12}>
+                          <div className="post-img-preview-sec">
+                            <audio
+                              controls
+                              id="myVideo"
+                              className="user-profile1"
+                            >
+                              <source src={audio} type="audio/mp3" />
+                            </audio>
+                            <Link to="#" onClick={(event) => handleClose(event, audio)} className="close-audio">
+                              <i className="far fa-window-close"></i>
+                            </Link>
+                          </div>
+                        </Col>
                       ))}
                     </Row>
                   ) : null}
+                </Col>
+
+                <Col sm={12} md={6} className="mt-3 mt-lg-4">
+                  <>
+                    <Form.Group className="md-mrg-btm mt-3 mt-lg-4">
+                      <Form.Label className="edit-input-label mb-3 mb-lg-3">
+                        {`Enable Fundraising ?`}
+                      </Form.Label>
+                      <input value="test" type="checkbox" onChange={handleChange} />
+                      {checked ?
+                      <input
+                        className="form-control searchBox"
+                        placeholder="Your Target"
+                        type="text"
+                        name="opt_1"
+                        value={amount}
+                        onChange={handleAmountChange}
+                      
+                      />:
+                      null
+                      }
+                      {amount > 1?
+                      
+                      <Col sm={12} md={12} >
+                      
+                      <input
+                        className="form-control campaign_box"
+                        placeholder="Enter option"
+                        type="text"
+                        name="opt_1"
+                        value={inputs.opt_1}
+                        onChange={handleInputChange}
+                      
+                      />
+                        <input
+                        className="form-control campaign_box"
+                        placeholder="Enter option"
+                        type="text"
+                        name="opt_2"
+                        value={inputs.opt_2}
+                        onChange={handleInputChange}
+                      
+                      />
+                                 
+                        <input
+                        className="form-control campaign_box"
+                        placeholder="Enter option"
+                        type="text"
+                        name="opt_3"
+                        value={inputs.opt_3}
+                        onChange={handleInputChange}
+                      
+                      />
+                        <input
+                        className="form-control campaign_box"
+                        placeholder="Enter option"
+                        type="text"
+                        name="opt_4"
+                        value={inputs.opt_4}
+                        onChange={handleInputChange}
+                      
+                      />
+                      </Col>
+                      :null
+                      }
+                      
+                    </Form.Group>
+                  </>
+
                 </Col>
               </Row>
             </Form>

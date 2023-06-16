@@ -210,9 +210,9 @@ const ProfileIndex = (props) => {
                     )}
                   </span>
                 </h4>
-                {/* <Link to="#" className="sidebar-user-name">
-                  {props.profile.data.email}
-                </Link> */}
+                <Link to="#" className="sidebar-user-name">
+                  @{props.profile.data.username}
+                </Link>
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">
                     <h5>{props.profile.data.total_posts}</h5>

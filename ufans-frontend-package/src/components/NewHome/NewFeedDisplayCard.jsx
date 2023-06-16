@@ -9,6 +9,7 @@ import {
   Image,
   Media,
   Modal,
+  ProgressBar
 } from "react-bootstrap";
 import "./NewHome.css";
 import { Link, useHistory } from "react-router-dom";
@@ -113,12 +114,14 @@ const NewFeedDisplayCard = (props) => {
       <div className="new-feed-display-card">
         <div className="new-feed-header-sec">
           <div className="new-feed-user-info">
-            <div className="live-streaming-user-img-sec">
-              <Image className="new-feed-user-img" src={post.user_picture} />
+            <div className="live-streaming-user-img-sec" >
+              <Link to={`/${post.user_unique_id}`}>
+                <Image className="new-feed-user-img" src={post.user_picture} />
+              </Link>
             </div>
             <div className="new-feed-user-details">
               <h4>
-                {post.user_displayname}
+              <Link to={`/${post.user_unique_id}`}>{post.user_displayname}</Link>
                 {post.is_verified_badge === 1 ? (
                   <span>
                     <Image
@@ -226,8 +229,44 @@ const NewFeedDisplayCard = (props) => {
             </AutoplaySlider>
           )}
         </div>
+
+        <div className="new-feed-campaign-footer-sec">
+            {/* <ProgressBar now = {50} label = {`50% completed`} bgColor="#E0F5FD"/>
+            <br></br>*/}
+            <div className="new-feed-footer-action-btn-sec campaign-option">
+              <div className="new-feed-footer-action-left-sec campaign-option-target">
+                <span> <Image
+                  className="three-dots-icon"
+                  src={
+                    window.location.origin +
+                    "/assets/images/icons/target_dollar.png"
+                  }
+                /> $0</span>
+              </div>
+              <div className="new-feed-footer-action-right-sec campaign-option-target">
+                <span>$250</span>
+              </div>
+            </div>
+          
+
+          <div className="new-feed-footer-campaign-option-sec">
+            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
+              <span>$10</span>
+            </Button>
+            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
+              <span>$25</span>
+            </Button>
+            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
+              <span>$50</span>
+            </Button>
+            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
+              <span>$100</span>
+            </Button>
+          </div>
+        </div>
         <div className="new-feed-footer-sec">
           <div className="new-feed-footer-action-btn-sec">
+
             <div className="new-feed-footer-action-left-sec">
               <Button
                 className="new-feed-wishlist-btn"
@@ -353,21 +392,25 @@ const NewFeedDisplayCard = (props) => {
         />
           : null
       } */}
-      {sendTip ? (
-        <SendTipPaymentModal
-          paymentsModal={sendTip}
-          closepaymentsModal={closeSendTipModal}
-          post_id={post.post_id}
-          user_id={post.user_id}
-        />
-      ) : null}
-      {reportMode ? (
-        <ReportModeModal
-          reportMode={reportMode}
-          closeReportModeModal={closeReportModeModal}
-          post={post}
-        />
-      ) : null}
+      {
+        sendTip ? (
+          <SendTipPaymentModal
+            paymentsModal={sendTip}
+            closepaymentsModal={closeSendTipModal}
+            post_id={post.post_id}
+            user_id={post.user_id}
+          />
+        ) : null
+      }
+      {
+        reportMode ? (
+          <ReportModeModal
+            reportMode={reportMode}
+            closeReportModeModal={closeReportModeModal}
+            post={post}
+          />
+        ) : null
+      }
       <Modal
         className="modal-dialog-center"
         centered
