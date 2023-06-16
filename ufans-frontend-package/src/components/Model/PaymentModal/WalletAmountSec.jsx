@@ -48,7 +48,7 @@ const WalletAmountSec = (props) => {
             {configuration.get("configData.token_amount") * props.amount}
           </div>
 
-          {props.paymentType === "PAYPAL" ? (
+          {props.paymentType === "PAYPAL" && (
             <PaypalExpressBtn
               env={env}
               client={client}
@@ -58,25 +58,25 @@ const WalletAmountSec = (props) => {
               onSuccess={props.paypalOnSuccess}
               onCancel={props.paypalOnCancel}
             />
-          ) : props.paymentType === "BTCPAY" ? (
-            <Button
-              type="button"
-              variant="link"
-              disabled={
-                props.amount && props.amount > 0
-                  ? false
-                  : true || props.buttonDisable
-              }
-              style={{ padding: 0, width: "auto" }}
-              onClick={() => props.handleBtcpay(props.amount)}
-            >
-              <img
-                src="/assets/images/btcpay-button.svg"
-                style={{ height: 50 }}
-                alt="Pay with BTCPay Server, a Self-Hosted Bitcoin Payment Processor"
-              />
-            </Button>
-          ) : (
+          )}
+          {props.paymentType === "BTCPAY" && (
+            <div className="add-card-btn">
+              <Button
+                type="button"
+                disabled={
+                  props.amount && props.amount > 0
+                    ? false
+                    : true || props.buttonDisable
+                }
+                onClick={() => props.handleBtcpay(props.amount)}
+              >
+                {props.loadingButtonContent
+                  ? props.loadingButtonContent
+                  : "Pay with Bitcoin"}
+              </Button>
+            </div>
+          )}
+          {props.paymentType === "CARD" && (
             <div className="add-card-btn">
               <Button
                 type="submit"

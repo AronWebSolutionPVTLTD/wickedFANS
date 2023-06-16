@@ -158,12 +158,12 @@ const PaymentMethodCard = (props) => {
                     <img
                       src={
                         window.location.origin +
-                        "/assets/images/btcpay-logo.png"
+                        "/assets/images/bitcoin-logo.png"
                       }
                       alt=""
                       height={28}
                     />
-                    <span className="btcpay-payment-title">BTCPAY</span>
+                    <span className="btcpay-payment-title">Bitcoin</span>
                   </div>
 
                   <input

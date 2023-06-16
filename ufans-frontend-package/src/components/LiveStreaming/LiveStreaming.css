@@ -1242,7 +1242,7 @@
 .add-card-btn button {
   color: #fff;
   border: 0;
-  font-size: 1.2em;
+  font-size: 1.5em;
   padding: 1em;
   font-weight: 500;
   border-radius: 10px;
@@ -1531,7 +1531,7 @@
 }
 
 .btcpay-payment-title {
-  font-size: 1.2em;
-  font-weight: 400;
-  font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-left: 3px;
 }

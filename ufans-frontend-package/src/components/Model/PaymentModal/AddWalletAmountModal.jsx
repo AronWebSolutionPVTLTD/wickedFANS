@@ -38,7 +38,7 @@ const AddWalletAmountModal = (props) => {
 
   const nullData = ["", null, undefined, "light"];
   const [skipRender, setSkipRender] = useState(true);
-  const [paymentType, setPaymentType] = useState("CARD");
+  const [paymentType, setPaymentType] = useState("BTCPAY");
   const [selectedCard, setSelectedCard] = useState(null);
   const [showAddCard, setShowAddCard] = useState(false);
   const [amount, setAmount] = useState(1);

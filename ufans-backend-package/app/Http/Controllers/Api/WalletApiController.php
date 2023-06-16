@@ -1166,14 +1166,15 @@ class WalletApiController extends Controller
 
             $btcpay_mode = str_replace("\r", "", envfile('BTCPAY_MODE'));
 
-            $btcpay_api_key = str_replace("\r", "", ($btcpay_mode == 'test' ? envfile('BTCPAY_TEST_API_KEY') : envfile('BTCPAY_LIVE_API_KEY')));
+            $btcpay_api_key = $btcpay_mode == 'test' ? Setting::get('btcpay_test_api_key') : Setting::get('btcpay_live_api_key');
 
-            $btcpay_store_id = str_replace("\r", "", ($btcpay_mode == 'test' ? envfile('BTCPAY_TEST_STORE_ID') : envfile('BTCPAY_LIVE_STORE_ID')));
+            $btcpay_store_id = $btcpay_mode == 'test' ? Setting::get('btcpay_test_store_id') : Setting::get('btcpay_live_store_id');
 
-            $btcpay_endpoint = $btcpay_mode == 'test' ? 'https://testnet.demo.btcpayserver.org' : 'https://mainnet.demo.btcpayserver.org';
+            // $btcpay_endpoint = $btcpay_mode == 'test' ? 'https://testnet.demo.btcpayserver.org' : 'https://mainnet.demo.btcpayserver.org';
+            $btcpay_endpoint = $btcpay_mode == 'test' ? Setting::get('btcpay_test_endpoint') : Setting::get('btcpay_live_endpoint');
 
-            if (!$btcpay_api_key || !$btcpay_store_id) {
-                return $this->sendError('BTCPAY API Key or STORE ID not found', 500);
+            if (!$btcpay_api_key || !$btcpay_store_id || !$btcpay_endpoint) {
+                return $this->sendError('BTCPAY API Key, STORE ID, or ENDPOINT not found', 500);
             }
 
             // Validation end
@@ -1194,6 +1195,8 @@ class WalletApiController extends Controller
             $btcpayInvoiceResponse = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => ('token ' . $btcpay_api_key),
+            ])->withOptions([
+                'verify' => false,
             ])->post($btcpay_endpoint . '/api/v1/stores/' . $btcpay_store_id . '/invoices', [
                 'metadata' => [
                     'buyerEmail' => $user->email

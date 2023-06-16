@@ -277,6 +277,9 @@ if (!defined('BELL_NOTIFICATION_TYPE_ORDER')) define('BELL_NOTIFICATION_TYPE_ORD
 if (!defined('PRODUCTION')) define('PRODUCTION', 'production');
 if (!defined('SANDBOX')) define('SANDBOX', 'sandbox');
 
+if (!defined('LIVE')) define('LIVE', 'live');
+if (!defined('TEST')) define('TEST', 'test');
+
 if (!defined('FILE_TYPE_IMAGE')) define('FILE_TYPE_IMAGE', 'image');
 if (!defined('FILE_TYPE_VIDEO')) define('FILE_TYPE_VIDEO', 'video');
 if (!defined('FILE_TYPE_AUDIO')) define('FILE_TYPE_AUDIO', 'audio');
