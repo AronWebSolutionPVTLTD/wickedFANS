@@ -231,8 +231,6 @@ const NewFeedDisplayCard = (props) => {
         </div>
 
         <div className="new-feed-campaign-footer-sec">
-            {/* <ProgressBar now = {50} label = {`50% completed`} bgColor="#E0F5FD"/>
-            <br></br>*/}
             <div className="new-feed-footer-action-btn-sec campaign-option">
               <div className="new-feed-footer-action-left-sec campaign-option-target">
                 <span> <Image
