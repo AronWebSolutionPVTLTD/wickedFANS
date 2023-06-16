@@ -730,3 +730,43 @@
 .new-feed-image-modal-body {
   padding: 0 !important;
 }
+
+/* kamal */
+.new-feed-campaign-footer-sec {	
+  border: 1px solid #ddd;	
+  border-radius: 5px;	
+  margin-top: 10px;	
+}
+.new-feed-footer-campaign-option-sec {	
+  display: flex;	
+  align-items: center;	
+  justify-content: space-between;	
+}	
+.campaign-option {	
+  border-bottom: 1px solid #ddd;	
+  padding: 16px;	
+}
+.campaign-option-target span {
+  font-size: 2em;
+  font-weight: 500;
+  line-height: 1.8;
+  color: #525252;
+  text-align: left;
+}
+.new-feed-footer-campaign-option-sec .btn-primary {	
+    color: #47B7F1;
+    background-color: #ffffff;
+    border-color: #ddd;
+    width: 24%;
+    margin: 20px 7px;
+    border-radius: 25px;
+    padding: 6px;
+}	
+
+.new-feed-footer-campaign-option-sec .btn-primary span {
+  font-size: 1.6em;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #47B7F1;
+  text-align: left;
+}
