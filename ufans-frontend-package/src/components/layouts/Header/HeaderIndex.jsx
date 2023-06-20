@@ -24,7 +24,7 @@ const HeaderIndex = (props) => {
   const pro_pic = localStorage.getItem("user_picture")
 
   useEffect(() => {
-    console.log("Inside");
+    console.log("----Inside----",localStorage.getItem("user_picture"));
     
     let chatSocketUrl = configuration.get("configData.chat_socket_url");
     if (chatSocketUrl === "") {
@@ -371,9 +371,16 @@ const HeaderIndex = (props) => {
                     <h3 className="g-user-name">
                       {localStorage.getItem("name")} {"  "}
                       {localStorage.getItem("is_verified_badge") == 1 ? (
-                        <div className="pl-2">
-                          <VerifiedBadgeNoShadow />
-                        </div>
+                        // <div className="pl-2">
+                        //   <VerifiedBadgeNoShadow />
+                        // </div>
+                        <Image
+                        className="sidebar-verified-icon"
+                        src={
+                          window.location.origin +
+                          "/assets/images/new-home/verified-icon.svg"
+                        }
+                      />
                       ) : null}
                     </h3>
                     <span className="user-id">
@@ -474,7 +481,7 @@ const HeaderIndex = (props) => {
                       }
                       alt={configuration.get("configData.site_name")}
                     />{" "}
-                    {t("dashboard")}
+                    {t("statistics")}
                   </Link>
                 )}
 

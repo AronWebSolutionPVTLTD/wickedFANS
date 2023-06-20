@@ -89,6 +89,7 @@ const SingleProfile = (props) => {
   const toggleVisibility = () => {};
 
   useEffect(() => {
+    
     props.dispatch(
       fetchSingleUserProfileStart({
         user_unique_id: props.match.params.username,
@@ -332,6 +333,56 @@ const SingleProfile = (props) => {
                 <Link to="#" className="sidebar-user-name">
                   @{userDetails.data.user.username}
                 </Link>
+                <div className="sidebar-total-count-info-box">
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/image-post-1.svg"
+                          }
+                        />
+                      </span>
+                      <span> </span>
+                      { userDetails.data.user.total_images? userDetails.data.user.total_images : 0 }
+                    </h5>
+                    
+                  </div>
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/video-post.svg"
+                          }
+                        />
+                      </span>
+                      <span> </span>
+                        { userDetails.data.user.total_videos? userDetails.data.user.total_videos : 0}
+                    </h5>
+                    
+                  </div>
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/eye.svg"
+                          }
+                        />
+                      </span>
+                      <span> </span>
+                        { userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users: 0}
+                    </h5>
+                   
+                  </div>
+                </div>
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">
                     <h5>{userDetails.data.user.total_posts}</h5>

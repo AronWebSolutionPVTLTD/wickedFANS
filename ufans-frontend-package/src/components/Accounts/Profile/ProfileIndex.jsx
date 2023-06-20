@@ -69,6 +69,7 @@ const ProfileIndex = (props) => {
       props.dispatch(fetchUserDetailsStart());
       setBadgeStatus(localStorage.getItem("is_verified_badge"));
     }
+    console.log('000000000',props.posts.data)
   }, []);
 
   const setActiveSection = (event, key) => {
@@ -213,6 +214,63 @@ const ProfileIndex = (props) => {
                 <Link to="#" className="sidebar-user-name">
                   @{props.profile.data.username}
                 </Link>
+                {/* Photo_count,video_count,likes_count*/}
+                <div className="sidebar-total-count-info-box">
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/image-post-1.svg"
+                          }
+                        />
+                      </span>
+                      <span>  </span> 
+                      {localStorage.getItem("total_images")
+                          ? localStorage.getItem("total_images")
+                          : 0}
+                    </h5>
+                    
+                  </div>
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/video-post.svg"
+                          }
+                        />
+                      </span><span>  </span>
+                        {localStorage.getItem("total_videos")
+                        ? localStorage.getItem("total_videos")
+                        : 0}
+                    </h5>
+                    
+                  </div>
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/eye.svg"
+                          }
+                        />
+                      </span>
+                      <span>  </span>
+                        {localStorage.getItem("total_fav_users")
+                        ? localStorage.getItem("total_fav_users")
+                        : 0}
+                    </h5>
+                   
+                  </div>
+                </div>
+                {/* Posts_count,fans_count,follower_count*/}
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">
                     <h5>{props.profile.data.total_posts}</h5>

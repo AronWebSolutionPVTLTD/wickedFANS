@@ -8,8 +8,7 @@ import {
   Form,
   Image,
   Media,
-  Modal,
-  ProgressBar
+  Modal
 } from "react-bootstrap";
 import "./NewHome.css";
 import { Link, useHistory } from "react-router-dom";
@@ -47,6 +46,7 @@ const NewFeedDisplayCard = (props) => {
   };
 
   const handleLike = () => {
+    console.log('-------------',post)
     props.dispatch(savePostLikeStart({ post_id: post.post_id }));
   };
 
@@ -287,7 +287,7 @@ const NewFeedDisplayCard = (props) => {
                     }
                   />
                 )}
-                <span>{post.like_count}</span>
+                <span>{post.post_fake_likes>0?post.post_fake_likes :post.like_count}</span>
               </Button>
 
               <Button

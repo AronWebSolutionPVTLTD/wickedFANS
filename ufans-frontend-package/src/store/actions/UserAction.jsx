@@ -258,7 +258,7 @@ export function forgotPasswordStart(data) {
 }
 
 export function forgotPasswordSuccess(data) {
-  return {
+  return  {
     type: FORGOT_PASSWORD_SUCCESS,
     data,
   };
