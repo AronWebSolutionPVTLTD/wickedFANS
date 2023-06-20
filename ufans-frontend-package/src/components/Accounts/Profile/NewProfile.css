@@ -615,3 +615,13 @@
 .new-explore-search-card .new-explore-search-icon{
    max-width: 1.5em;
 }
+
+.sidebar-total-count-media-card::before {
+    content: '';
+    width: 0;
+    height: 100%;
+    position: absolute;
+    /* border: 1px solid rgba(0, 0, 0, 0.1); */
+    top: 0;
+    right: -18px;
+}

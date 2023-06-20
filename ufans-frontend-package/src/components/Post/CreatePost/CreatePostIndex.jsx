@@ -72,6 +72,12 @@ const CreatePostIndex = (props) => {
     opt_4:""
   })
 
+  const [multipleInputs,setMultipleInputs] = useState([
+    {
+      name:""
+    }
+  ])
+
   const [amount, setAmount] = useState('');
 
 
@@ -309,6 +315,27 @@ const CreatePostIndex = (props) => {
       });
     }
   };
+  const addInputFields = (e) => {
+    e.preventDefault()
+    let newfield = { name: ''}
+    setMultipleInputs([...multipleInputs, newfield])
+}
+const removeInputFields = (e,index)=>{
+  e.preventDefault()
+    let data = [...multipleInputs];
+    data.splice(index, 1)
+    setMultipleInputs(data)
+}
+
+const handleMultipleInputChange = (evnt,index)=>{
+   
+
+  const { name, value } = evnt.target;
+  const list = [...multipleInputs];
+  list[index][name] = value;
+  setMultipleInputs(list);
+
+}
 
   return (
     <div className="notification-page create-post" id="tabs">
@@ -718,43 +745,29 @@ const CreatePostIndex = (props) => {
                       
                       <Col sm={12} md={12} >
                       
-                      <input
-                        className="form-control campaign_box"
-                        placeholder="Enter option"
-                        type="text"
-                        name="opt_1"
-                        value={inputs.opt_1}
-                        onChange={handleInputChange}
-                      
-                      />
-                        <input
-                        className="form-control campaign_box"
-                        placeholder="Enter option"
-                        type="text"
-                        name="opt_2"
-                        value={inputs.opt_2}
-                        onChange={handleInputChange}
-                      
-                      />
+                      {
+                        
+                        multipleInputs.slice(0,4).map((input,index)=>{
+                   
+                          return(
+                            <div key={index} style={{display:"flex",flexDirection:'row'}}>
+                            <input
+                            className="form-control campaign_box"
+                            placeholder="Enter option"
+                            type="text"
+                            name="name"
+                            value={input.name}
+                            onChange={(e)=>handleMultipleInputChange(e,index)}
+                            key={index}
+                          />
+                    {index == 0 ? <button onClick={addInputFields} style={{ height:"20px",width:"20px" }}>+</button>:<button onClick={(e)=>removeInputFields(e,index)} style={{ height:"20px",width:"20px" }}>-</button>}
+                    {index == 4 && <h1>cannot add more than 4 fields</h1>}
+                      </div>
+                          )
+                        })
+                      }
                                  
-                        <input
-                        className="form-control campaign_box"
-                        placeholder="Enter option"
-                        type="text"
-                        name="opt_3"
-                        value={inputs.opt_3}
-                        onChange={handleInputChange}
-                      
-                      />
-                        <input
-                        className="form-control campaign_box"
-                        placeholder="Enter option"
-                        type="text"
-                        name="opt_4"
-                        value={inputs.opt_4}
-                        onChange={handleInputChange}
-                      
-                      />
+                   
                       </Col>
                       :null
                       }
