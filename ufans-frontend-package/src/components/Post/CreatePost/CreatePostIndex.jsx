@@ -65,16 +65,16 @@ const CreatePostIndex = (props) => {
   const [videoPreview, setVideoPreview] = useState({ previewVideo: "" });
 
   const [checked, setChecked] = React.useState(false);
-  const [inputs,setInputs] = useState({
-    opt_1:"",
-    opt_2:"",
-    opt_3:"",
-    opt_4:""
+  const [inputs, setInputs] = useState({
+    opt_1: "",
+    opt_2: "",
+    opt_3: "",
+    opt_4: ""
   })
 
-  const [multipleInputs,setMultipleInputs] = useState([
+  const [multipleInputs, setMultipleInputs] = useState([
     {
-      name:""
+      name: ""
     }
   ])
 
@@ -216,25 +216,25 @@ const CreatePostIndex = (props) => {
 
   const handleInputChange = (e) => {
     e.preventDefault()
-    const {value,name} = e.target
-    
+    const { value, name } = e.target
+
     setInputs((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const handleAmountChange  = (e) => {
+  const handleAmountChange = (e) => {
     e.preventDefault()
-    const {value,name} = e.target
+    const { value, name } = e.target
     setAmount(value)
   }
-  
-  
-  
+
+
+
 
   const handleSubmit = (event) => {
-    console.log('-----------',event)
+    console.log('-----------', event)
     // event.preventDefault();
     // if (fileUploadStatus) {
     //   props.dispatch(
@@ -317,25 +317,25 @@ const CreatePostIndex = (props) => {
   };
   const addInputFields = (e) => {
     e.preventDefault()
-    let newfield = { name: ''}
+    let newfield = { name: '' }
     setMultipleInputs([...multipleInputs, newfield])
-}
-const removeInputFields = (e,index)=>{
-  e.preventDefault()
+  }
+  const removeInputFields = (e, index) => {
+    e.preventDefault()
     let data = [...multipleInputs];
     data.splice(index, 1)
     setMultipleInputs(data)
-}
+  }
 
-const handleMultipleInputChange = (evnt,index)=>{
-   
+  const handleMultipleInputChange = (evnt, index) => {
 
-  const { name, value } = evnt.target;
-  const list = [...multipleInputs];
-  list[index][name] = value;
-  setMultipleInputs(list);
 
-}
+    const { name, value } = evnt.target;
+    const list = [...multipleInputs];
+    list[index][name] = value;
+    setMultipleInputs(list);
+
+  }
 
   return (
     <div className="notification-page create-post" id="tabs">
@@ -726,52 +726,78 @@ const handleMultipleInputChange = (evnt,index)=>{
                   <>
                     <Form.Group className="md-mrg-btm mt-3 mt-lg-4">
                       <Form.Label className="edit-input-label mb-3 mb-lg-3">
-                        {`Enable Fundraising ?`}
+                        {` Enable Fundraising ?  `}
+                        <input value="test" type="checkbox" onChange={handleChange} />
                       </Form.Label>
-                      <input value="test" type="checkbox" onChange={handleChange} />
+
+
                       {checked ?
-                      <input
-                        className="form-control searchBox"
-                        placeholder="Your Target"
-                        type="text"
-                        name="opt_1"
-                        value={amount}
-                        onChange={handleAmountChange}
-                      
-                      />:
-                      null
-                      }
-                      {amount > 1?
-                      
-                      <Col sm={12} md={12} >
-                      
-                      {
-                        
-                        multipleInputs.slice(0,4).map((input,index)=>{
-                   
-                          return(
-                            <div key={index} style={{display:"flex",flexDirection:'row'}}>
-                            <input
-                            className="form-control campaign_box"
-                            placeholder="Enter option"
+
+                        <div className="campaign-input-box">
+                          <input
+                            className="campaign-input-field searchBox"
+                            placeholder="Your target"
                             type="text"
-                            name="name"
-                            value={input.name}
-                            onChange={(e)=>handleMultipleInputChange(e,index)}
-                            key={index}
+                            name="opt_1"
+                            value={amount}
+                            onChange={handleAmountChange}
                           />
-                    {index == 0 ? <button onClick={addInputFields} style={{ height:"20px",width:"20px" }}>+</button>:<button onClick={(e)=>removeInputFields(e,index)} style={{ height:"20px",width:"20px" }}>-</button>}
-                    {index == 4 && <h1>cannot add more than 4 fields</h1>}
-                      </div>
-                          )
-                        })
+                        </div>
+
+                        :
+                        null
                       }
-                                 
-                   
-                      </Col>
-                      :null
-                      }
+
                       
+
+                      {amount > 1 ?
+                          <>
+                            {
+                              multipleInputs.slice(0, 4).map((input, index) => {
+                                return (
+                                  <>
+                                    <div key={index} style={{ marginTop: '20px' }} >
+
+                                      <div className="campaign-input-box">
+                                        <input
+                                          className="campaign-input-field searchBox"
+                                          placeholder="Enter option"
+                                          type="text"
+                                          name="name"
+                                          value={input.name}
+                                          onChange={(e) => handleMultipleInputChange(e, index)}
+                                          key={index}
+                                        />
+                                      </div>
+                                      {index == 0 ?
+                                        <div class="forget-password">
+                                          <p id="one">
+                                            <a type="button" class="forgot-link" onClick={addInputFields}> Add upto 4 prefered options </a>
+                                          </p>
+                                        </div>
+                                        :
+                                        <div class="forget-password">
+                                          <p id="one">
+                                            <a type="button" class="forgot-link" onClick={(e) => removeInputFields(e, index)}>Remove</a>
+                                          </p>
+                                        </div>
+                                      
+                                      }
+                                    </div>
+                                    {index == 4 &&
+                                      <div class="forget-password">
+                                        <p id="one">
+                                          <a type="button" class="forgot-link"> You can add maximum 4 prefered option </a>
+                                        </p>
+                                      </div>
+                                    }
+                                  </>
+                                )
+                              })
+                            }
+                          </>
+                        : null
+                      }
                     </Form.Group>
                   </>
 

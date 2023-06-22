@@ -976,13 +976,19 @@ class Helper {
 
         $placeholder = placeholder_path_formate($key);
 
-        $ext = $placeholder['formate'];
+        //$ext = $placeholder['formate'];
+         
+        $file = $picture->getClientOriginalName();
+
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
 
         $local_url = $placeholder['file_name'] . "." . $ext;
 
         Image::make($picture)->encode($ext, 65)->save(public_path($folder_path.$local_url));
 
-        $file_path_url = Helper::web_url().$folder_path.$local_url;
+        //$file_path_url = Helper::web_url().$folder_path.$local_url;
+        
+        $file_path_url = Helper::web_url()."/public".$folder_path.$local_url;
 
         return $file_path_url;
     

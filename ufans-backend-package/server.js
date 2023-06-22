@@ -11,7 +11,7 @@ const setTimeoutPromise = util.promisify(setTimeout);
 
 var port = process.env.PORT || '3041';
 
-var chat_save_url = process.env.APP_URL;
+var chat_save_url = process.env.CHAT_SOCKET_URL;
 
 var SSL_KEY = process.env.SSL_KEY;
 

@@ -31,8 +31,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
 
-let chatSocket;
-// = io();
+let chatSocket = io();
 
 const NewChatRoom = (props) => {
   const history = useHistory();

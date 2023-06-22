@@ -142,13 +142,6 @@ const ProfileIndex = (props) => {
             <div className="new-home-sidebar">
               <div className="profile-logo-sec">
                 <p className="profile-logo-img"></p>
-
-                {/* <Image
-                  className="profile-logo-img"
-                  src={`${configuration.get("configData.site_logo")}`}
-                  width="200"
-                  height="80"
-                /> */}
               </div>
               <div className="sibebar-header-sec">
                 {props.profile.data.featured_story ? (
@@ -729,6 +722,86 @@ const ProfileIndex = (props) => {
                   )}
                 </div>
               </div>
+              <div className="mobile-display">
+               <div className="sidebar-total-count-info-box">
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/image-post-1.svg"
+                          }
+                        />
+                      </span>
+                      <span>  </span> 
+                      {localStorage.getItem("total_images")
+                          ? localStorage.getItem("total_images")
+                          : 0}
+                    </h5>
+                    
+                  </div>
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/video-post.svg"
+                          }
+                        />
+                      </span><span>  </span>
+                        {localStorage.getItem("total_videos")
+                        ? localStorage.getItem("total_videos")
+                        : 0}
+                    </h5>
+                    
+                  </div>
+                  <div className="sidebar-total-count-media-card">
+                    <h5>
+                      <span>
+                        <Image
+                          className="sidebar-verified-icon"
+                          src={
+                            window.location.origin +
+                            "/assets/images/new-home/icon/eye.svg"
+                          }
+                        />
+                      </span>
+                      <span>  </span>
+                        {localStorage.getItem("total_fav_users")
+                        ? localStorage.getItem("total_fav_users")
+                        : 0}
+                    </h5>
+                   
+                  </div>
+                </div>
+                {/* Posts_count,fans_count,follower_count*/}
+                <div className="sidebar-total-count-info-box">
+                  <div className="sidebar-total-count-card">
+                    <h5>{props.profile.data.total_posts}</h5>
+                    <p>{t("posts")}</p>
+                  </div>
+                  <div className="sidebar-total-count-card">
+                    <h5>
+                      {localStorage.getItem("total_followers")
+                        ? localStorage.getItem("total_followers")
+                        : 0}
+                    </h5>
+                    <p>{t("fans")}</p>
+                  </div>
+                  <div className="sidebar-total-count-card">
+                    <h5>
+                      {localStorage.getItem("total_followings")
+                        ? localStorage.getItem("total_followings")
+                        : 0}
+                    </h5>
+                    <p>{t("following")}</p>
+                  </div>
+                </div>
+                </div>
               <div className="user-right-content-sec">
                 <div className="user-right-info">
                   <div className="user-info-desc">

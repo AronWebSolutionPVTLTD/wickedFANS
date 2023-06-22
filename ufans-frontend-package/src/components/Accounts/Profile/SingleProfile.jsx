@@ -75,7 +75,7 @@ const SingleProfile = (props) => {
   const [subscrptionPayment, setPaymentModal] = useState(false);
   const [showUnfollow, setShowUnfollow] = useState(false);
   const [isReadMore, setIsReadMore] = useState(true);
-  const toggleReadMore = () => {setIsReadMore(!isReadMore)};
+  const toggleReadMore = () => { setIsReadMore(!isReadMore) };
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(12);
 
@@ -86,10 +86,10 @@ const SingleProfile = (props) => {
     amount_formatted: 0,
   });
 
-  const toggleVisibility = () => {};
+  const toggleVisibility = () => { };
 
   useEffect(() => {
-    
+
     props.dispatch(
       fetchSingleUserProfileStart({
         user_unique_id: props.match.params.username,
@@ -259,7 +259,7 @@ const SingleProfile = (props) => {
         ) : (
           <div className="new-home-box">
             <div className="new-home-sidebar">
-            <div className="profile-logo-sec">
+              <div className="profile-logo-sec">
                 <p className="profile-logo-img"></p>
 
                 {/* <Image
@@ -346,10 +346,10 @@ const SingleProfile = (props) => {
                         />
                       </span>
                       <span> </span>
-                      { userDetails.data.user.total_images? userDetails.data.user.total_images : 0 }
+                      {userDetails.data.user.total_images ? userDetails.data.user.total_images : 0}
                     </h5>
-                    
                   </div>
+
                   <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
@@ -362,9 +362,9 @@ const SingleProfile = (props) => {
                         />
                       </span>
                       <span> </span>
-                        { userDetails.data.user.total_videos? userDetails.data.user.total_videos : 0}
+                      {userDetails.data.user.total_videos ? userDetails.data.user.total_videos : 0}
                     </h5>
-                    
+
                   </div>
                   <div className="sidebar-total-count-media-card">
                     <h5>
@@ -378,9 +378,9 @@ const SingleProfile = (props) => {
                         />
                       </span>
                       <span> </span>
-                        { userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users: 0}
+                      {userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users : 0}
                     </h5>
-                   
+
                   </div>
                 </div>
                 <div className="sidebar-total-count-info-box">
@@ -789,15 +789,15 @@ const SingleProfile = (props) => {
                 </div>
               ) : null}
               {userDetails.data.youtube_link ||
-              userDetails.data.pinterest_link ||
-              userDetails.data.linkedin_link ||
-              userDetails.data.snapchat_link ||
-              userDetails.data.twitter_link ||
-              userDetails.data.instagram_link ||
-              userDetails.data.amazon_wishlist ||
-              userDetails.data.facebook_link ||
-              userDetails.data.twitch_link ||
-              userDetails.data.website ? (
+                userDetails.data.pinterest_link ||
+                userDetails.data.linkedin_link ||
+                userDetails.data.snapchat_link ||
+                userDetails.data.twitter_link ||
+                userDetails.data.instagram_link ||
+                userDetails.data.amazon_wishlist ||
+                userDetails.data.facebook_link ||
+                userDetails.data.twitch_link ||
+                userDetails.data.website ? (
                 <div className="sidebar-social-links">
                   <ul className="list-unstyled">
                     {userDetails.data.youtube_link && (
@@ -1003,6 +1003,56 @@ const SingleProfile = (props) => {
                         {userDetails.data.user.email}
                       </Link>
                       <div className="sidebar-total-count-info-box">
+                        <div className="sidebar-total-count-media-card">
+                          <h5>
+                            <span>
+                              <Image
+                                className="sidebar-verified-icon"
+                                src={
+                                  window.location.origin +
+                                  "/assets/images/new-home/icon/image-post-1.svg"
+                                }
+                              />
+                            </span>
+                            <span> </span>
+                            {userDetails.data.user.total_images ? userDetails.data.user.total_images : 0}
+                          </h5>
+                        </div>
+
+                        <div className="sidebar-total-count-media-card">
+                          <h5>
+                            <span>
+                              <Image
+                                className="sidebar-verified-icon"
+                                src={
+                                  window.location.origin +
+                                  "/assets/images/new-home/icon/video-post.svg"
+                                }
+                              />
+                            </span>
+                            <span> </span>
+                            {userDetails.data.user.total_videos ? userDetails.data.user.total_videos : 0}
+                          </h5>
+
+                        </div>
+                        <div className="sidebar-total-count-media-card">
+                          <h5>
+                            <span>
+                              <Image
+                                className="sidebar-verified-icon"
+                                src={
+                                  window.location.origin +
+                                  "/assets/images/new-home/icon/eye.svg"
+                                }
+                              />
+                            </span>
+                            <span> </span>
+                            {userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users : 0}
+                          </h5>
+
+                        </div>
+                      </div>
+                      <div className="sidebar-total-count-info-box">
                         <div className="sidebar-total-count-card">
                           <h5>{userDetails.data.user.total_posts}</h5>
                           <p>{t("posts")}</p>
@@ -1019,19 +1069,19 @@ const SingleProfile = (props) => {
                     </div>
                   </div>
                   <div className="user-info-desc">
-                    {userDetails.data.user.about_formatted?
-                    <p>
-                      {/* {userDetails.data.user.about_formatted}
+                    {userDetails.data.user.about_formatted ?
+                      <p>
+                        {/* {userDetails.data.user.about_formatted}
                       <a href="#">Read More</a> */}
-                      {isReadMore ? userDetails.data.user.about_formatted.slice(0, 300) : userDetails.data.user.about_formatted}
-                      {userDetails.data.user.about_formatted.length > 150 &&
-                        <span onClick={toggleReadMore} style={{color:'#E54296',fontSize:'14px',cursor:'pointer'}}>
-                          {isReadMore ? '...read more' : ' ...show less'}
-                        </span>
-                      }
-                    </p>
-                    :
-                    null
+                        {isReadMore ? userDetails.data.user.about_formatted.slice(0, 300) : userDetails.data.user.about_formatted}
+                        {userDetails.data.user.about_formatted.length > 150 &&
+                          <span onClick={toggleReadMore} style={{ color: '#E54296', fontSize: '14px', cursor: 'pointer' }}>
+                            {isReadMore ? '...read more' : ' ...show less'}
+                          </span>
+                        }
+                      </p>
+                      :
+                      null
                     }
                   </div>
                   <div className="user-info-list">
@@ -1151,7 +1201,7 @@ const SingleProfile = (props) => {
                   <div className="user-subscription-plans-details">
                     <h3>Subscription Plans</h3>
                     {userDetails.data.payment_info.is_user_needs_pay == 1 &&
-                    userDetails.data.payment_info.unsubscribe_btn_status ==
+                      userDetails.data.payment_info.unsubscribe_btn_status ==
                       0 ? (
                       userDetails.data.payment_info.is_free_account == 0 ? (
                         <div className="user-subscription-btn-sec">
@@ -1227,61 +1277,60 @@ const SingleProfile = (props) => {
 
                     {userDetails.data.payment_info.unsubscribe_btn_status ==
                       1 && (
-                      <>
-                        <div className="user-subscription-btn-sec">
-                          <div
-                            className="subscription-btn"
-                            onClick={() => handleUnfollowModalShow()}
-                          >
-                            {t("unfollow")}
+                        <>
+                          <div className="user-subscription-btn-sec">
+                            <div
+                              className="subscription-btn"
+                              onClick={() => handleUnfollowModalShow()}
+                            >
+                              {t("unfollow")}
+                            </div>
                           </div>
-                        </div>
-                        <Modal
-                          show={showUnfollow}
-                          onHide={handleUnfollowModalClose}
-                          backdrop="static"
-                          keyboard={false}
-                          centered
-                          className={`${
-                            localStorage.getItem("theme") !== "" &&
-                            localStorage.getItem("theme") !== null &&
-                            localStorage.getItem("theme") !== undefined &&
-                            localStorage.getItem("theme") === "dark"
+                          <Modal
+                            show={showUnfollow}
+                            onHide={handleUnfollowModalClose}
+                            backdrop="static"
+                            keyboard={false}
+                            centered
+                            className={`${localStorage.getItem("theme") !== "" &&
+                              localStorage.getItem("theme") !== null &&
+                              localStorage.getItem("theme") !== undefined &&
+                              localStorage.getItem("theme") === "dark"
                               ? "dark-theme-modal"
                               : ""
-                          }
-        `}
-                        >
-                          <Modal.Header closeButton>
-                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>
-                            {t("cancel_subscription_conformation")}
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <Button
-                              variant="secondary"
-                              size="lg"
-                              onClick={handleUnfollowModalClose}
-                            >
-                              {t("close")}
-                            </Button>
-                            <Button
-                              variant="primary"
-                              size="lg"
-                              onClick={(event) =>
-                                handleUnfollow(
-                                  event,
-                                  userDetails.data.user.user_id
-                                )
                               }
-                            >
-                              {t("yes")}
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                      </>
-                    )}
+        `}
+                          >
+                            <Modal.Header closeButton>
+                              <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              {t("cancel_subscription_conformation")}
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                variant="secondary"
+                                size="lg"
+                                onClick={handleUnfollowModalClose}
+                              >
+                                {t("close")}
+                              </Button>
+                              <Button
+                                variant="primary"
+                                size="lg"
+                                onClick={(event) =>
+                                  handleUnfollow(
+                                    event,
+                                    userDetails.data.user.user_id
+                                  )
+                                }
+                              >
+                                {t("yes")}
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        </>
+                      )}
                   </div>
                 ) : (
                   <div className="user-subscription-plans-details">
@@ -1426,15 +1475,15 @@ const SingleProfile = (props) => {
                   </div>
                 ) : null}
                 {userDetails.data.youtube_link ||
-                userDetails.data.pinterest_link ||
-                userDetails.data.linkedin_link ||
-                userDetails.data.snapchat_link ||
-                userDetails.data.twitter_link ||
-                userDetails.data.instagram_link ||
-                userDetails.data.amazon_wishlist ||
-                userDetails.data.facebook_link ||
-                userDetails.data.twitch_link ||
-                userDetails.data.website ? (
+                  userDetails.data.pinterest_link ||
+                  userDetails.data.linkedin_link ||
+                  userDetails.data.snapchat_link ||
+                  userDetails.data.twitter_link ||
+                  userDetails.data.instagram_link ||
+                  userDetails.data.amazon_wishlist ||
+                  userDetails.data.facebook_link ||
+                  userDetails.data.twitch_link ||
+                  userDetails.data.website ? (
                   <div className="sidebar-social-links">
                     <ul className="list-unstyled">
                       {userDetails.data.youtube_link && (

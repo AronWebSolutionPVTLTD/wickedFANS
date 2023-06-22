@@ -304,7 +304,7 @@ const LandingPageIndex = (props) => {
               </div> */}
               <div className="auth-img-left-sec">
                 <Image
-                  src={window.location.origin + "/assets/images/auth-img.jpg"}
+                  src={window.location.origin + "/assets/images/auth-img.png"}
                   alt=""
                   className="auth-left-img"
                 />
@@ -318,9 +318,9 @@ const LandingPageIndex = (props) => {
                     width="237"
                   />
                 </div>
-                <p className="login-tagline">
+                {/* <p className="login-tagline">
                   {configuration.get("configData.tag_name")}
-                </p>
+                </p> */}
                 <div className="forms-fields">
                   {configuration.get("configData.FB_CLIENT_ID") ? (
                     <SocialButton
