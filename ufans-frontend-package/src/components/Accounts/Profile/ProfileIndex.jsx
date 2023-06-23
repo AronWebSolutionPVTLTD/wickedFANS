@@ -69,7 +69,7 @@ const ProfileIndex = (props) => {
       props.dispatch(fetchUserDetailsStart());
       setBadgeStatus(localStorage.getItem("is_verified_badge"));
     }
-    console.log('000000000',props.posts.data)
+    console.log('000000000',props.profile)
   }, []);
 
   const setActiveSection = (event, key) => {
@@ -221,8 +221,8 @@ const ProfileIndex = (props) => {
                         />
                       </span>
                       <span>  </span> 
-                      {localStorage.getItem("total_images")
-                          ? localStorage.getItem("total_images")
+                      {props.profile.data.total_images
+                          ? props.profile.data.total_images
                           : 0}
                     </h5>
                     
@@ -238,13 +238,13 @@ const ProfileIndex = (props) => {
                           }
                         />
                       </span><span>  </span>
-                        {localStorage.getItem("total_videos")
-                        ? localStorage.getItem("total_videos")
+                        {props.profile.data.total_videos
+                        ? props.profile.data.total_videos
                         : 0}
                     </h5>
                     
                   </div>
-                  <div className="sidebar-total-count-media-card">
+                  {/* <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
                         <Image
@@ -256,12 +256,13 @@ const ProfileIndex = (props) => {
                         />
                       </span>
                       <span>  </span>
-                        {localStorage.getItem("total_fav_users")
-                        ? localStorage.getItem("total_fav_users")
-                        : 0}
+                        {props.profile.data.total_fav_users? 
+                         props.profile.data.total_fav_users
+                        : 0
+                        }
                     </h5>
                    
-                  </div>
+                  </div> */}
                 </div>
                 {/* Posts_count,fans_count,follower_count*/}
                 <div className="sidebar-total-count-info-box">

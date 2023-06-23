@@ -89,7 +89,7 @@ const SingleProfile = (props) => {
   const toggleVisibility = () => { };
 
   useEffect(() => {
-
+    console.log("00000000",props.userDetails)
     props.dispatch(
       fetchSingleUserProfileStart({
         user_unique_id: props.match.params.username,
@@ -346,7 +346,7 @@ const SingleProfile = (props) => {
                         />
                       </span>
                       <span> </span>
-                      {userDetails.data.user.total_images ? userDetails.data.user.total_images : 0}
+                      {userDetails.data.total_images ? userDetails.data.total_images : 0}
                     </h5>
                   </div>
 
@@ -362,11 +362,11 @@ const SingleProfile = (props) => {
                         />
                       </span>
                       <span> </span>
-                      {userDetails.data.user.total_videos ? userDetails.data.user.total_videos : 0}
+                      {userDetails.data.total_videos ? userDetails.data.total_videos : 0}
                     </h5>
 
                   </div>
-                  <div className="sidebar-total-count-media-card">
+                  {/* <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
                         <Image
@@ -380,8 +380,7 @@ const SingleProfile = (props) => {
                       <span> </span>
                       {userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users : 0}
                     </h5>
-
-                  </div>
+                  </div> */}
                 </div>
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">

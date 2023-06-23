@@ -5045,6 +5045,9 @@ span.subscribe-title {
   margin-top: 0;
 }
 @media only screen and (max-width: 480px) {
+  .new-chat-room-header-sec {
+    margin-top:4em;
+  }
   .user-profile-page .tab .nav-tabs li {
     width: 100%;
   }
