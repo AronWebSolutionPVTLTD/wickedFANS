@@ -1535,3 +1535,34 @@
   font-weight: 600;
   margin-left: 3px;
 }
+
+.btcpay-modal .modal-dialog {
+  width: 500px;
+}
+
+.btcpay-modal-body iframe {
+  border: none;
+  width: 500px;
+  height: 657px;
+  border-radius: 15px;
+}
+
+.btcpay-modal, .btcpay-modal-body {
+  padding: 0 !important;
+}
+
+.btcpay-modal-close {
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+}
+
+@media (max-width: 767.98px) {    
+  .btcpay-modal .modal-dialog {
+    width: 400px;
+  }
+
+  .btcpay-modal-body iframe {
+    width: 400px;
+  }
+}

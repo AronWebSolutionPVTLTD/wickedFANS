@@ -45,6 +45,9 @@ const AddWalletAmountModal = (props) => {
 
   const [clientSecret, setClientSecret] = useState("");
 
+  const [btcpayModalShow, setBtcpayModalShow] = useState(false);
+  const [btcpayCheckoutLink, setBtcpayCheckoutLink] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (paymentType === "CARD") {
@@ -121,6 +124,13 @@ const AddWalletAmountModal = (props) => {
     }
   }, [props.generateStripe]);
 
+  useEffect(() => {
+    if (!props.generateBtcpay.error && props.generateBtcpay.data.checkoutLink) {
+      setBtcpayCheckoutLink(props.generateBtcpay.data.checkoutLink);
+      setBtcpayModalShow(true);
+    }
+  }, [props.generateBtcpay]);
+
   const appearance = {
     theme: "stripe",
   };
@@ -195,6 +205,29 @@ const AddWalletAmountModal = (props) => {
             </div>
           </Modal.Body>
         </Modal>
+        <Modal
+          className={`modal-dialog-center user-list-free-modal btcpay-modal ${
+            nullData.includes(localStorage.getItem("theme"))
+              ? ""
+              : "dark-theme-modal"
+          }`}
+          size="xl"
+          centered
+          show={btcpayModalShow}
+          onHide={() => setBtcpayModalShow(false)}
+        >
+          <Modal.Body className="btcpay-modal-body">
+            <Button
+              className="modal-close btcpay-modal-close"
+              onClick={() => setBtcpayModalShow(false)}
+            >
+              <i className="fa fa-times" />
+            </Button>
+            <div className="btcpay-modal-content">
+              <iframe src={btcpayCheckoutLink} />
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     </>
   );
@@ -203,6 +236,7 @@ const AddWalletAmountModal = (props) => {
 const mapStateToPros = (state) => ({
   addAmount: state.wallet.addMoneyInput,
   generateStripe: state.wallet.generateStripe,
+  generateBtcpay: state.wallet.generateBtcpay,
   profile: state.users.profile,
 });
 

@@ -206,7 +206,7 @@ function* generateBtcpayPaymentAPI(action) {
     console.log("generateBtcpayPaymentAPI - Response: ", response);
     if (response.data.success) {
       yield put(generateBtcpayPaymentSuccess(response.data.data));
-      window.location.href = response.data.data.checkoutLink;
+      // window.location.href = response.data.data.checkoutLink;
     } else {
       yield put(generateBtcpayPaymentFailure(response.data.error));
       yield put(
