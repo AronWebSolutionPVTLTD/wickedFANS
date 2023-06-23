@@ -237,7 +237,7 @@ const NewFeedDisplayCard = (props) => {
                   className="three-dots-icon"
                   src={
                     window.location.origin +
-                    "/assets/images/icons/target_dollar.png"
+                    "/assets/images/icons/target_dollar.svg"
                   }
                 /> $0</span>
               </div>
@@ -308,7 +308,7 @@ const NewFeedDisplayCard = (props) => {
                   className="new-feed-wishlist-icon"
                   src={
                     window.location.origin +
-                    "/assets/images/feed-story/circuler_dollar_icon.png"
+                    "/assets/images/feed-story/circuler_dollar_icon.svg"
                   }
                 />
                 <span>SEND TIP</span>

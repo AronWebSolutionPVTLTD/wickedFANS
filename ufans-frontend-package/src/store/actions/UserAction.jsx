@@ -225,7 +225,7 @@ export function userRegisterStart(data) {
 }
 
 export function userRegisterSuccess(data) {
-  return {
+  return  {
     type: REGISTER_SUCCESS,
     data,
   };

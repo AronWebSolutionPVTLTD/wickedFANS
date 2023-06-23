@@ -11588,7 +11588,7 @@ button.main-header-menu.icon-with-round-hover img{
 }
 
 .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary img {
-  width: 22px;
+  width: 2.2em;
 }
 .new-feed-footer-sec .new-feed-footer-action-btn-sec .new-feed-footer-action-left-sec button.new-feed-wishlist-btn.send_tip_custom_button.btn.btn-primary span {
   font-size:16px;
@@ -11598,6 +11598,26 @@ input.form-control.campaign_box {
   margin-bottom: 15px;
 }
 
+.campaign-input-box {
+  background-color: #ffffff;
+  border: 0 !important;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 15%);
+  border-radius: 8px;
+  padding: 0.2em;
+  padding-left: 0.6;
+}
+.campaign-input-box .campaign-input-field {
+    border: 0 !important;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    padding: 0.9em;
+    min-height: 22px;
+    position: relative;
+    font-size: 13px;
+    font-weight: 500;
+    color: #525252;
+    width: 100%;
+}
 
 
 
