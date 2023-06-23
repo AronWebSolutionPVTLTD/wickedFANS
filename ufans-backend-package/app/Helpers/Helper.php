@@ -814,8 +814,10 @@ class Helper {
             $img = \Image::make(Storage::path($storage_file_path));
 
             // apply stronger blur
-            $img->blur(100)->save(Storage::path($output_file_path));
-           
+            //$img->blur(100)->save(Storage::path($output_file_path));
+
+            $img->blur(30)->save(Storage::path($output_file_path));
+            
             $url = asset(Storage::url($output_file_path));
 
         }
