@@ -475,6 +475,7 @@
 
 .new-single-page-box .profile-lock-icon{
     max-width: 4em;
+    z-index: 999;
 }
 
 /*Profile Video CSS*/

@@ -22,6 +22,7 @@ import {
   fetchWalletDetailsStart,
   generateStripePaymentStart,
   generateBtcpayPaymentStart,
+  generateBtcpayPaymentFailure,
 } from "../../../store/actions/WalletAction";
 import { getErrorNotificationMessage } from "../../helper/NotificationMessage";
 import { createNotification } from "react-redux-notify";
@@ -99,6 +100,11 @@ const AddWalletAmountModal = (props) => {
         redirectURL: `${process.env.REACT_APP_URL}/wallet`,
       })
     );
+  };
+
+  const closeBtcpayModal = () => {
+    setBtcpayModalShow(false);
+    props.dispatch(generateBtcpayPaymentFailure({}));
   };
 
   useEffect(() => {
@@ -205,29 +211,31 @@ const AddWalletAmountModal = (props) => {
             </div>
           </Modal.Body>
         </Modal>
-        <Modal
-          className={`modal-dialog-center user-list-free-modal btcpay-modal ${
-            nullData.includes(localStorage.getItem("theme"))
-              ? ""
-              : "dark-theme-modal"
-          }`}
-          size="xl"
-          centered
-          show={btcpayModalShow}
-          onHide={() => setBtcpayModalShow(false)}
-        >
-          <Modal.Body className="btcpay-modal-body">
-            <Button
-              className="modal-close btcpay-modal-close"
-              onClick={() => setBtcpayModalShow(false)}
-            >
-              <i className="fa fa-times" />
-            </Button>
-            <div className="btcpay-modal-content">
-              <iframe src={btcpayCheckoutLink} />
-            </div>
-          </Modal.Body>
-        </Modal>
+        {btcpayModalShow && (
+          <Modal
+            className={`modal-dialog-center user-list-free-modal btcpay-modal ${
+              nullData.includes(localStorage.getItem("theme"))
+                ? ""
+                : "dark-theme-modal"
+            }`}
+            size="xl"
+            centered
+            show={btcpayModalShow}
+            onHide={() => closeBtcpayModal()}
+          >
+            <Modal.Body className="btcpay-modal-body">
+              <Button
+                className="modal-close btcpay-modal-close"
+                onClick={() => closeBtcpayModal()}
+              >
+                <i className="fa fa-times" />
+              </Button>
+              <div className="btcpay-modal-content">
+                <iframe src={btcpayCheckoutLink} />
+              </div>
+            </Modal.Body>
+          </Modal>
+        )}
       </div>
     </>
   );

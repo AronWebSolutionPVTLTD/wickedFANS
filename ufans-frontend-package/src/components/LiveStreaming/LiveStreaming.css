@@ -1551,12 +1551,20 @@
   padding: 0 !important;
 }
 
+.btcpay-modal-body {
+  background: #f8f9fa;
+}
+
 .btcpay-modal-close {
   position: absolute;
   right: 1.5rem;
   top: 1.5rem;
 }
 
+.btcpay-modal-content {
+  height: 657px;
+  margin-top: 50px;
+}
 @media (max-width: 767.98px) {    
   .btcpay-modal .modal-dialog {
     width: 400px;
