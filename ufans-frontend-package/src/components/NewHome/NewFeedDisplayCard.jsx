@@ -21,6 +21,7 @@ import { savePostLikeStart } from "../../store/actions/PostLikesAction";
 import { connect } from "react-redux";
 import { translate, t } from "react-multi-lang";
 import SendTipPaymentModal from "../Model/PaymentModal/SendTipPaymentModal";
+import SendCampaignPaymentModal from "../Model/PaymentModal/SendCampaignPaymentModal";
 import { getSuccessNotificationMessage } from "../helper/NotificationMessage";
 import { createNotification } from "react-redux-notify";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -33,12 +34,31 @@ const NewFeedDisplayCard = (props) => {
   const { post } = props;
 
   const [sendTip, setSendTip] = useState(false);
+  const [sendCampaign, setSendCampaign] = useState(false);
   const [reportMode, setReportMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [campaignAmt, setCampaignAmt]  =useState();
+  const [campaignOptions, setCampaignOptions] = useState([]);
+
+  const setCampaignFxn =(val,options)=>{
+    console.log('=======123',options)
+    setCampaignAmt(val)
+    if(options != ''){
+     // options.split(',')
+      console.log('=======',options)
+      setCampaignOptions(options)
+    } 
+    setSendCampaign(true);
+  }
+
 
   const closeSendTipModal = () => {
     setSendTip(false);
+  };
+
+  const closeSendCampaignModal = () => {
+    setSendCampaign(false);
   };
 
   const closeReportModeModal = () => {
@@ -46,7 +66,7 @@ const NewFeedDisplayCard = (props) => {
   };
 
   const handleLike = () => {
-    console.log('-------------',post)
+    console.log('-------------', post)
     props.dispatch(savePostLikeStart({ post_id: post.post_id }));
   };
 
@@ -73,6 +93,22 @@ const NewFeedDisplayCard = (props) => {
     setIsModalOpen(true);
     setSelectedImage(image);
   };
+
+  // const campaignButton = (opt) => {
+  //   console.log('tttttt', opt.split(','));
+  //   return (
+  //       <>
+  //       {['10','20','30'].map((item, i) => {
+  //         return (<Button className="new-feed-campaign-btn">
+  //                  <span>10</span>
+  //                </Button>
+  //         )
+  //       })
+  //       }
+  //     </>
+
+  //   )
+  // }
 
   const feedMedia = (file) => {
     return (
@@ -121,7 +157,7 @@ const NewFeedDisplayCard = (props) => {
             </div>
             <div className="new-feed-user-details">
               <h4>
-              <Link to={`/${post.user_unique_id}`}>{post.user_displayname}</Link>
+                <Link to={`/${post.user_unique_id}`}>{post.user_displayname}</Link>
                 {post.is_verified_badge === 1 ? (
                   <span>
                     <Image
@@ -229,8 +265,8 @@ const NewFeedDisplayCard = (props) => {
             </AutoplaySlider>
           )}
         </div>
-
-        <div className="new-feed-campaign-footer-sec">
+        {post.is_campaign && post.is_campaign == '1' ?
+          <div className="new-feed-campaign-footer-sec">
             <div className="new-feed-footer-action-btn-sec campaign-option">
               <div className="new-feed-footer-action-left-sec campaign-option-target">
                 <span> <Image
@@ -239,29 +275,27 @@ const NewFeedDisplayCard = (props) => {
                     window.location.origin +
                     "/assets/images/icons/target_dollar.svg"
                   }
-                /> $0</span>
+                /> $ {post.total_compaign_amt ? post.total_compaign_amt:0}</span>
               </div>
               <div className="new-feed-footer-action-right-sec campaign-option-target">
-                <span>$250</span>
+                <span>$ {post.campaign_goal_amt?post.campaign_goal_amt:0}</span>
               </div>
             </div>
-          
+            <div className="new-feed-footer-campaign-option-sec" >
+            {post.campaign_options.split(',').map((item, i) => {
+                return <Button className="new-feed-campaign-btn" key={i} onClick={() => setCampaignFxn(item,post.campaign_options)}>
+                   <span>$ {item}</span>
+                 </Button>
+              })
+            }
+            </div>
 
-          <div className="new-feed-footer-campaign-option-sec">
-            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
-              <span>$10</span>
-            </Button>
-            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
-              <span>$25</span>
-            </Button>
-            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
-              <span>$50</span>
-            </Button>
-            <Button className="new-feed-campaign-btn" onClick={() => setSendTip(true)}>
-              <span>$100</span>
-            </Button>
           </div>
-        </div>
+          :
+          null
+        }
+
+
         <div className="new-feed-footer-sec">
           <div className="new-feed-footer-action-btn-sec">
 
@@ -287,7 +321,7 @@ const NewFeedDisplayCard = (props) => {
                     }
                   />
                 )}
-                <span>{post.post_fake_likes>0?post.post_fake_likes :post.like_count}</span>
+                <span>{post.post_fake_likes > 0 ? post.post_fake_likes : post.like_count}</span>
               </Button>
 
               <Button
@@ -395,6 +429,20 @@ const NewFeedDisplayCard = (props) => {
           <SendTipPaymentModal
             paymentsModal={sendTip}
             closepaymentsModal={closeSendTipModal}
+            post_id={post.post_id}
+            user_id={post.user_id}
+          />
+        ) : null
+      }
+
+      {
+        sendCampaign ? (
+          <SendCampaignPaymentModal
+            setCampaignAmt = {setCampaignAmt}
+            paymentsModal={sendCampaign}
+            campaignAmount = {campaignAmt}
+            campaignOptions = {campaignOptions}
+            closepaymentsModal={closeSendCampaignModal}
             post_id={post.post_id}
             user_id={post.user_id}
           />

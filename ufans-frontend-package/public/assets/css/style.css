@@ -11647,3 +11647,12 @@ input.form-control.campaign_box {
   text-transform: uppercase;
   max-width: 7em;
 }
+
+.error-message {
+  position: absolute;
+  bottom: -44px;
+  right: 0;
+}
+
+
+

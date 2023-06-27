@@ -300,6 +300,10 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
             Route::post('stories_home', 'Api\StoriesApiController@stories_home');
 
             Route::post('stories_single_view', 'Api\StoriesApiController@stories_single_view');
+
+            // campaign
+
+            Route::post('send_amount_to_campaign', 'Api\PostsApiController@send_amount_to_campaign');
         });
     });
 
