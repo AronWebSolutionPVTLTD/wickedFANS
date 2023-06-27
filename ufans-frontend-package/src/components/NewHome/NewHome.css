@@ -770,3 +770,14 @@
   color: #47B7F1;
   text-align: left;
 }
+
+.new-feed-footer-campaign-option-sec .btn-primary:hover{
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: #ffffff;
+}
+
+.new-feed-footer-campaign-option-sec .btn-primary:hover span{
+  color: #ffffff;
+}
+

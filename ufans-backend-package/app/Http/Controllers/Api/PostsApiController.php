@@ -323,6 +323,8 @@ class PostsApiController extends Controller
                 'post_file_id' => 'required',
                 // 'post_file_id' => 'required_if:post_files,id|exists:post_files,id',
                 'post_id' => 'nullable|exists:posts,id',
+                'campaign_goal_amt' => 'required_if:is_campaign,==,1',
+                'campaign_options' => 'required_if:is_campaign,==,1',
             ];
 
             Helper::custom_validator($request->all(), $rules);
@@ -406,7 +408,22 @@ class PostsApiController extends Controller
             $publish_time = $request->publish_time ?: date('Y-m-d H:i:s');
 
             $post->publish_time = date('Y-m-d H:i:s', strtotime($publish_time));
+            
+            if($request->is_campaign == 1){
 
+                $post->is_campaign = $request->is_campaign;
+
+                $post->campaign_options = '';
+
+                if($request->campaign_options!=''){
+
+                    $post->campaign_options = $request->campaign_options;
+
+                }
+
+                $post->campaign_goal_amt = $request->campaign_goal_amt;
+
+            }
 
             if (!$post->content) {
 
@@ -3422,4 +3439,68 @@ class PostsApiController extends Controller
             return $this->sendError($e->getMessage(), $e->getCode());
         }
     }
+    
+    /**
+     * @method send_amount_to_campaign()
+     *
+     * @uses get the selected post details
+     *
+     * @created Vithya R
+     *
+     * @updated Vithya R
+     *
+     * @param integer $subscription_id
+     *
+     * @return JSON Response
+     */
+    public function send_amount_to_campaign(Request $request)
+    {
+    
+        try {
+
+            $rules = [
+                'post_id' => 'required',
+                'id' => 'required',
+                'campaign_amt' => 'required|numeric|min:1',
+            ];
+
+            Helper::custom_validator($request->all(), $rules);
+
+            $post = Post::find($request->post_id);
+
+            if($post){
+
+                $campaign_post = new CampaignHistory;
+
+                $campaign_post->post_id = $request->post_id;
+
+                $campaign_post->user_id = $request->id;
+
+                $campaign_post->campaign_amt = $request->campaign_amt;
+
+                $campaign_post->save();
+
+                $total_compaign_amt = $post->total_compaign_amt;
+
+                $total_compaign_amt = (float) $total_compaign_amt + (float) $request->campaign_amt;
+
+                $post->total_compaign_amt =  $total_compaign_amt;
+
+                $post->save();                              
+
+            }
+
+            $data['success'] = true;
+
+            return $this->sendResponse($message = "", $code = "", $data);
+
+        } catch (Exception $e) {
+
+            DB::rollback();
+
+            return $this->sendError($e->getMessage(), $e->getLine());
+        }
+    }
 }
+
+

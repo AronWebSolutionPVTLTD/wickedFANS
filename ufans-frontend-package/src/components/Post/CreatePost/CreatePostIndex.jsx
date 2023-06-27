@@ -64,7 +64,7 @@ const CreatePostIndex = (props) => {
 
   const [videoPreview, setVideoPreview] = useState({ previewVideo: "" });
 
-  const [checked, setChecked] = React.useState(false);
+  const [is_campaign, setChecked] = React.useState(false);
   const [inputs, setInputs] = useState({
     opt_1: "",
     opt_2: "",
@@ -78,7 +78,10 @@ const CreatePostIndex = (props) => {
     }
   ])
 
-  const [amount, setAmount] = useState('');
+  const [multipleInputError,setMultipleInputError] = useState(false)
+
+
+  const [campaign_goal_amt, setCampaignAmount] = useState('');
 
 
 
@@ -214,56 +217,47 @@ const CreatePostIndex = (props) => {
     setChecked(e.target.checked);
   }
 
-  const handleInputChange = (e) => {
-    e.preventDefault()
-    const { value, name } = e.target
-
-    setInputs((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const handleAmountChange = (e) => {
     e.preventDefault()
     const { value, name } = e.target
-    setAmount(value)
+    setCampaignAmount(value)
   }
-
-
 
 
   const handleSubmit = (event) => {
     console.log('-----------', event)
-    // event.preventDefault();
-    // if (fileUploadStatus) {
-    //   props.dispatch(
-    //     savePostStart({
-    //       content: editorHtmlContent,
-    //       amount: inputData.amount ? inputData.amount : "",
-    //       post_file_id: inputData.post_file_id ? inputData.post_file_id : "",
-    //       preview_file: inputData.preview_file ? inputData.preview_file : "",
-    //       category_ids: inputData.category_ids
-    //         ? inputData.category_ids
-    //         : [],
-    //       video_preview_file: inputData.video_preview_file ? inputData.video_preview_file : "",
-    //     })
-    //   );
-    // } else {
-    //   // props.dispatch(
-    //   //   savePostStart({
-    //   //     content: editorHtmlContent,
-    //   //     amount: inputData.amount ? inputData.amount : "",
-    //   //     category_ids: inputData.category_ids
-    //   //       ? inputData.category_ids
-    //   //       : [],
-    //   //   })
-    //   // );
-    //   const notificationMessage = getErrorNotificationMessage(
-    //     "Please upload media files"
-    //   );
-    //   props.dispatch(createNotification(notificationMessage));
-    // }
+    event.preventDefault();
+    if (fileUploadStatus) {
+      props.dispatch(
+        savePostStart({
+          content: editorHtmlContent,
+          amount: inputData.amount ? inputData.amount : "",
+          post_file_id: inputData.post_file_id ? inputData.post_file_id : "",
+          preview_file: inputData.preview_file ? inputData.preview_file : "",
+          category_ids: inputData.category_ids ? inputData.category_ids: [],
+          video_preview_file: inputData.video_preview_file ? inputData.video_preview_file : "",
+          is_campaign : is_campaign?1:0,
+          campaign_goal_amt : campaign_goal_amt,
+          campaign_options  : multipleInputs
+        })
+      );
+    } else {
+      props.dispatch(
+        savePostStart({
+          content: editorHtmlContent,
+          amount: inputData.amount ? inputData.amount : "",
+          category_ids: inputData.category_ids ? inputData.category_ids: [],
+          is_campaign : is_campaign?1:0,
+          campaign_goal_amt : campaign_goal_amt,
+          campaign_options  : multipleInputs
+          
+        })
+      );
+      const notificationMessage = getErrorNotificationMessage(
+        "Please upload media files"
+      );
+      props.dispatch(createNotification(notificationMessage));
+    }
   };
 
   const setValues = (inputValue) => {
@@ -320,6 +314,7 @@ const CreatePostIndex = (props) => {
     let newfield = { name: '' }
     setMultipleInputs([...multipleInputs, newfield])
   }
+
   const removeInputFields = (e, index) => {
     e.preventDefault()
     let data = [...multipleInputs];
@@ -328,14 +323,23 @@ const CreatePostIndex = (props) => {
   }
 
   const handleMultipleInputChange = (evnt, index) => {
-
-
+    console.log('ffffff',campaign_goal_amt)
     const { name, value } = evnt.target;
-    const list = [...multipleInputs];
-    list[index][name] = value;
-    setMultipleInputs(list);
+    console.log('eeeee',value)
+    let list = [...multipleInputs];
+    list[index] = value;
+    if(parseFloat(value) < parseFloat(campaign_goal_amt)){
+      setMultipleInputs(list);
+      setMultipleInputError(false)
+    }
+    else{
+     // setMultipleInputs(list);
+      setMultipleInputError(true)
+    }
 
   }
+
+  console.log("options value",multipleInputs);
 
   return (
     <div className="notification-page create-post" id="tabs">
@@ -731,7 +735,7 @@ const CreatePostIndex = (props) => {
                       </Form.Label>
 
 
-                      {checked ?
+                      {is_campaign ?
 
                         <div className="campaign-input-box">
                           <input
@@ -739,7 +743,7 @@ const CreatePostIndex = (props) => {
                             placeholder="Your target"
                             type="text"
                             name="opt_1"
-                            value={amount}
+                            value={campaign_goal_amt}
                             onChange={handleAmountChange}
                           />
                         </div>
@@ -750,13 +754,13 @@ const CreatePostIndex = (props) => {
 
                       
 
-                      {amount > 1 ?
+                      {campaign_goal_amt > 1 ?
                           <>
                             {
                               multipleInputs.slice(0, 4).map((input, index) => {
                                 return (
                                   <>
-                                    <div key={index} style={{ marginTop: '20px' }} >
+                                    <div key={index} style={{ marginTop: '20px',position:'relative' }} >
 
                                       <div className="campaign-input-box">
                                         <input
@@ -770,13 +774,13 @@ const CreatePostIndex = (props) => {
                                         />
                                       </div>
                                       {index == 0 ?
-                                        <div class="forget-password">
+                                        <div class="forget-password error-message">
                                           <p id="one">
                                             <a type="button" class="forgot-link" onClick={addInputFields}> Add upto 4 prefered options </a>
                                           </p>
                                         </div>
                                         :
-                                        <div class="forget-password">
+                                        <div class="forget-password error-message">
                                           <p id="one">
                                             <a type="button" class="forgot-link" onClick={(e) => removeInputFields(e, index)}>Remove</a>
                                           </p>
@@ -785,7 +789,7 @@ const CreatePostIndex = (props) => {
                                       }
                                     </div>
                                     {index == 4 &&
-                                      <div class="forget-password">
+                                      <div class="forget-password error-message">
                                         <p id="one">
                                           <a type="button" class="forgot-link"> You can add maximum 4 prefered option </a>
                                         </p>
@@ -797,6 +801,10 @@ const CreatePostIndex = (props) => {
                             }
                           </>
                         : null
+                      }
+                      {multipleInputError && 
+                      
+                       <p style={{"float":"left","fontSize":"14px","color":"#e34498"}}>Number should be less target amount</p>
                       }
                     </Form.Group>
                   </>

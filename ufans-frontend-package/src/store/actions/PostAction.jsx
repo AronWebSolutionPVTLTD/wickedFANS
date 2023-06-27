@@ -53,6 +53,7 @@ import {
 } from "./ActionConstant";
 
 export function savePostStart(data) {
+  console.log('yyyeeyeyey',data)
   return {
     type: SAVE_POST_START,
     data,
@@ -67,6 +68,7 @@ export function savePostSuccess(data) {
 }
 
 export function savePostFailure(error) {
+  console.log(error)
   return {
     type: SAVE_POST_FAILURE,
     error,
