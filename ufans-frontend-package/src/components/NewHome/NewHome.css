@@ -774,10 +774,17 @@
 .new-feed-footer-campaign-option-sec .btn-primary:hover{
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
-  color: #ffffff;
+  border-color: #ddd !important;
 }
 
 .new-feed-footer-campaign-option-sec .btn-primary:hover span{
   color: #ffffff;
+  
+}
+
+.new-feed-footer-campaign-option-sec .btn-primary.focus, .btn-primary:focus {
+  color: #fff !important;
+  background-color: #fff !important;
+  border-color: #ddd !important;
 }
 

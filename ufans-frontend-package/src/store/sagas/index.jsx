@@ -34,7 +34,8 @@ import StoriesSaga from './StoriesSaga'
 import ProductOwnerSaga from './ProductOwnerSaga'
 import ProductsSaga from './ProductsSaga'
 import VodVideosSaga from './VodVideosSaga'
-import SessionSaga from "./SessionSaga"
+import SessionSaga from "./SessionSaga";
+import SendCampaignSaga from "./SendCampaignSaga";
 
 export default function* rootSaga() {
   yield all([fork(UserSaga)]);
@@ -72,4 +73,5 @@ export default function* rootSaga() {
   yield all([fork(ProductsSaga)]);
   yield all([fork(VodVideosSaga)]);
   yield all([fork(SessionSaga)]);
+  yield all([fork(SendCampaignSaga)]);
 }

@@ -89,7 +89,6 @@ const SingleProfile = (props) => {
   const toggleVisibility = () => { };
 
   useEffect(() => {
-    console.log("00000000",props.userDetails)
     props.dispatch(
       fetchSingleUserProfileStart({
         user_unique_id: props.match.params.username,

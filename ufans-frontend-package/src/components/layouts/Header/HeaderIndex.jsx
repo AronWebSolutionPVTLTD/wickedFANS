@@ -24,8 +24,6 @@ const HeaderIndex = (props) => {
   const pro_pic = localStorage.getItem("user_picture")
 
   useEffect(() => {
-    console.log("----Inside----",localStorage.getItem("user_picture"));
-    
     let chatSocketUrl = configuration.get("configData.chat_socket_url");
     if (chatSocketUrl === "") {
       console.log("no keys configured");
@@ -66,7 +64,6 @@ const HeaderIndex = (props) => {
           `',myid:` +
           localStorage.getItem("userId"),
       });
-      console.log("header file check socket",chatSocket)
       chatSocket.emit("notification update", {
         commonid: "user_id_" + localStorage.getItem("userId"),
         myid: localStorage.getItem("userId"),

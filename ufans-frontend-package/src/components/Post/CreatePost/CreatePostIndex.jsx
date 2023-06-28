@@ -225,7 +225,6 @@ const CreatePostIndex = (props) => {
 
 
   const handleSubmit = (event) => {
-    console.log('-----------', event)
     event.preventDefault();
     if (fileUploadStatus) {
       props.dispatch(
@@ -323,23 +322,20 @@ const CreatePostIndex = (props) => {
   }
 
   const handleMultipleInputChange = (evnt, index) => {
-    console.log('ffffff',campaign_goal_amt)
     const { name, value } = evnt.target;
-    console.log('eeeee',value)
     let list = [...multipleInputs];
-    list[index] = value;
     if(parseFloat(value) < parseFloat(campaign_goal_amt)){
       setMultipleInputs(list);
       setMultipleInputError(false)
     }
     else{
-     // setMultipleInputs(list);
       setMultipleInputError(true)
     }
-
   }
 
-  console.log("options value",multipleInputs);
+  console.log(multipleInputs)
+
+  
 
   return (
     <div className="notification-page create-post" id="tabs">

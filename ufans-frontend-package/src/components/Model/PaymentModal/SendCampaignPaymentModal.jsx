@@ -22,6 +22,7 @@ import { getErrorNotificationMessage } from "../../helper/NotificationMessage";
 import { connect } from "react-redux";
 import { translate, t } from "react-multi-lang";
 import CampaignModalSec from "./CampaignModalSec";
+import { sendAmountToCampaignStart } from '../../../store/actions/SendCampaignAction';
 import {
   sendTipStripeStart,
   sendTipWalletStart,
@@ -72,45 +73,20 @@ const SendCampaignPaymentModal = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (paymentType === "CARD")
-      props.dispatch(
-        sendTipStripeStart({
-          post_id:
-            props.post_id != undefined || props.post_id != null
-              ? props.post_id
-              : "",
-          amount: tipAmount,
-          message: message,
-          user_id: props.user_id,
-          user_card_id: selectedCard,
-          tips_type: props.type,
-        })
-      );
-    if (paymentType === "WALLET")
-      props.dispatch(
-        sendTipWalletStart({
-          post_id:
-            props.post_id != undefined || props.post_id != null
-              ? props.post_id
-              : "",
-          amount: tipAmount,
-          message: message,
-          user_id: props.user_id,
-          tips_type: props.type,
-        })
-      );
-    // props.closepaymentsModal();
+    props.dispatch(
+      sendAmountToCampaignStart({
+        post_id: props.post_id != undefined || props.post_id != null ? props.post_id : "",
+        campaign_amt: props.campaignAmount,
+      })
+    );
   };
 
-  
-
   useEffect(() => {
-    console.log('1111111111',props.campaignOptions)
-    if (!skipRender && !props.tipWallet.loading && Object.keys(props.tipWallet.data).length > 0) {
+    if (!skipRender && !props.campaign.loading && props.campaign.data != null && Object.keys(props.campaign.data).length > 0) {
       props.closepaymentsModal();
     }
     setSkipRender(false);
-  }, [props.tipWallet]);
+  }, [props.campaign]);
 
   return (
     <>
@@ -140,7 +116,7 @@ const SendCampaignPaymentModal = (props) => {
                   selectedCard={selectedCard}
                   setSelectedCard={setSelectedCard}
                   setShowAddCard={setShowAddCard}
-                  tipAmount={tipAmount}
+                  tipAmount={props.campaignAmount}
                 />
                 <Col md={12} xl={5}>
                   {showAddCard ?
@@ -148,10 +124,8 @@ const SendCampaignPaymentModal = (props) => {
                       setShowAddCard={setShowAddCard}
                     />
                     : <CampaignModalSec
-                    
                       modalCampaignAmount = {props.campaignAmount}
                       campaignOptions = {props.campaignOptions}
-                      setTipAmount={setTipAmount}
                       setCampaignAmt = {props.setCampaignAmt}
                       message={message}
                       setMessage={setMessage}
@@ -159,8 +133,8 @@ const SendCampaignPaymentModal = (props) => {
                       paypalOnSuccess={paypalOnSuccess}
                       paypalOnError={paypalOnError}
                       paypalOnCancel={paypalOnCancel}
-                      buttonDisable={props.tipWallet.buttonDisable}
-                      loadingButtonContent={props.tipWallet.loadingButtonContent}
+                      buttonDisable={props.campaign.buttonDisable}
+                      loadingButtonContent={props.campaign.loadingButtonContent}
                     />
                   }
                 </Col>
@@ -174,8 +148,7 @@ const SendCampaignPaymentModal = (props) => {
 };
 
 const mapStateToPros = (state) => ({
-  // liveVideoDetails: state.liveVideo.singleLiveVideo,
-  tipWallet: state.tip.tipWallet,
+  campaign : state.campaign.campaign
 });
 
 function mapDispatchToProps(dispatch) {

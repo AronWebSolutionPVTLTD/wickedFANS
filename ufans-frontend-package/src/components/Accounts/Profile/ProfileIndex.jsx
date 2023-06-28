@@ -69,7 +69,6 @@ const ProfileIndex = (props) => {
       props.dispatch(fetchUserDetailsStart());
       setBadgeStatus(localStorage.getItem("is_verified_badge"));
     }
-    console.log('000000000',props.profile)
   }, []);
 
   const setActiveSection = (event, key) => {
