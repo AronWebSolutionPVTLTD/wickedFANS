@@ -3465,8 +3465,8 @@ class PostsApiController extends Controller
             ];
 
             Helper::custom_validator($request->all(), $rules);
-
-            $post = Post::find($request->post_id);
+            
+            $post = \App\Models\Post::Approved()->find($request->post_id);
 
             if($post){
 
@@ -3490,9 +3490,9 @@ class PostsApiController extends Controller
 
             }
 
-            $data['success'] = true;
+            $data = \App\Repositories\PostRepository::posts_single_response($post, $request);
 
-            return $this->sendResponse($message = "", $code = "", $data);
+            return $this->sendResponse($message = "Fund Sent Successfully !", $code = "", $data);
 
         } catch (Exception $e) {
 

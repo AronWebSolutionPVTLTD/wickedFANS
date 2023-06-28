@@ -25,26 +25,14 @@ const CampaignModalSec = (props) => {
     production: configuration.get("configData.PAYPAL_ID"),
   };
 
-  const radios = [
-    { name: "10 Tokens", value: "10" },
-    { name: "20 Tokens", value: "20" },
-    { name: "50 Tokens", value: "50" },
-    { name: "100 Tokens", value: "100" },
-  ];
-
   const handleCampaignChange = (value) => {
-    console.log('ggggg',value)
-   // if (!isNaN(value)) {
-      //props.setTipAmount(value >= 0 ? value : 0);
-        props.setCampaignAmt(value >= 0 ? value : 0);
-
-    //}
+   props.setCampaignAmt(value >= 0 ? value : 0);
   };
 
   return (
     <>
       <div className="wallet-modal-details mt-5">
-        <h4 className="payment-modal-title">{t("send_campaign")}</h4>
+        <h4 className="payment-modal-title">{t("send_money")}</h4>
         <p>
           {t("sentip_paytment_note")}
         </p>
@@ -85,7 +73,7 @@ const CampaignModalSec = (props) => {
             />
           </Form.Group>
           <div className="wallet-account-balance mt-5 mb-5">
-            {t("total_tokens",{token: props.tipAmount ? props.tipAmount : 0})}
+            {t("total_tokens",{token: props.modalCampaignAmount ? props.modalCampaignAmount : 0})}
           </div>
           <div className="add-card-btn">
             {props.paymentType === "PAYPAL" ? (
@@ -101,7 +89,7 @@ const CampaignModalSec = (props) => {
             ) : (
               <Button
                 type="submit"
-                disabled={props.tipAmount > 0 ? false : true || props.buttonDisable}
+                disabled={props.modalCampaignAmount > 0 ? false : true || props.buttonDisable}
               >
                 {props.loadingButtonContent
                   ? props.loadingButtonContent

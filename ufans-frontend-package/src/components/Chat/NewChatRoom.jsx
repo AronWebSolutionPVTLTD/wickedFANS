@@ -136,14 +136,11 @@ const NewChatRoom = (props) => {
       chatSocket = io(chatSocketUrl, {
         query: `commonid:'user_id_${userId}_to_user_id_${props.selectedUser.user_id}',myid:${userId}`,
       });
-      console.log("chatSocket 222", chatSocket);
       chatSocket.emit("update sender", {
         commonid: `user_id_${userId}_to_user_id_${props.selectedUser.user_id}`,
         myid: userId,
       });
-      console.log("chatSocket 333", chatSocket);
       chatSocket.on("message", (newData) => {
-        console.log("Input ID 444",newData);
         setNewMsg(true);
         props.dispatch(updateChatMessagesSuccess(newData));
       });
@@ -172,13 +169,10 @@ const NewChatRoom = (props) => {
         time_formatted: time,
         amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
       }
-      console.log("fffff",chatData)
       chatSocket.emit("message", chatData);
-      console.log("fffff++++++",chatData)
       setMessage("");
       props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
       
-      console.log("==========",chatData)
       setNewChatUpload(false);
       setShowEmojis(false);
       messageField.current.focus();

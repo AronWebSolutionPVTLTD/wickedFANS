@@ -42,12 +42,9 @@ const NewFeedDisplayCard = (props) => {
   const [campaignOptions, setCampaignOptions] = useState([]);
 
   const setCampaignFxn =(val,options)=>{
-    console.log('=======123',options)
     setCampaignAmt(val)
     if(options != ''){
-     // options.split(',')
-      console.log('=======',options)
-      setCampaignOptions(options)
+     setCampaignOptions(options)
     } 
     setSendCampaign(true);
   }
@@ -66,7 +63,6 @@ const NewFeedDisplayCard = (props) => {
   };
 
   const handleLike = () => {
-    console.log('-------------', post)
     props.dispatch(savePostLikeStart({ post_id: post.post_id }));
   };
 
@@ -93,22 +89,6 @@ const NewFeedDisplayCard = (props) => {
     setIsModalOpen(true);
     setSelectedImage(image);
   };
-
-  // const campaignButton = (opt) => {
-  //   console.log('tttttt', opt.split(','));
-  //   return (
-  //       <>
-  //       {['10','20','30'].map((item, i) => {
-  //         return (<Button className="new-feed-campaign-btn">
-  //                  <span>10</span>
-  //                </Button>
-  //         )
-  //       })
-  //       }
-  //     </>
-
-  //   )
-  // }
 
   const feedMedia = (file) => {
     return (
@@ -265,7 +245,7 @@ const NewFeedDisplayCard = (props) => {
             </AutoplaySlider>
           )}
         </div>
-        {post.is_campaign && post.is_campaign == '1' ?
+        {post.is_campaign && post.is_campaign == '1'?
           <div className="new-feed-campaign-footer-sec">
             <div className="new-feed-footer-action-btn-sec campaign-option">
               <div className="new-feed-footer-action-left-sec campaign-option-target">
@@ -275,7 +255,7 @@ const NewFeedDisplayCard = (props) => {
                     window.location.origin +
                     "/assets/images/icons/target_dollar.svg"
                   }
-                /> $ {post.total_compaign_amt ? post.total_compaign_amt:0}</span>
+                /> $ {post.total_compaign_amt ? post.total_compaign_amt : 0}</span>
               </div>
               <div className="new-feed-footer-action-right-sec campaign-option-target">
                 <span>$ {post.campaign_goal_amt?post.campaign_goal_amt:0}</span>

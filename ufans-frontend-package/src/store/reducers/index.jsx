@@ -35,7 +35,8 @@ import UserCategoryReducer from './UserCategoryReducer'
 import StoriesReducer from "./StoriesReducer";
 import ProductsReducer from "./ProductsReducer";
 import VodVideosReducer from "./VodVideosReducer";
-import SessionReducer from "./SessionReducer"
+import SessionReducer from "./SessionReducer";
+import SendCampaignReducer from "./SendCampaignReducer"
 
 export default combineReducers({
   users: UserReducer,
@@ -73,5 +74,6 @@ export default combineReducers({
   userStories : StoriesReducer,
   userProducts : ProductsReducer,
   vodVideos : VodVideosReducer,
-  sessions : SessionReducer
+  sessions : SessionReducer,
+  campaign : SendCampaignReducer
 });
