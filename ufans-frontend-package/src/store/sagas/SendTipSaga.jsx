@@ -29,6 +29,9 @@ import {
   checkLogoutStatus,
 } from "../actions/ErrorAction";
 
+import { homePostsSuccess } from "../actions/HomeAction";
+import { fetchSinglePostSuccess } from "../actions/PostAction";
+
 function* sendTipStripeAPI() {
   try {
     const inputData = yield select((state) => state.tip.tipStripe.inputData);
@@ -88,6 +91,20 @@ function* sendTipWalletAPI() {
         response.data.message
       );
       yield put(createNotification(notificationMessage));
+      if(inputData.is_campaign == 1){
+        let homeData = yield select((state) => state.home.homePost.data);
+        homeData = {
+          ...homeData,
+          posts: homeData.posts.map((post) => post.post_unique_id === response.data.data.post_unique_id ? response.data.data : post)
+        }
+        yield put(homePostsSuccess(homeData));
+        let singlePostData = yield select((state) => state.post.singlePost.data);
+        if (Object.keys(singlePostData).length > 0) {
+          if (singlePostData.post.post_unique_id === response.data.data.post_unique_id) {
+            yield put(fetchSinglePostSuccess({ post: response.data.data }));
+          }
+        }
+      }
     } else {
       yield put(sendTipWalletFailure(response.data.error));
       const notificationMessage = getErrorNotificationMessage(

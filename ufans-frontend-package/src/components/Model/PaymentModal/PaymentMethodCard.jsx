@@ -178,12 +178,9 @@ const PaymentMethodCard = (props) => {
           ) : null}
         </div>
         {!props.wallet.loading &&
-          props.tipAmount > props.wallet.data.user_wallet.remaining && (
+         (
             <div className="add-card-btn mt-4">
               <Button
-                disabled={
-                  !(props.tipAmount > props.wallet.data.user_wallet.remaining)
-                }
                 onClick={() => setAddWalletAmountModal(true)}
               >
                 {" "}

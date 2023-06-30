@@ -1514,6 +1514,20 @@ class PaymentRepository {
 
             }
 
+            if($request->is_campaign == 1){
+
+                $post = \App\Models\Post::Approved()->find($request->post_id);
+
+                $total_compaign_amt = $post->total_compaign_amt;
+
+                $total_compaign_amt = (float) $total_compaign_amt + (float) $user_tip->user_amount;
+                
+                $post->total_compaign_amt =  $total_compaign_amt;
+                
+                $post->save();
+
+            }
+
             $user_tip->paid_date = date('Y-m-d H:i:s');
 
             $user_tip->status = $request->payment_status ?? PAID;
@@ -1528,7 +1542,17 @@ class PaymentRepository {
                 self::tips_payment_wallet_update($request, $user_tip);
             }
             
-            $response = ['success' => true, 'message' => 'paid', 'data' => [ 'payment_id' => $request->payment_id]];
+            if($request->is_campaign == 1){
+
+                $data = \App\Repositories\PostRepository::posts_single_response($post, $request);
+
+                $response = ['success' => true, 'message' => 'paid', 'data' => $data];
+
+            }else{
+
+                $response = ['success' => true, 'message' => 'paid', 'data' => [ 'payment_id' => $request->payment_id]];
+
+            }
 
             return response()->json($response, 200);
 
@@ -1925,6 +1949,13 @@ class PaymentRepository {
     public static function tips_payment_wallet_update($request, $user_tip) {
 
         try {
+            $usage_type = USAGE_TYPE_TIP;
+
+            if(isset($request->is_campaign) && $request->is_campaign == 1){
+
+                $usage_type = USAGE_TYPE_CAMPAIGN;
+                
+            }
 
             $to_user_inputs = [
                 'id' => $request->to_user_id,
@@ -1938,7 +1969,7 @@ class PaymentRepository {
                 'payment_id' => $user_tip->payment_id,
                 'user_amount' => $user_tip->user_amount,
                 'admin_amount' => $user_tip->admin_amount,
-                'usage_type' => USAGE_TYPE_TIP,
+                'usage_type' => $usage_type,
                 'message' => $request->message,
                 'user_token' => $user_tip->user_token,
                 'admin_token' => $user_tip->admin_token,
