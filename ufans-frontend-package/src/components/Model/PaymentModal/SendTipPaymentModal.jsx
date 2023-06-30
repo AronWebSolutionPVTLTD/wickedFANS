@@ -39,6 +39,7 @@ const SendTipPaymentModal = (props) => {
   const [showAddCard, setShowAddCard] = useState(false);
   const [tipAmount, setTipAmount] = useState("");
   const [message, setMessage] = useState("");
+  
 
   const paypalOnError = (err) => {
     const notificationMessage = getErrorNotificationMessage(err);
@@ -54,9 +55,10 @@ const SendTipPaymentModal = (props) => {
             props.post_id != undefined || props.post_id != null
               ? props.post_id
               : "",
-          amount: tipAmount,
+          amount: props.isCampaign==1?props.campaignAmt:tipAmount,
           user_id: props.user_id,
-          tips_type: props.type,
+          tips_type: props.isCampaign==1?"campaign":props.type,
+          is_campaign : props.isCampaign
         })
       );
     }, 1000);
@@ -79,11 +81,12 @@ const SendTipPaymentModal = (props) => {
             props.post_id != undefined || props.post_id != null
               ? props.post_id
               : "",
-          amount: tipAmount,
+          amount: props.isCampaign==1?props.campaignAmt:tipAmount,
           message: message,
           user_id: props.user_id,
           user_card_id: selectedCard,
-          tips_type: props.type,
+          tips_type: props.isCampaign==1?"campaign":props.type,
+          is_campaign : props.isCampaign
         })
       );
     if (paymentType === "WALLET")
@@ -93,10 +96,11 @@ const SendTipPaymentModal = (props) => {
             props.post_id != undefined || props.post_id != null
               ? props.post_id
               : "",
-          amount: tipAmount,
+          amount: props.isCampaign==1?props.campaignAmt:tipAmount,
           message: message,
           user_id: props.user_id,
-          tips_type: props.type,
+          tips_type: props.isCampaign==1?"campaign":props.type,
+          is_campaign : props.isCampaign
         })
       );
     // props.closepaymentsModal();
@@ -104,7 +108,12 @@ const SendTipPaymentModal = (props) => {
 
   useEffect(() => {
     if (!skipRender && !props.tipWallet.loading && Object.keys(props.tipWallet.data).length > 0) {
+      if(props.isCampaign ==1){
+       props.setCampaignAmt()
+       props.setIscampaign(0)
+      } 
       props.closepaymentsModal();
+      
     }
     setSkipRender(false);
   }, [props.tipWallet]);
@@ -137,7 +146,7 @@ const SendTipPaymentModal = (props) => {
                   selectedCard={selectedCard}
                   setSelectedCard={setSelectedCard}
                   setShowAddCard={setShowAddCard}
-                  tipAmount={tipAmount}
+                  tipAmount={props.isCampaign==1?props.campaignAmt:tipAmount}
                 />
                 <Col md={12} xl={5}>
                   {showAddCard ?
@@ -145,8 +154,11 @@ const SendTipPaymentModal = (props) => {
                       setShowAddCard={setShowAddCard}
                     />
                     : <TipModalSec
-                      tipAmount={tipAmount}
+                      tipAmount={props.isCampaign==1?props.campaignAmt:tipAmount}
                       setTipAmount={setTipAmount}
+                      setCampaignAmt = {props.setCampaignAmt}
+                      campaignOptions ={props.campaignOptions}
+                      isCampaign = {props.isCampaign}
                       message={message}
                       setMessage={setMessage}
                       handleSubmit={handleSubmit}

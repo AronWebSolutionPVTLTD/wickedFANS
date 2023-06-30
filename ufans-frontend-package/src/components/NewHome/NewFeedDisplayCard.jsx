@@ -21,7 +21,6 @@ import { savePostLikeStart } from "../../store/actions/PostLikesAction";
 import { connect } from "react-redux";
 import { translate, t } from "react-multi-lang";
 import SendTipPaymentModal from "../Model/PaymentModal/SendTipPaymentModal";
-import SendCampaignPaymentModal from "../Model/PaymentModal/SendCampaignPaymentModal";
 import { getSuccessNotificationMessage } from "../helper/NotificationMessage";
 import { createNotification } from "react-redux-notify";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -40,23 +39,26 @@ const NewFeedDisplayCard = (props) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [campaignAmt, setCampaignAmt]  =useState();
   const [campaignOptions, setCampaignOptions] = useState([]);
+  const [isCampaign ,setIscampaign] = useState(0);
 
-  const setCampaignFxn =(val,options)=>{
+  const setCampaignModal =(val,options)=>{
     setCampaignAmt(val)
+    setIscampaign(1)
     if(options != ''){
      setCampaignOptions(options)
     } 
-    setSendCampaign(true);
+    setSendTip(true);
   }
 
 
   const closeSendTipModal = () => {
+    setIscampaign(0)
+    setCampaignAmt()
+    setCampaignOptions([])
     setSendTip(false);
   };
 
-  const closeSendCampaignModal = () => {
-    setSendCampaign(false);
-  };
+  
 
   const closeReportModeModal = () => {
     setReportMode(false);
@@ -255,7 +257,7 @@ const NewFeedDisplayCard = (props) => {
                     window.location.origin +
                     "/assets/images/icons/target_dollar.svg"
                   }
-                /> $ {post.total_compaign_amt ? post.total_compaign_amt : 0}</span>
+                /> $ {post.total_compaign_amt ? post.total_compaign_amt.toFixed(2) : 0}</span>
               </div>
               <div className="new-feed-footer-action-right-sec campaign-option-target">
                 <span>$ {post.campaign_goal_amt?post.campaign_goal_amt:0}</span>
@@ -263,7 +265,7 @@ const NewFeedDisplayCard = (props) => {
             </div>
             <div className="new-feed-footer-campaign-option-sec" >
             {post.campaign_options.split(',').map((item, i) => {
-                return <Button className="new-feed-campaign-btn" key={i} onClick={() => setCampaignFxn(item,post.campaign_options)}>
+                return <Button className="new-feed-campaign-btn" key={i} onClick={() => setCampaignModal(item,post.campaign_options)}>
                    <span>$ {item}</span>
                  </Button>
               })
@@ -408,6 +410,11 @@ const NewFeedDisplayCard = (props) => {
         sendTip ? (
           <SendTipPaymentModal
             paymentsModal={sendTip}
+            campaignAmt = {campaignAmt}
+            setCampaignAmt = {setCampaignAmt}
+            isCampaign ={isCampaign}
+            setIscampaign = {setIscampaign}
+            campaignOptions = {campaignOptions}
             closepaymentsModal={closeSendTipModal}
             post_id={post.post_id}
             user_id={post.user_id}
@@ -415,19 +422,6 @@ const NewFeedDisplayCard = (props) => {
         ) : null
       }
 
-      {
-        sendCampaign ? (
-          <SendCampaignPaymentModal
-            setCampaignAmt = {setCampaignAmt}
-            paymentsModal={sendCampaign}
-            campaignAmount = {campaignAmt}
-            campaignOptions = {campaignOptions}
-            closepaymentsModal={closeSendCampaignModal}
-            post_id={post.post_id}
-            user_id={post.user_id}
-          />
-        ) : null
-      }
       {
         reportMode ? (
           <ReportModeModal

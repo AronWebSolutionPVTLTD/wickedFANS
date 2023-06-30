@@ -33,15 +33,19 @@ const TipModalSec = (props) => {
   ];
 
   const handleTipChange = (value) => {
+    console.log("value",value)
     if (!isNaN(value)) {
-      props.setTipAmount(value >= 0 ? value : 0);
+      if(props.isCampaign == 1)
+        props.setCampaignAmt(value >= 0 ? value : 0);
+      else
+        props.setTipAmount(value >= 0 ? value : 0);
     }
   };
 
   return (
     <>
       <div className="wallet-modal-details mt-5">
-        <h4 className="payment-modal-title">{t("send_tips")}</h4>
+        <h4 className="payment-modal-title">{props.campaignOptions.length>0?t("send_money"):t("send_tips")}</h4>
         <p>
           {t("sentip_paytment_note")}
         </p>
@@ -56,6 +60,24 @@ const TipModalSec = (props) => {
             />
           </Form.Group>
           <div className="tips-list">
+            {props.isCampaign==1 && props.campaignOptions.length>0?
+            <ButtonGroup>
+              {props.campaignOptions.split(',').map((radio, idx) => (
+                <ToggleButton
+                  key={idx}
+                  id={`radio-${idx}`}
+                  type="radio"
+                  variant="btn-tips"
+                  name="radio"
+                  value={radio}
+                  checked={Number(props.tipAmount) === Number(radio)}
+                  onChange={(e) => props.setCampaignAmt(Number(radio))}
+                >
+                  {radio}
+                </ToggleButton>
+              ))}
+            </ButtonGroup>
+            :
             <ButtonGroup>
               {radios.map((radio, idx) => (
                 <ToggleButton
@@ -72,6 +94,7 @@ const TipModalSec = (props) => {
                 </ToggleButton>
               ))}
             </ButtonGroup>
+           }
           </div>
           <Form.Group className="mb-3">
             <Form.Control
@@ -102,7 +125,9 @@ const TipModalSec = (props) => {
               >
                 {props.loadingButtonContent
                   ? props.loadingButtonContent
-                  : t("send_tip")}
+                  : 
+                  props.campaignOptions.length>0?t("send_campaign"):t("send_tip")
+                  }
               </Button>
             )}
           </div>

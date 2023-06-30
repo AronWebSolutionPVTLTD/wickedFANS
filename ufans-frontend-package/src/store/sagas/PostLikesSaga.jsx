@@ -28,7 +28,6 @@ function* savePostLikesAPI(action) {
     // );
     const response = yield api.postMethod("post_likes_save", action.data);
     if (response.data.success) {
-      console.log("post like",response.data)
       yield put(savePostLikeSuccess(response.data.data));
       const notificationMessage = getSuccessNotificationMessage(
         response.data.message

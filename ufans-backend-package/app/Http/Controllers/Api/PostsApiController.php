@@ -2185,7 +2185,8 @@ class PostsApiController extends Controller
             $rules = [
                 'post_id' => 'nullable|exists:posts,id',
                 'user_id' => 'required|exists:users,id',
-                'amount' => 'required|numeric|min:1'
+                'amount' => 'required|numeric|min:1',
+                'is_campaign' => 'required',
             ];
 
             $custom_errors = ['post_id' => api_error(139), 'user_id' => api_error(135)];
@@ -2239,7 +2240,7 @@ class PostsApiController extends Controller
                 'payment_type' => WALLET_PAYMENT_TYPE_PAID,
                 'amount_type' => WALLET_AMOUNT_TYPE_MINUS,
                 'payment_id' => 'WPP-' . rand(),
-                'usage_type' => USAGE_TYPE_TIP
+                'usage_type' => $request->is_campaign == 1 ? USAGE_TYPE_CAMPAIGN : USAGE_TYPE_TIP
             ]);
 
             $wallet_payment_response = PaymentRepo::user_wallets_payment_save($request)->getData();
@@ -3440,67 +3441,6 @@ class PostsApiController extends Controller
         }
     }
     
-    /**
-     * @method send_amount_to_campaign()
-     *
-     * @uses get the selected post details
-     *
-     * @created Vithya R
-     *
-     * @updated Vithya R
-     *
-     * @param integer $subscription_id
-     *
-     * @return JSON Response
-     */
-    public function send_amount_to_campaign(Request $request)
-    {
-    
-        try {
-
-            $rules = [
-                'post_id' => 'required',
-                'id' => 'required',
-                'campaign_amt' => 'required|numeric|min:1',
-            ];
-
-            Helper::custom_validator($request->all(), $rules);
-            
-            $post = \App\Models\Post::Approved()->find($request->post_id);
-
-            if($post){
-
-                $campaign_post = new CampaignHistory;
-
-                $campaign_post->post_id = $request->post_id;
-
-                $campaign_post->user_id = $request->id;
-
-                $campaign_post->campaign_amt = $request->campaign_amt;
-
-                $campaign_post->save();
-
-                $total_compaign_amt = $post->total_compaign_amt;
-
-                $total_compaign_amt = (float) $total_compaign_amt + (float) $request->campaign_amt;
-
-                $post->total_compaign_amt =  $total_compaign_amt;
-
-                $post->save();                              
-
-            }
-
-            $data = \App\Repositories\PostRepository::posts_single_response($post, $request);
-
-            return $this->sendResponse($message = "Fund Sent Successfully !", $code = "", $data);
-
-        } catch (Exception $e) {
-
-            DB::rollback();
-
-            return $this->sendError($e->getMessage(), $e->getLine());
-        }
-    }
 }
 
 

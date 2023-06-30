@@ -481,3 +481,4 @@ if (!defined('SUFFIX')) define('SUFFIX', 'suffix');
 
 if (!defined('CHAT_MESSAGE_STATUS_SENT')) define('CHAT_MESSAGE_STATUS_SENT', 1);
 if (!defined('CHAT_MESSAGE_STATUS_RECEIVED')) define('CHAT_MESSAGE_STATUS_RECEIVED', 2);
+if (!defined('USAGE_TYPE_CAMPAIGN')) define('USAGE_TYPE_CAMPAIGN', 'campaign');
