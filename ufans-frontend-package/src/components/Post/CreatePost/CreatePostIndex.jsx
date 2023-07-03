@@ -64,14 +64,8 @@ const CreatePostIndex = (props) => {
 
   const [videoPreview, setVideoPreview] = useState({ previewVideo: "" });
 
-  const [is_campaign, setChecked] = React.useState(false);
-  const [inputs, setInputs] = useState({
-    opt_1: "",
-    opt_2: "",
-    opt_3: "",
-    opt_4: ""
-  })
-
+  const [isCampaign, setChecked] = React.useState(false);
+  
   const [multipleInputs, setMultipleInputs] = useState([
     {
       name: ""
@@ -80,8 +74,11 @@ const CreatePostIndex = (props) => {
 
   const [multipleInputError,setMultipleInputError] = useState(false)
 
+  const [campaignGoalAmount, setCampaignAmount] = useState('');
 
-  const [campaign_goal_amt, setCampaignAmount] = useState('');
+  const [addOptionMsg ,setAddOption] = useState('+ Add upto 4 prefered options');
+
+  const [errorCount ,setErrorCount] = useState(0);
 
 
 
@@ -226,6 +223,7 @@ const CreatePostIndex = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    //console.log("hhh",multipleInputs)
     if (fileUploadStatus) {
       props.dispatch(
         savePostStart({
@@ -235,8 +233,8 @@ const CreatePostIndex = (props) => {
           preview_file: inputData.preview_file ? inputData.preview_file : "",
           category_ids: inputData.category_ids ? inputData.category_ids: [],
           video_preview_file: inputData.video_preview_file ? inputData.video_preview_file : "",
-          is_campaign : is_campaign?1:0,
-          campaign_goal_amt : campaign_goal_amt,
+          is_campaign : isCampaign?1:0,
+          campaign_goal_amt : campaignGoalAmount,
           campaign_options  : multipleInputs
         })
       );
@@ -246,8 +244,8 @@ const CreatePostIndex = (props) => {
           content: editorHtmlContent,
           amount: inputData.amount ? inputData.amount : "",
           category_ids: inputData.category_ids ? inputData.category_ids: [],
-          is_campaign : is_campaign?1:0,
-          campaign_goal_amt : campaign_goal_amt,
+          is_campaign : isCampaign?1:0,
+          campaign_goal_amt : campaignGoalAmount,
           campaign_options  : multipleInputs
           
         })
@@ -310,32 +308,37 @@ const CreatePostIndex = (props) => {
   };
   const addInputFields = (e) => {
     e.preventDefault()
-    let newfield = { name: '' }
-    setMultipleInputs([...multipleInputs, newfield])
+    if(multipleInputs.length<4){
+      let newfield = { name: '' }
+      setMultipleInputs([...multipleInputs, newfield])
+    }else{
+      setAddOption("You can add maximum 4 option")
+    }
   }
 
   const removeInputFields = (e, index) => {
     e.preventDefault()
+    setAddOption('+ Add upto 4 prefered options')
     let data = [...multipleInputs];
     data.splice(index, 1)
     setMultipleInputs(data)
+    
   }
 
   const handleMultipleInputChange = (evnt, index) => {
     const { name, value } = evnt.target;
+    console.log(evnt.target.value,'dddd')
     let list = [...multipleInputs];
-    if(parseFloat(value) < parseFloat(campaign_goal_amt)){
+    list[index] = value;
+    console.log("updated list" ,list)
+    if(parseFloat(value) < parseFloat(campaignGoalAmount)){
       setMultipleInputs(list);
       setMultipleInputError(false)
     }
     else{
       setMultipleInputError(true)
-    }
+    } 
   }
-
-  console.log(multipleInputs)
-
-  
 
   return (
     <div className="notification-page create-post" id="tabs">
@@ -731,15 +734,18 @@ const CreatePostIndex = (props) => {
                       </Form.Label>
 
 
-                      {is_campaign ?
+                      {isCampaign ?
 
                         <div className="campaign-input-box">
                           <input
                             className="campaign-input-field searchBox"
                             placeholder="Your target"
-                            type="text"
+                            type="number"
                             name="opt_1"
-                            value={campaign_goal_amt}
+                            pattern="[0-9]*"
+                            min="1"
+                            inputmode="numeric"
+                            value={campaignGoalAmount}
                             onChange={handleAmountChange}
                           />
                         </div>
@@ -750,7 +756,7 @@ const CreatePostIndex = (props) => {
 
                       
 
-                      {campaign_goal_amt > 1 ?
+                      {campaignGoalAmount > 1 ?
                           <>
                             {
                               multipleInputs.slice(0, 4).map((input, index) => {
@@ -762,19 +768,18 @@ const CreatePostIndex = (props) => {
                                         <input
                                           className="campaign-input-field searchBox"
                                           placeholder="Enter option"
-                                          type="text"
+                                          type="number"
                                           name="name"
+                                          pattern="[0-9]*"
+                                          min="1"
+                                          inputmode="numeric"
                                           value={input.name}
                                           onChange={(e) => handleMultipleInputChange(e, index)}
                                           key={index}
                                         />
                                       </div>
                                       {index == 0 ?
-                                        <div class="forget-password error-message">
-                                          <p id="one">
-                                            <a type="button" class="forgot-link" onClick={addInputFields}> Add upto 4 prefered options </a>
-                                          </p>
-                                        </div>
+                                        null
                                         :
                                         <div class="forget-password error-message">
                                           <p id="one">
@@ -784,13 +789,20 @@ const CreatePostIndex = (props) => {
                                       
                                       }
                                     </div>
-                                    {index == 4 &&
+                                    <br/>
+                                    <div class="forget-password error-message">
+                                          <p id="one">
+                                            <a type="button" class="forgot-link" onClick={addInputFields}> {addOptionMsg} </a>
+                                          </p>
+                                    </div>
+                                    
+                                    {/* {index == 4 &&
                                       <div class="forget-password error-message">
                                         <p id="one">
                                           <a type="button" class="forgot-link"> You can add maximum 4 prefered option </a>
                                         </p>
                                       </div>
-                                    }
+                                    } */}
                                   </>
                                 )
                               })
@@ -799,15 +811,16 @@ const CreatePostIndex = (props) => {
                         : null
                       }
                       {multipleInputError && 
-                      
                        <p style={{"float":"left","fontSize":"14px","color":"#e34498"}}>Number should be less target amount</p>
                       }
+                      
                     </Form.Group>
                   </>
 
                 </Col>
               </Row>
             </Form>
+            <br/>
           </div>
         ) : (
           ""
