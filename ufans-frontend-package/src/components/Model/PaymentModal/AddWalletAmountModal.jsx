@@ -104,7 +104,8 @@ const AddWalletAmountModal = (props) => {
 
   const closeBtcpayModal = () => {
     setBtcpayModalShow(false);
-    props.dispatch(generateBtcpayPaymentFailure({}));
+    props.dispatch(fetchWalletDetailsStart());
+    props.dispatch(fetchAllTransactionStart());
   };
 
   useEffect(() => {
