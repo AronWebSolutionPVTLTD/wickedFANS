@@ -589,6 +589,7 @@
 .feed-post-dropdown .dropdown-menu {
   min-width: 200px;
   transform: translate(-200px, 35px) !important;
+  left: 17px !important;
 }
 
 .mobile-visible {
@@ -784,7 +785,6 @@
 
 .new-feed-footer-campaign-option-sec .btn-primary.focus, .btn-primary:focus {
   color: #fff !important;
-  background-color: #fff !important;
   border-color: #ddd !important;
 }
 

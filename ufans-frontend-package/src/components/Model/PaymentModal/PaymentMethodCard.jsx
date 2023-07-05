@@ -177,7 +177,7 @@ const PaymentMethodCard = (props) => {
             </>
           ) : null}
         </div>
-        {!props.wallet.loading &&
+        {showWallet &&
          (
             <div className="add-card-btn mt-4">
               <Button

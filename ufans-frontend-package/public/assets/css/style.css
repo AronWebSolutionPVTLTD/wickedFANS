@@ -6151,7 +6151,7 @@ a.upload-profile-picture form#profilePictureForm {
   text-align: center;
 }
 .edit-profile-photo .user-info {
-  *zoom: 1;
+  zoom: 1;
   padding: 8px;
   position: relative;
 }

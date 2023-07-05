@@ -33,7 +33,6 @@ const TipModalSec = (props) => {
   ];
 
   const handleTipChange = (value) => {
-    console.log("value",value)
     if (!isNaN(value)) {
       if(props.isCampaign == 1)
         props.setCampaignAmt(value >= 0 ? value : 0);
@@ -45,7 +44,7 @@ const TipModalSec = (props) => {
   return (
     <>
       <div className="wallet-modal-details mt-5">
-        <h4 className="payment-modal-title">{props.campaignOptions.length>0?t("send_money"):t("send_tips")}</h4>
+        <h4 className="payment-modal-title">{props.campaignOptions && props.campaignOptions.length>0?t("send_money"):t("send_tips")}</h4>
         <p>
           {t("sentip_paytment_note")}
         </p>
@@ -126,7 +125,7 @@ const TipModalSec = (props) => {
                 {props.loadingButtonContent
                   ? props.loadingButtonContent
                   : 
-                  props.campaignOptions.length>0?t("send_campaign"):t("send_tip")
+                  props.campaignOptions && props.campaignOptions.length>0?t("send_campaign"):t("send_tip")
                   }
               </Button>
             )}
