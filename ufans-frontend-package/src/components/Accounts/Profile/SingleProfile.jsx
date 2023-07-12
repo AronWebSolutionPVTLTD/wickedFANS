@@ -78,6 +78,8 @@ const SingleProfile = (props) => {
   const toggleReadMore = () => { setIsReadMore(!isReadMore) };
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(12);
+  const [imageCount, setImageCount] = useState(0);
+  const [videoCount, setVideoCount] = useState(0);
 
   const [subscriptionData, setSubscriptionData] = useState({
     is_free: 0,
@@ -102,10 +104,24 @@ const SingleProfile = (props) => {
         take: take,
       })
     );
-    setSkip(take);
-
+    setSkip(take); 
     window.addEventListener("scroll", toggleVisibility);
   }, []);
+
+  useEffect(() => {
+    let tempImageCount = 0;
+    let tempVideoCount = 0;
+    props.userPosts.data.posts.map((post) => {
+      if(post.post_files.find((eachFile) => eachFile.file_type === "image")) {
+        tempImageCount ++;
+      }
+      else if(post.post_files.find((eachFile) => eachFile.file_type === "video")) {
+        tempVideoCount ++;
+      }
+    })
+    setImageCount(tempImageCount)
+    setVideoCount(tempVideoCount)
+  }, [props.userPosts])
 
   useEffect(() => {
     if (
@@ -1692,7 +1708,7 @@ const SingleProfile = (props) => {
                                   }
                                 />
                               </span>
-                              <span className="resp-display-none">Images</span>
+                              <span className="resp-display-none">{imageCount} Images</span>
                             </Nav.Link>
                           </Nav.Item>
                           <Nav.Item>
@@ -1711,7 +1727,7 @@ const SingleProfile = (props) => {
                                   }
                                 />
                               </span>
-                              <span className="resp-display-none"> Videos</span>
+                              <span className="resp-display-none"> {videoCount} Videos</span>
                             </Nav.Link>
                           </Nav.Item>
                           {/* <Nav.Item>
@@ -1756,60 +1772,64 @@ const SingleProfile = (props) => {
                           )} */}
                         </Nav>
                       </Col>
-                      {activeSec === "product" ? (
+                      {userDetails.data.payment_info.unsubscribe_btn_status === 1 && (
                         <Col md={12}>
-                          <ModelProfileStoreSec
-                            activeSec={activeSec}
-                            setActiveSec={setActiveSec}
-                            products={props.products}
-                            otherUserUniquId={props.match.params.username}
-                          />
-                        </Col>
-                      ) : (
-                        <Col sm={12}>
-                          {props.userPosts.loading ? (
-                            <div className="profile-all-post-box">
-                              {[...Array(8)].map(() => (
-                                <Skeleton className="profile-post-card-loader" />
-                              ))}
-                            </div>
+                          {activeSec === "product" ? (
+                            <Col md={12}>
+                              <ModelProfileStoreSec
+                                activeSec={activeSec}
+                                setActiveSec={setActiveSec}
+                                products={props.products}
+                                otherUserUniquId={props.match.params.username}
+                              />
+                            </Col>
                           ) : (
-                            <>
-                              {props.userPosts.data.posts.length > 0 ? (
-                                <InfiniteScroll
-                                  dataLength={props.userPosts.data.posts.length}
-                                  next={fetchMorePost}
-                                  hasMore={
-                                    props.userPosts.data.posts.length <
-                                    props.userPosts.data.total
-                                  }
-                                  loader={
-                                    <div className="profile-all-post-box">
-                                      {[...Array(4)].map(() => (
-                                        <Skeleton className="profile-post-card-loader" />
-                                      ))}
-                                    </div>
-                                  }
-                                  style={{ height: "auto", overflow: "hidden" }}
-                                >
-                                  <div className="profile-all-post-box">
-                                    {props.userPosts.data.posts.map((post) => (
-                                      <>
-                                        {post.postFiles &&
-                                          post.postFiles.length > 0 && (
-                                            // post.postFiles.map((postFile, index) =>
-                                            <ProfileSinglePost post={post} />
-                                          )}
-                                      </>
-                                    ))}
-                                  </div>
-                                </InfiniteScroll>
+                            <Col sm={12}>
+                              {props.userPosts.loading ? (
+                                <div className="profile-all-post-box">
+                                  {[...Array(8)].map(() => (
+                                    <Skeleton className="profile-post-card-loader" />
+                                  ))}
+                                </div>
                               ) : (
-                                <NoDataFound />
+                                <>
+                                  {props.userPosts.data.posts.length > 0 ? (
+                                    <InfiniteScroll
+                                      dataLength={props.userPosts.data.posts.length}
+                                      next={fetchMorePost}
+                                      hasMore={
+                                        props.userPosts.data.posts.length <
+                                        props.userPosts.data.total
+                                      }
+                                      loader={
+                                        <div className="profile-all-post-box">
+                                          {[...Array(4)].map(() => (
+                                            <Skeleton className="profile-post-card-loader" />
+                                          ))}
+                                        </div>
+                                      }
+                                      style={{ height: "auto", overflow: "hidden" }}
+                                    >
+                                      <div className="profile-all-post-box">
+                                        {props.userPosts.data.posts.map((post) => (
+                                          <>
+                                            {post.postFiles &&
+                                              post.postFiles.length > 0 && (
+                                                // post.postFiles.map((postFile, index) =>
+                                                <ProfileSinglePost post={post} />
+                                              )}
+                                          </>
+                                        ))}
+                                      </div>
+                                    </InfiniteScroll>
+                                  ) : (
+                                    <NoDataFound />
+                                  )}
+                                </>
                               )}
-                            </>
+                            </Col>
                           )}
-                        </Col>
+                      </Col>
                       )}
                     </Row>
                   </Tab.Container>
