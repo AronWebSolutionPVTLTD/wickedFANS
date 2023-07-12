@@ -17,7 +17,6 @@ import NewEmailVerifiedCard from "./NewEmailVerifiedCard";
 import NewFeatureStoryIndex from "./NewFeatureStoryIndex";
 import NewFeedIndex from "./NewFeedIndex";
 import NewFeedRightIndex from "./NewFeedRightIndex";
-// import EmailVerificationModal from "../Verification/EmailVerificationModal"
 import {
   fetchHomePostsStart,
   fetchMoreHomePostsStart,
@@ -165,7 +164,6 @@ const NewHomeIndex = (props) => {
                       {verificationShow && <NewEmailVerifiedCard verificationShow={verificationShow} setVerificationShow={setVerificationShow} />}
                       <NewFeatureStoryIndex />
                       {/* <NewFeedIndex /> */}
-                      {/* {verificationShow && <EmailVerificationModal verificationShow={verificationShow} setVerificationShow={setVerificationShow} />} */}
                       
                       {props.posts.loading ? (
                         <div className="row" style={{ display: "block" }}>
