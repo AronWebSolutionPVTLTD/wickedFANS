@@ -332,7 +332,7 @@ const SingleProfile = (props) => {
                 <Link to="#" className="sidebar-user-name">
                   @{userDetails.data.user.username}
                 </Link>
-                <div className="sidebar-total-count-info-box">
+                {/* <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
@@ -365,7 +365,7 @@ const SingleProfile = (props) => {
                     </h5>
 
                   </div>
-                  {/* <div className="sidebar-total-count-media-card">
+                  <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
                         <Image
@@ -379,8 +379,8 @@ const SingleProfile = (props) => {
                       <span> </span>
                       {userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users : 0}
                     </h5>
-                  </div> */}
-                </div>
+                  </div>
+                </div> */}
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">
                     <h5>{userDetails.data.user.total_posts}</h5>

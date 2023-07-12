@@ -25,6 +25,7 @@ import {
   FETCH_TRENDING_USERS_FAILURE,
   FETCH_MORE_HOME_POSTS_START,
   HOME_POSTS_SUCCESS,
+  FETCH_LOGGEDIN_USER,
 } from "./ActionConstant";
 
 export function fetchHomePostsStart(data) {
@@ -206,5 +207,12 @@ export function fetchTrendingUsersFailure(error) {
   return {
     type: FETCH_TRENDING_USERS_FAILURE,
     error,
+  };
+}
+
+export function fetchLoggedInUser(data) {
+  return {
+    type: FETCH_LOGGEDIN_USER,
+    data,
   };
 }

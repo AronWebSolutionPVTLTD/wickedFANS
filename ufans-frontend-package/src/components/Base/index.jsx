@@ -60,7 +60,7 @@ import ProductList from "../Ecom/Product/ProductList";
 import ExploreIndex from "../Post/Explore/ExploreIndex";
 import StoriesIndex from "../Home/Stories/StoriesIndex";
 import VerificationIndex from "../Verification/VerificationIndex";
-import RegisterVerifyIndex from "../Verification/RegisterVerifyIndex";
+// import RegisterVerifyIndex from "../Verification/RegisterVerifyIndex";
 
 import UserLiveVideosIndex from "../LiveVideos/UserLiveVideosIndex";
 import LiveVideosIndex from "../LiveVideos/LiveVideosIndex";
@@ -667,11 +667,11 @@ class App extends Component {
             layout={AuthLayout}
           />
 
-          <AppRoute
+          {/* <AppRoute
             path={"/register/verify"}
             component={RegisterVerifyIndex}
             layout={AuthLayout}
-          />
+          /> */}
 
           <PrivateRoute
             authentication={this.state.authentication}

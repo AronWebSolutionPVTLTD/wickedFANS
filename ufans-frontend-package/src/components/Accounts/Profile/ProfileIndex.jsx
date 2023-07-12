@@ -207,7 +207,7 @@ const ProfileIndex = (props) => {
                   @{props.profile.data.username}
                 </Link>
                 {/* Photo_count,video_count,likes_count*/}
-                <div className="sidebar-total-count-info-box">
+                {/* <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
@@ -243,7 +243,7 @@ const ProfileIndex = (props) => {
                     </h5>
                     
                   </div>
-                  {/* <div className="sidebar-total-count-media-card">
+                  <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
                         <Image
@@ -261,8 +261,8 @@ const ProfileIndex = (props) => {
                         }
                     </h5>
                    
-                  </div> */}
-                </div>
+                  </div>
+                </div> */}
                 {/* Posts_count,fans_count,follower_count*/}
                 <div className="sidebar-total-count-info-box">
                   <div className="sidebar-total-count-card">

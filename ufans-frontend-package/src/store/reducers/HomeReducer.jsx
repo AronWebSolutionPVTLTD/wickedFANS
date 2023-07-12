@@ -25,6 +25,7 @@ import {
   FETCH_TRENDING_USERS_FAILURE,
   FETCH_MORE_HOME_POSTS_START,
   HOME_POSTS_SUCCESS,
+  FETCH_LOGGEDIN_USER,
 } from "../actions/ActionConstant";
 
 const initialState = {
@@ -91,6 +92,10 @@ const initialState = {
     loadingButtonContent: null,
     buttonDisable: false,
   },
+  loggedInUser : {
+    is_email_verified: false,
+    email: false,
+  },
 };
 
 const HomeReducer = (state = initialState, action) => {
@@ -111,6 +116,7 @@ const HomeReducer = (state = initialState, action) => {
     case FETCH_MORE_HOME_POSTS_START:
       return state;
     case FETCH_HOME_POSTS_SUCCESS:
+      console.log('action', action.data)
       return {
         ...state,
         homePost: {
@@ -388,6 +394,11 @@ const HomeReducer = (state = initialState, action) => {
           loadingButtonContent: null,
           buttonDisable: false,
         },
+      };
+    case FETCH_LOGGEDIN_USER:
+      return {
+        ...state,
+        loggedInUser: action.data,
       };
     default:
       return state;

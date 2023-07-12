@@ -34,6 +34,7 @@ import {
   fetchListsDetailsFailure,
   fetchTrendingUsersFailure,
   fetchTrendingUsersSuccess,
+  fetchLoggedInUser
 } from "../actions/HomeAction";
 
 import {
@@ -49,12 +50,21 @@ function* fetchHomePostAPI(action) {
     if (response.data.success) {
       yield put(fetchHomePostsSuccess(response.data.data));
       if (response.data.data.user) {
+        yield put(fetchLoggedInUser(response.data.data.user));
         localStorage.setItem(
           "total_followers",
           response.data.data.user.total_followers
             ? response.data.data.user.total_followers
             : 0
         );
+        // localStorage.setItem(
+        //   "is_email_verified",
+        //   response.data.data.user.is_email_verified
+        // );
+        // localStorage.setItem(
+        //   "email",
+        //   response.data.data.user.email
+        // );
         localStorage.setItem(
           "total_followings",
           response.data.data.user.total_followings

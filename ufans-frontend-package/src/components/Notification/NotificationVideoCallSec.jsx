@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image } from "react-bootstrap";
 import NoDataFound from "../NoDataFound/NoDataFound";
 import VerifiedBadgeNoShadow from "../Handlers/VerifiedBadgeNoShadow";
@@ -10,7 +10,7 @@ const NotificationVideoCallSec = (props) => {
 
   const {totalNotifications} = props;
 
-  const {notificatoin} = props;
+  const {notification} = props;
 
   return (
     <>
@@ -32,7 +32,7 @@ const NotificationVideoCallSec = (props) => {
               hasMore={
                notifications.length <
                totalNotifications &&
-               notificatoin.errorCount < 2
+               notification.errorCount < 2
               }
               loader={<h4>{t("loading")}</h4>}
             >

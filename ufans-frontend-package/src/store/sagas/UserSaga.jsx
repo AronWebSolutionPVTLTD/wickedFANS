@@ -201,7 +201,7 @@ function* userLoginAPI() {
       localStorage.setItem("accessToken", response.data.data.token);
       localStorage.setItem("device_unique_id", response.data.data.device_unique_id);
       if (response.data.code == 1001)
-        window.location.assign("/register/verify");
+        window.location.assign("/home");
       else {
         if (response.data.code == 240) {
           const notificationMessage = getSuccessNotificationMessage(
@@ -286,7 +286,7 @@ function* userRegisterAPI() {
           response.data.message
         );
         yield put(createNotification(notificationMessage));
-        window.location.assign("/register/verify");
+        window.location.assign("/home");
       }
       else {
         localStorage.setItem("userLoginStatus", true);
@@ -873,7 +873,7 @@ function* twoStepAuthenticationLoginAPI(action) {
       localStorage.setItem("userId", response.data.data.user_id);
       localStorage.setItem("accessToken", response.data.data.token);
       if (response.data.code == 1001)
-        window.location.assign("/register/verify");
+        window.location.assign("/home");
       else {
         localStorage.setItem("userLoginStatus", true);
         localStorage.setItem("user_picture", response.data.data.picture);
