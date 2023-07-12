@@ -31,7 +31,7 @@ const MainLayout = (props) => {
 
   useEffect(() => {
     if (!props.profile.loading && props.profile.data.is_email_verified === 0) {
-      history.push('/register/verify');
+      history.push('/home');
     }
   }, [props.profile]);
 

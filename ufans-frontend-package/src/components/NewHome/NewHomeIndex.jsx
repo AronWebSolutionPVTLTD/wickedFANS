@@ -13,9 +13,11 @@ import {
 } from "react-bootstrap";
 import "./NewHome.css";
 import { Link } from "react-router-dom";
+import NewEmailVerifiedCard from "./NewEmailVerifiedCard";
 import NewFeatureStoryIndex from "./NewFeatureStoryIndex";
 import NewFeedIndex from "./NewFeedIndex";
 import NewFeedRightIndex from "./NewFeedRightIndex";
+// import EmailVerificationModal from "../Verification/EmailVerificationModal"
 import {
   fetchHomePostsStart,
   fetchMoreHomePostsStart,
@@ -41,6 +43,9 @@ import NewFeedSuggestionCard from "./NewFeedSuggestionCard";
 import NewFeedTrendingCard from "./NewFeedTrendingCard";
 
 const NewHomeIndex = (props) => {
+
+  const [verificationShow, setVerificationShow] = useState(false);
+
   useEffect(() => {
     props.dispatch(
       fetchHomePostsStart({
@@ -49,6 +54,12 @@ const NewHomeIndex = (props) => {
       })
     );
   }, []);
+
+  useEffect(() => {
+    if(props.loggedInUser.is_email_verified === 0) {
+      setVerificationShow(true);
+    }
+  }, [props.loggedInUser]);
 
   const fetchMoreData = () => {
     props.dispatch(
@@ -151,9 +162,11 @@ const NewHomeIndex = (props) => {
                   <div className="row">
                     <div className="col-12">
                       <NewHomeSearch />
+                      {verificationShow && <NewEmailVerifiedCard verificationShow={verificationShow} setVerificationShow={setVerificationShow} />}
                       <NewFeatureStoryIndex />
                       {/* <NewFeedIndex /> */}
-
+                      {/* {verificationShow && <EmailVerificationModal verificationShow={verificationShow} setVerificationShow={setVerificationShow} />} */}
+                      
                       {props.posts.loading ? (
                         <div className="row" style={{ display: "block" }}>
                           <HomeLoader />
@@ -204,11 +217,12 @@ const NewHomeIndex = (props) => {
   );
 };
 
-const mapStateToPros = (state) => ({
+const mapStateToPros = (state) => ({ 
   posts: state.home.homePost,
   searchUser: state.home.searchUser,
   trendingUsers: state.home.trendingUsers,
   postSug: state.home.postSug,
+  loggedInUser: state.home.loggedInUser
 });
 
 function mapDispatchToProps(dispatch) {
@@ -218,4 +232,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToPros,
   mapDispatchToProps
-)(translate(NewHomeIndex));
+)(translate(NewHomeIndex))

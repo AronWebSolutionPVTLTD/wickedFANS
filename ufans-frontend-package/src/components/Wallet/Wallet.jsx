@@ -168,13 +168,13 @@ const Wallet = (props) => {
 														</span>
 														{/* <span className="amout-abb text-muted">TYPE</span> */}
 													</td>
-													<td>
+													{/* <td>
 														{t("from")} :{" "}
 														{data.received_from_username
 															? data.received_from_username
 															: "-"}
 													</td>
-													<td>{data.payment_id}</td>
+													<td>{data.payment_id}</td> */}
 													{/* <td>
 															<Badge className="unconfirmed-badge">
 																unconfirmed

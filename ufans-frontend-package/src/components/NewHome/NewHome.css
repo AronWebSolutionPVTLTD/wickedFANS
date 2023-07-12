@@ -419,9 +419,9 @@
   font-weight: 400;
 }
 
-.new-feed-post-time-sec {
-  /* padding-top: 0.5em; */
-}
+/* .new-feed-post-time-sec {
+  padding-top: 0.5em;
+} */
 
 .new-feed-post-time-sec p {
   color: #9896A1;
@@ -788,3 +788,38 @@
   border-color: #ddd !important;
 }
 
+/*Style of NewEmailVerifiedCard*/
+
+.email-verification-body {
+  display: flex;
+  background-color: #f0f0f0;
+  font-size: 14px;
+  padding: 24px 28px 24px 20px;
+  margin-right: -20px;
+  margin-left: -20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  line-height: 2;
+}
+.email-verification-content-title {
+  font-weight: 600;
+}
+.email-verification-content-email {
+  font-weight: 600;
+}
+.email-verification-content-resend-btn {
+  border: none;
+  background-color: #f0f0f0;
+  color: #ff0000;
+  font-weight: 600;
+  position: fixed;
+}
+.email-verification-close {
+  display: flex;
+  align-items: center;
+}
+.email-verification-close-btn {
+  border: none;
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
