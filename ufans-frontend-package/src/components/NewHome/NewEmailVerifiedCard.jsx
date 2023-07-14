@@ -19,10 +19,10 @@ const NewEmailVerifiedCard = (props) => {
     return (
         <div className="email-verification-body">
             <div className="email-verification-content">
-                <span className="email-verification-content-title">Check your email to verify your account.</span>
+                <span className="email-verification-content-title">Check your email to verify your account.</span>&nbsp;
                 <span>We sent a link to </span>
-                <sapn className="email-verification-content-email">{props.loggedInUser.email}.</sapn>
-                <span>Didn't receie the email? <button className="email-verification-content-resend-btn" onClick={resendVerification}>Send again</button></span>
+                <sapn className="email-verification-content-email">{props.loggedInUser.email}.</sapn>&nbsp;
+                <span>Didn't receive the email? <button className="email-verification-content-resend-btn" onClick={resendVerification}>Send again</button></span>
             </div>
             <div className="email-verification-close">
                 <button

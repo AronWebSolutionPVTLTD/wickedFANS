@@ -647,7 +647,7 @@ class Helper {
 
         Storage::putFileAs($public_folder_path, $input_file, $file_name);
 
-        $storage_file_path = "app/public/".$folder_path.$file_name;
+        $storage_file_path = "".$folder_path.$file_name;
 
         if($admin!='')
             $url = asset($admin.Storage::url($storage_file_path));
@@ -720,7 +720,7 @@ class Helper {
 
         Storage::putFileAs($public_folder_path, $input_file, $file_name);
 
-        $storage_file_path = "app/public/".$folder_path.$file_name;
+        $storage_file_path = "".$folder_path.$file_name;
 
         $url = asset(Storage::url($storage_file_path));
     

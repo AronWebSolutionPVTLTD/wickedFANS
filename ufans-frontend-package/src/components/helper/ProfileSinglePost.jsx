@@ -7,6 +7,15 @@ import { translate, t } from "react-multi-lang";
 import NoDataFound from "../NoDataFound/NoDataFound";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import InfiniteScroll from "react-infinite-scroll-component";
+// import {
+//   Button,
+//   Container,
+//   Row,
+//   Col,
+//   Image,
+//   Form,
+//   Media,
+// } from "react-bootstrap";
 
 const ProfileSinglePost = ({ post }) => {
   const [postFile, setPostFile] = useState(post.postFiles[0]);
@@ -26,7 +35,7 @@ const ProfileSinglePost = ({ post }) => {
                                                         /> */}
                 <LazyLoadImage
                   className="profile-lock-img"
-                  src={postFile.post_file}
+                  src={postFile.blur_file}
                   effect="blur"
                 />
                 <div className="profile-lock-icon-sec">
@@ -224,7 +233,7 @@ const ProfileSinglePost = ({ post }) => {
                   src={
                     postFile.preview_file
                       ? postFile.preview_file
-                      : postFile.post_file
+                      : postFile.blur_file
                   }
                   effect="blur"
                 />
@@ -304,6 +313,24 @@ const ProfileSinglePost = ({ post }) => {
                 )}
               </div>
             </div>
+            {/* {videoPreview.previewVideo !== "" ? (
+              <Row>
+                <Col sm={12} md={6} className="mb-3 mb-lg-4">
+                  <div className="post-img-preview-sec m-0">
+                    <div className="post-img-preview-sec my-3 my-lg-4">
+                      <video
+                        autoplay
+                        controls
+                        id="myVideo"
+                        className="user-profile1 w-100"
+                      >
+                        <source src={videoPreview.previewVideo} type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            ) : null} */}
           </Link>
         ) : (
           //Free Video
