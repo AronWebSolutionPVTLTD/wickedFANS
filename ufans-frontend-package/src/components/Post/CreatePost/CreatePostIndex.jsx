@@ -28,6 +28,8 @@ import PostEditor from "../postMentions/PostEditor";
 import { stateToHTML } from "draft-js-export-html";
 import { Multiselect } from "multiselect-react-dropdown";
 import ContentCreatorSteps from "./ContentCreatorSteps";
+import { Checkbox } from "@material-ui/core";
+import "./CreatePost.css"
 
 
 const CreatePostIndex = (props) => {
@@ -128,37 +130,37 @@ const CreatePostIndex = (props) => {
   }, [!props.fileRemove.loading]);
 
   const handleChangeImage = (event, fileType) => {
-    let data_array = [];
+    let data_obj = {};
 
     [...event.target.files].forEach((file, key) => {
 
       let name = 'file[' + key + ']';
 
-      data_array[name] = file;
+      data_obj[name] = file;
 
     });
-    data_array['file_type'] = fileType;
+    data_obj['file_type'] = fileType;
 
     setPreviewImage(true);
     setFileUploadStatus(true);
     setPaidPost(true);
     setDisableVideo(true);
     setDisableAudio(true);
-    props.dispatch(postFileUploadStart(data_array));
+    props.dispatch(postFileUploadStart(data_obj));
   };
 
   const handleChangeVideo = (event, fileType) => {
-    let data_array = [];
+    let data_obj = {};
 
     [...event.target.files].forEach((file, key) => {
 
       let name = 'file[' + key + ']';
 
-      data_array[name] = file;
+      data_obj[name] = file;
 
     });
 
-    data_array['file_type'] = fileType;
+    data_obj['file_type'] = fileType;
 
     setPaidPost(true);
     setFileUploadStatus(true);
@@ -166,27 +168,27 @@ const CreatePostIndex = (props) => {
     setDisableImage(true);
     setDisableAudio(true);
     setVideoPreviewUrl(true);
-    props.dispatch(postFileUploadStart(data_array));
+    props.dispatch(postFileUploadStart(data_obj));
   };
 
   const handleChangeAudio = (event, fileType) => {
-    let data_array = [];
+    let data_obj = {};
 
     [...event.target.files].forEach((file, key) => {
 
       let name = 'file[' + key + ']';
 
-      data_array[name] = file;
+      data_obj[name] = file;
 
     });
 
-    data_array['file_type'] = fileType;
+    data_obj['file_type'] = fileType;
     setFileUploadStatus(true);
     setPaidPost(true);
     setAudioThumbnail(true);
     setDisableImage(true);
     setDisableVideo(true);
-    props.dispatch(postFileUploadStart(data_array));
+    props.dispatch(postFileUploadStart(data_obj));
   };
 
   const handleClose = (event, post_file) => {
@@ -209,6 +211,10 @@ const CreatePostIndex = (props) => {
     }
   };
 
+  const handleCheckBox = (e) => {
+    setVideoThumbnailStatus(e.target.checked);
+  }
+
   const handleChange = (e) => {
     //alert(e.target.checked)
     setChecked(e.target.checked);
@@ -223,7 +229,6 @@ const CreatePostIndex = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //console.log("hhh",multipleInputs)
     if (fileUploadStatus) {
       props.dispatch(
         savePostStart({
@@ -327,10 +332,8 @@ const CreatePostIndex = (props) => {
 
   const handleMultipleInputChange = (evnt, index) => {
     const { name, value } = evnt.target;
-    console.log(evnt.target.value,'dddd')
     let list = [...multipleInputs];
     list[index] = value;
-    console.log("updated list" ,list)
     if(parseFloat(value) < parseFloat(campaignGoalAmount)){
       setMultipleInputs(list);
       setMultipleInputError(false)
@@ -472,6 +475,10 @@ const CreatePostIndex = (props) => {
                           })
                         }
                       />
+                      <div className="check-preview">
+                        <input type="checkbox" className="check-preview-box" checked={videoThumbnailStatus} onChange={handleCheckBox} />
+                        <span className="check-preview-content">Show preview image or video</span>
+                      </div>
                     </Form.Group>
                   ) : (
                     ""
