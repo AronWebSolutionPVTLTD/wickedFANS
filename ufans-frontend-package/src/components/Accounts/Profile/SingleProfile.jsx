@@ -109,19 +109,15 @@ const SingleProfile = (props) => {
   }, []);
 
   useEffect(() => {
-    let tempImageCount = 0;
-    let tempVideoCount = 0;
-    props.userPosts.data.posts.map((post) => {
-      if(post.post_files.find((eachFile) => eachFile.file_type === "image")) {
-        tempImageCount ++;
-      }
-      else if(post.post_files.find((eachFile) => eachFile.file_type === "video")) {
-        tempVideoCount ++;
-      }
-    })
-    setImageCount(tempImageCount)
-    setVideoCount(tempVideoCount)
-  }, [props.userPosts])
+    if (activeSec === 'all') {
+      const tempImageCount = props.userPosts.data.posts.filter((post) => post.post_files.find((eachFile) => eachFile.file_type === "image")).length;
+      const tempVideoCount = props.userPosts.data.posts.filter((post) => post.post_files.find((eachFile) => eachFile.file_type === "video")).length;
+
+      setImageCount(tempImageCount)
+      setVideoCount(tempVideoCount)
+    }
+    
+  }, [activeSec, props.userPosts])
 
   useEffect(() => {
     if (
@@ -1312,7 +1308,7 @@ const SingleProfile = (props) => {
                               ? "dark-theme-modal"
                               : ""
                               }
-        `}
+                            `}
                           >
                             <Modal.Header closeButton>
                               <Modal.Title>{t("unsubscribe")}</Modal.Title>
@@ -1708,7 +1704,7 @@ const SingleProfile = (props) => {
                                   }
                                 />
                               </span>
-                              <span className="resp-display-none">{imageCount} Images</span>
+                              <span style={{ minWidth: 82 }}>{imageCount} Images</span>
                             </Nav.Link>
                           </Nav.Item>
                           <Nav.Item>
@@ -1727,7 +1723,7 @@ const SingleProfile = (props) => {
                                   }
                                 />
                               </span>
-                              <span className="resp-display-none"> {videoCount} Videos</span>
+                              <span style={{ minWidth: 82 }}> {videoCount} Videos</span>
                             </Nav.Link>
                           </Nav.Item>
                           {/* <Nav.Item>
@@ -1772,6 +1768,26 @@ const SingleProfile = (props) => {
                           )} */}
                         </Nav>
                       </Col>
+                      
+                      {userDetails.data.payment_info.unsubscribe_btn_status !== 1 && (
+                        <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
+                          <div
+                            className="subscription-btn"
+                            onClick={(event) => props.dispatch(
+                              subscriptionPaymentStripeStart({
+                                user_unique_id:
+                                  userDetails.data.user.user_unique_id,
+                                plan_type: "months",
+                                is_free: 0,
+                              })
+                            )
+                            } 
+                          >
+                            SUBSCRIBE TO SEE USER'S POSTS
+                          </div>
+                        </div>
+                      )}
+
                       {userDetails.data.payment_info.unsubscribe_btn_status === 1 && (
                         <Col md={12}>
                           {activeSec === "product" ? (
