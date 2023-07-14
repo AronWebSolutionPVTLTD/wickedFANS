@@ -260,6 +260,12 @@
                                             
                                         <span class="badge badge-success">{{ tr('yes') }}</span>
 
+                                            @if($user->is_auto_following_creator == 1)
+
+                                            <span class="badge badge-success">{{ tr('auto_following') }}</span>
+
+                                            @endif
+
                                         @else
 
                                         <span class="badge badge-primary">{{ tr('no') }}</span>

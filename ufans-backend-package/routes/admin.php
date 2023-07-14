@@ -60,6 +60,9 @@ Route::group(['middleware' => 'web'], function() {
         
         Route::get('/users/content_creator_upgrade','Admin\AdminUserController@content_creator_upgrade')->name('users.content_creator_upgrade');
 
+        Route::get('/users/auto_following_creator_set','Admin\AdminUserController@auto_following_creator_set')->name('users.auto_following_creator_set');
+
+        Route::get('/users/auto_following_creator_unset','Admin\AdminUserController@auto_following_creator_unset')->name('users.auto_following_creator_unset');
 
         Route::get('user_subscription_payments/index','Admin\AdminUserController@user_subscription_payments')->name('users_subscriptions.index');
 

@@ -1983,4 +1983,13 @@ return [
 	"btcpay_test_api_key" => "Btcpay Test Api key",
 	"btcpay_test_store_id" => "Btcpay Test Store ID",
 
+	"auto_following" => "Auto Following",
+	"auto_following_creator_set" => "Set To Auto Following Creator",
+	"auto_following_creator_set_success" => "User Set To Auto Following Creator Successfully",
+	"auto_following_creator_set_failed" => "User Set To Auto Following Creator Failed",
+	"auto_following_creator_set_confirmation" => "Are you sure you want to make the user (:other_key) an auto following Creator?",	
+	"auto_following_creator_unset" => "Unset Auto Following Creator",
+	"auto_following_creator_unset_success" => "User Unset Auto Following Creator Successfully",
+	"auto_following_creator_unset_failed" => "User Unset Auto Following Creator Failed",
+	"auto_following_creator_unset_confirmation" => "Are you sure you want to unset the user (:other_key) an auto following Creator?",
 ];

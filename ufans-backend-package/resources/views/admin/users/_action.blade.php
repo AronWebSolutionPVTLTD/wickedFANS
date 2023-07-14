@@ -94,6 +94,17 @@
         </a>
 
         @if($user->is_content_creator == CONTENT_CREATOR)
+            @if($user->is_auto_following_creator == 0)
+            <a onclick="return confirm(&quot;{{ tr('auto_following_creator_set_confirmation' , $user->name) }}&quot;);" class="dropdown-item" href="{{ route('admin.users.auto_following_creator_set', ['user_id' => $user->id] ) }}">
+                <img class="icon" src="{{asset('admin-assets/vendors/flat-color-icons/automatic.svg')}}" alt="photo_reel.svg"/>
+                <span class="title">{{ tr('auto_following_creator_set') }}</span>
+            </a>
+            @else
+            <a onclick="return confirm(&quot;{{ tr('auto_following_creator_unset_confirmation' , $user->name) }}&quot;);" class="dropdown-item" href="{{ route('admin.users.auto_following_creator_unset', ['user_id' => $user->id] ) }}">
+                <img class="icon" src="{{asset('admin-assets/vendors/flat-color-icons/undo.svg')}}" alt="photo_reel.svg"/>
+                <span class="title">{{ tr('auto_following_creator_unset') }}</span>
+            </a>
+            @endif
 
             <a class="dropdown-item" href="{{route('admin.users.report_dashboard', ['user_id' => $user->id])}}">
                 <img class="icon" src="{{asset('admin-assets/vendors/flat-color-icons/line_chart.svg')}}" alt="line_chart.svg"/>

@@ -2464,5 +2464,111 @@ class AdminUserController extends Controller
         }
 
     }
+    
+    /**
+     * @method auto_following_creator_set
+     *
+     * @uses To update user to Auto Following Creator based on users id
+     *
+     * @created Volodymyr
+     *
+     * @updated 
+     *
+     * @param object $request - User Id
+     * 
+     * @return response success/failure message
+     *
+     **/
+    public function auto_following_creator_set(Request $request) {
+
+        try {
+
+            DB::beginTransaction();
+
+            $user = \App\Models\User::find($request->user_id);
+
+            if(!$user) {
+
+                throw new Exception(tr('user_not_found'), 101);
+                
+            }
+
+            if ($user->is_content_creator != CONTENT_CREATOR) {
+                throw new Exception(tr('unverified_content_creators'), 101);
+            }
+
+            $user->is_auto_following_creator = 1;
+
+            if($user->save()) {
+
+                DB::commit();
+
+                return redirect()->back()->with('flash_success', tr('auto_following_creator_set_success'));
+            }
+            
+            throw new Exception(tr('auto_following_creator_set_failed'));
+
+        } catch(Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.users.index')->with('flash_error', $e->getMessage());
+
+        }
+
+    }
+
+    /**
+     * @method auto_following_creator_unset
+     *
+     * @uses To unset user from Auto Following Creator based on users id
+     *
+     * @created Volodymyr
+     *
+     * @updated 
+     *
+     * @param object $request - User Id
+     * 
+     * @return response success/failure message
+     *
+     **/
+    public function auto_following_creator_unset(Request $request) {
+
+        try {
+
+            DB::beginTransaction();
+
+            $user = \App\Models\User::find($request->user_id);
+
+            if(!$user) {
+
+                throw new Exception(tr('user_not_found'), 101);
+                
+            }
+
+            if ($user->is_content_creator != CONTENT_CREATOR) {
+                throw new Exception(tr('unverified_content_creators'), 101);
+            }
+
+            $user->is_auto_following_creator = 0;
+
+            if($user->save()) {
+
+                DB::commit();
+
+                return redirect()->back()->with('flash_success', tr('auto_following_creator_unset_success'));
+            }
+            
+            throw new Exception(tr('auto_following_creator_unset_failed'));
+
+        } catch(Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->route('admin.users.index')->with('flash_error', $e->getMessage());
+
+        }
+
+    }
 
 }

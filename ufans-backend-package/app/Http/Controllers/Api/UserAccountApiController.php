@@ -558,6 +558,20 @@ class UserAccountApiController extends Controller
                   $user->save();
                 }
 
+                // Add auto following creators to the new user's followers list
+
+                $auto_following_creator_ids = User::where('is_auto_following_creator', YES)->where('is_content_creator', CONTENT_CREATOR)->pluck('id');
+
+                $auto_following_creator_ids = $auto_following_creator_ids ? $auto_following_creator_ids->toArray() : [];
+
+                $followers_data = [];
+
+                foreach ($auto_following_creator_ids as $creator_id) {
+                    $followers_data[] = ['follower_id' => $user->id, 'user_id' => $creator_id, 'status' => YES];
+                }
+
+                \App\Models\Follower::insert($followers_data);
+
                 // Send welcome email to the new user:
 
                 if($request->category_id){
