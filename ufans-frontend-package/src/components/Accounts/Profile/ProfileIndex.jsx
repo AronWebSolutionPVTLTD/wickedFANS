@@ -724,7 +724,7 @@ const ProfileIndex = (props) => {
               </div>
               <div className="mobile-display">
                <div className="sidebar-total-count-info-box">
-                  <div className="sidebar-total-count-media-card">
+                  {/* <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>
                         <Image
@@ -758,7 +758,7 @@ const ProfileIndex = (props) => {
                           : 0}
                     </h5>
                     
-                  </div>
+                  </div> */}
                   {/* <div className="sidebar-total-count-media-card">
                     <h5>
                       <span>

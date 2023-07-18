@@ -52,9 +52,9 @@ const NewSinglePostSlider = (props) => {
         
             {post.postFiles && post.postFiles.length > 0 ?
               post.postFiles.map((postFile, index) =>
-              <div  className="single_post_blur_image">
+              <div  className="single_post_blur_image" style={{backgroundImage: `url(${postFile.post_file})`, backgroundSize:'cover', backgroundPosition: 'center'}}>
                { postFile.file_type === "image" ?
-               <div className="single_post_blur_image" style={{backgroundImage: `url(${postFile.post_file})`,backgroundSize:'cover',backgroundPosition:'center'}}>
+               <div className="single_post_blur_image">
                   <div>
                     {post.payment_info.is_user_needs_pay == 1 ?
                       <div
@@ -120,11 +120,7 @@ const NewSinglePostSlider = (props) => {
                             </div>
                             :
                             <Image className="single-post-img"
-                              src={
-                                postFile.preview_file
-                                  ? postFile.preview_file
-                                  : postFile.post_file
-                              }
+                              src={postFile.post_file}
                               data-fancybox />
                           }
                           

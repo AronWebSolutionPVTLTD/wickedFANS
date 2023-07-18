@@ -113,16 +113,10 @@ const NewSinglePostSlider = (props) => {
                               controlsList={"nodownload"}
                               className="post-video-size video-bg-black"
                           // style={{backgroundImage: `url(${postFile.video_preview_file})`}}
-
                             />
-                           
                             :
                             <Image className="single-post-img"
-                              src={
-                                postFile.preview_file
-                                  ? postFile.preview_file
-                                  : postFile.post_file
-                              }
+                              src={postFile.post_file}
                               data-fancybox />
                           }
                           

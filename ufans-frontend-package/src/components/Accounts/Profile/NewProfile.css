@@ -444,6 +444,7 @@
 
 .profile-lock-post-card {
     position: relative;
+    height: 100%;
 }
 
 .profile-lock-post-card::before {
@@ -455,6 +456,15 @@
     background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     border-radius: 0.5em;
+}
+
+.profile-lock-img-sec {
+    height: 100%;
+}
+
+.user-profile1 {
+    height: 100%;
+    border-radius: 10px;
 }
 
 .profile-lock-icon-sec {
