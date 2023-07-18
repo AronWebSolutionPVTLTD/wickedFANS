@@ -228,15 +228,24 @@ const ProfileSinglePost = ({ post }) => {
           <Link to={`/post/${post.post_unique_id}`}>
             <div className="profile-lock-post-card">
               <div className="profile-lock-img-sec">
-                <LazyLoadImage
-                  className="profile-lock-img"
-                  src={
-                    postFile.preview_file
-                      ? postFile.preview_file
-                      : postFile.blur_file
-                  }
-                  effect="blur"
-                />
+                {postFile.video_preview_file ? (
+                  <video
+                    autoplay
+                    controls
+                    id="myVideo"
+                    className="user-profile1 w-100"
+                    effect="blur"
+                  >
+                    <source src={postFile.video_preview_file} type="video/mp4" />
+                  </video>
+                ) : (
+                  <LazyLoadImage
+                    className="profile-lock-img"
+                    src={ postFile.blur_file}
+                    effect="blur"
+                  />
+                )}
+                
                 <div className="profile-lock-icon-sec">
                   <Image
                     className="profile-lock-icon"
@@ -339,11 +348,7 @@ const ProfileSinglePost = ({ post }) => {
               <div className="profile-video-img-sec">
                 <LazyLoadImage
                   className="profile-video-img"
-                  src={
-                    postFile.preview_file
-                      ? postFile.preview_file
-                      : postFile.post_file
-                  }
+                  src={ postFile.post_file}//add thumbnail
                   effect="blur"
                 />
                 {post.amount > 0 ? (

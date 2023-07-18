@@ -109,6 +109,7 @@ const SingleProfile = (props) => {
   }, []);
 
   useEffect(() => {
+
     if (activeSec === 'all') {
       const tempImageCount = props.userPosts.data.posts.filter((post) => post.post_files.find((eachFile) => eachFile.file_type === "image")).length;
       const tempVideoCount = props.userPosts.data.posts.filter((post) => post.post_files.find((eachFile) => eachFile.file_type === "video")).length;
@@ -1013,7 +1014,7 @@ const SingleProfile = (props) => {
                         {userDetails.data.user.email}
                       </Link>
                       <div className="sidebar-total-count-info-box">
-                        <div className="sidebar-total-count-media-card">
+                        {/* <div className="sidebar-total-count-media-card">
                           <h5>
                             <span>
                               <Image
@@ -1043,7 +1044,7 @@ const SingleProfile = (props) => {
                             <span> </span>
                             {userDetails.data.total_videos ? userDetails.data.total_videos : 0}
                           </h5>
-                        </div>
+                        </div> */}
 
                         {/* <div className="sidebar-total-count-media-card">
                           <h5>
@@ -1768,24 +1769,55 @@ const SingleProfile = (props) => {
                           )} */}
                         </Nav>
                       </Col>
-                      
-                      {userDetails.data.payment_info.unsubscribe_btn_status !== 1 && (
-                        <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
-                          <div
-                            className="subscription-btn"
-                            onClick={(event) => props.dispatch(
-                              subscriptionPaymentStripeStart({
-                                user_unique_id:
-                                  userDetails.data.user.user_unique_id,
-                                plan_type: "months",
-                                is_free: 0,
-                              })
-                            )
-                            } 
-                          >
-                            SUBSCRIBE TO SEE USER'S POSTS
+
+                      {userDetails.data.payment_info.unsubscribe_btn_status === 0 && (
+                        userDetails.data.payment_info.is_free_account === 0 ? (
+                          <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
+                            <div
+                              className="subscription-btn"
+                              onClick={(event) =>
+                                subscriptionPayment(
+                                  event,
+                                  "months",
+                                  userDetails.data.payment_info.subscription_info
+                                    .monthly_amount,
+                                  userDetails.data.payment_info.subscription_info
+                                    .monthly_amount_formatted
+                                )
+                              }
+                            >
+                              SUBSCRIBE TO SEE USER'S POSTS
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
+                            <div
+                              className="subscription-btn"
+                              onClick={(event) => {
+                                if (localStorage.getItem("userId")) {
+                                  props.dispatch(
+                                    subscriptionPaymentStripeStart({
+                                      user_unique_id:
+                                        userDetails.data.user.user_unique_id,
+                                      plan_type: "months",
+                                      is_free: 0,
+                                    })
+                                  );
+                                } else {
+                                  const notificationMessage =
+                                    getErrorNotificationMessage(
+                                      t("login_to_continue")
+                                    );
+                                  props.dispatch(
+                                    createNotification(notificationMessage)
+                                  );
+                                }
+                              }}
+                            >
+                              SUBSCRIBE TO SEE USER'S POSTS
+                            </div>
+                          </div>
+                        )
                       )}
 
                       {userDetails.data.payment_info.unsubscribe_btn_status === 1 && (
