@@ -34,6 +34,7 @@ import PPVPaymentModal from "../Model/PaymentModal/PPVPaymentModal";
 const NewFeedDisplayCard = (props) => {
   const history = useHistory();
   const { post } = props;
+  const { postFile } = props;
 
   const [sendTip, setSendTip] = useState(false);
   const [sendCampaign, setSendCampaign] = useState(false);
@@ -102,12 +103,12 @@ const NewFeedDisplayCard = (props) => {
   }
 
   const feedMedia = (postFile, post) => {
-  
+
     return (
       <>
         {postFile.file_type === "image" ? (
         //Image File
-        post.payment_info.is_user_needs_pay === 1 ? (
+        post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
           //Locked Image
           <div className="profile-lock-post-card">
             <div className="profile-lock-img-sec">
@@ -129,7 +130,7 @@ const NewFeedDisplayCard = (props) => {
                   }
                 />
               </div>
-              {post.amount_formatted === 0 ? 
+              {post.amount === 0 ? 
                 (<div>
                   <svg>
                     <path
@@ -147,60 +148,10 @@ const NewFeedDisplayCard = (props) => {
                       <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
                     </g>
                   </svg>
-                </div>) :                
-              (<div className="ppv-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  width="24"
-                  height="24"
-                  enableBackground="new 0 0 512 512"
-                  viewBox="0 0 32 32"
-                >
-                  <linearGradient
-                    id="a"
-                    x1="-0.04"
-                    x2="31.01"
-                    y1="7"
-                    y2="7"
-                    data-name="New Gradient Swatch"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop offset="0" stopColor="#fff"></stop>
-                    <stop offset="1" stopColor="#fff"></stop>
-                  </linearGradient>
-                  <linearGradient
-                    id="b"
-                    y1="25"
-                    y2="25"
-                    data-name="New Gradient Swatch"
-                    xlinkHref="#a"
-                  ></linearGradient>
-                  <linearGradient
-                    id="c"
-                    x2="31.01"
-                    y1="16"
-                    y2="16"
-                    data-name="New Gradient Swatch"
-                    xlinkHref="#a"
-                  ></linearGradient>
-                  <path
-                    fill="url(#a)"
-                    d="M2 10c.55 0 1-.45 1-1V7c0-.55.45-1 1-1h2c.55 0 1-.45 1-1s-.45-1-1-1H4C2.35 4 1 5.35 1 7v2c0 .55.45 1 1 1zm26-6h-2c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1 .45 1 1v2c0 .55.45 1 1 1s1-.45 1-1V7c0-1.65-1.35-3-3-3z"
-                    data-original="url(#a)"
-                  ></path>
-                  <path
-                    fill="url(#b)"
-                    d="M6 26H4c-.55 0-1-.45-1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1v2c0 1.65 1.35 3 3 3h2c.55 0 1-.45 1-1s-.45-1-1-1zm24-4c-.55 0-1 .45-1 1v2c0 .55-.45 1-1 1h-2c-.55 0-1 .45-1 1s.45 1 1 1h2c1.65 0 3-1.35 3-3v-2c0-.55-.45-1-1-1z"
-                    data-original="url(#b)"
-                  ></path>
-                  <g fill="url(#c)">
-                    <path d="M16 7C9.83 7 4.13 10.26 1.13 15.5c-.18.31-.18.69 0 .99 3 5.25 8.7 8.5 14.87 8.5s11.87-3.26 14.87-8.5c.18-.31.18-.69 0-.99-3-5.25-8.7-8.5-14.87-8.5zM3.17 16a14.77 14.77 0 014.98-4.84C7.42 12.63 7 14.29 7 16s.41 3.37 1.15 4.84C6.15 19.65 4.43 18 3.17 16zm8.7 6.43c-1.79-1.51-2.86-3.89-2.86-6.43s1.07-4.92 2.86-6.43C13.2 9.2 14.59 9 16.01 9s2.81.2 4.14.57c1.79 1.51 2.86 3.89 2.86 6.43s-1.07 4.92-2.86 6.43c-1.33.37-2.72.57-4.14.57s-2.81-.2-4.14-.57zm11.99-1.59c.73-1.47 1.15-3.13 1.15-4.84s-.41-3.37-1.15-4.84c2 1.19 3.72 2.84 4.98 4.84a14.77 14.77 0 01-4.98 4.84z"></path>
-                    <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
-                  </g>
-                </svg>
-                <span>{post.amount_formatted}</span>
-              </div>)}
+                </div>) : (
+                  ""
+                )               
+              }
               {post.postFiles.length > 1 && (
                 <div className="multiple-icon-sec">
                   <Image
@@ -229,7 +180,7 @@ const NewFeedDisplayCard = (props) => {
                 onClick={() => handleImageClick(postFile.post_file)}
                 effect="blur"
               />
-              {post.amount > 0 ? (
+              {/* {post.amount > 0 ? (
                 <div className="ppv-icon">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -281,11 +232,11 @@ const NewFeedDisplayCard = (props) => {
                       <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
                     </g>
                   </svg>
-                  <span>{post.amount_formatted}</span>
+                  <span>{post.amount} $</span>
                 </div>
               ) : (
                 ""
-              )}
+              )} */}
               {post.postFiles.length > 1 && (
                 <div className="multiple-icon-sec">
                   <Image
@@ -303,7 +254,7 @@ const NewFeedDisplayCard = (props) => {
         )
       ) : postFile.file_type === "video" ? (
         // Video Section
-        post.payment_info.is_user_needs_pay === 1 ? (
+        post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
           //Locked Video
           <div className="profile-lock-post-card">
             <div className="profile-lock-img-sec">
@@ -333,7 +284,7 @@ const NewFeedDisplayCard = (props) => {
                   }
                 />
               </div>
-              <div className="ppv-icon">
+              {/* <div className="ppv-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -384,8 +335,8 @@ const NewFeedDisplayCard = (props) => {
                     <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
                   </g>
                 </svg>
-                <span>{post.amount_formatted}</span>
-              </div>
+                <span>{post.amount} $</span>
+              </div> */}
               {post.postFiles.length > 1 && (
                 <div className="multiple-icon-sec">
                   <Image
@@ -420,7 +371,7 @@ const NewFeedDisplayCard = (props) => {
                 }}
                 className="post-video-size"
               />
-              {post.amount > 0 ? (
+              {/* {post.amount > 0 ? (
                 <div className="ppv-icon">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -472,11 +423,11 @@ const NewFeedDisplayCard = (props) => {
                       <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
                     </g>
                   </svg>
-                  <span>{post.amount_formatted}</span>
+                  <span>{post.amount} $</span>
                 </div>
               ) : (
                 ""
-              )}
+              )} */}
               {post.postFiles.length > 1 && (
                 <div className="multiple-icon-sec">
                   <Image
@@ -494,7 +445,7 @@ const NewFeedDisplayCard = (props) => {
         )
       ) : postFile.file_type === "audio" ? (
         // Audio
-        post.payment_info.is_user_needs_pay === 1 ? (
+        post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
           //Locked Audio
           <div className="profile-lock-post-card">
             <div className="profile-lock-img-sec">
@@ -516,7 +467,7 @@ const NewFeedDisplayCard = (props) => {
                   }
                 />
               </div>
-              <div className="ppv-icon">
+              {/* <div className="ppv-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -567,8 +518,8 @@ const NewFeedDisplayCard = (props) => {
                     <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
                   </g>
                 </svg>
-                <span>{post.amount_formatted}</span>
-              </div>
+                <span>{post.amount} $</span>
+              </div> */}
               {post.postFiles.length > 1 && (
                 <div className="multiple-icon-sec">
                   <Image
@@ -596,7 +547,7 @@ const NewFeedDisplayCard = (props) => {
                 }
                 effect="blur"
               />
-              {post.amount > 0 ? (
+              {/* {post.amount > 0 ? (
                 <div className="ppv-icon">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -648,11 +599,11 @@ const NewFeedDisplayCard = (props) => {
                       <path d="M16.83 15h-1.67a.67.67 0 010-1.34h3.33c.55 0 1-.45 1-1s-.45-1-1-1h-1.5v-.67c0-.55-.45-1-1-1s-1 .45-1 1v.68c-1.39.09-2.5 1.24-2.5 2.65s1.2 2.67 2.67 2.67h1.67a.67.67 0 010 1.34H13.5c-.55 0-1 .45-1 1s.45 1 1 1H15V21c0 .55.45 1 1 1s1-.45 1-1v-.68c1.39-.09 2.5-1.24 2.5-2.65S18.3 15 16.83 15z"></path>
                     </g>
                   </svg>
-                  <span>{post.amount_formatted}</span>
+                  <span>{post.amount} $</span>
                 </div>
               ) : (
                 ""
-              )}
+              )} */}
               <div className="profile-audio-icon-sec">
                 <Image
                   className="profile-audio-icon"
@@ -712,70 +663,96 @@ const NewFeedDisplayCard = (props) => {
               <Link to={`/${post.user_unique_id}`}>@{post.username}</Link>
             </div>
           </div>
-          <div className="new-feed-user-btn-sec">
-            <div className="new-feed-post-time-sec">
-              <p>{post.created}</p>
-            </div>
-            {/* <Button className="sent-tip-btn" onClick={() => setSendTip(true)}>
-              <Image
-                className="sent-tip-icon"
-                src={
-                  window.location.origin +
-                  "/assets/images/feed-story/sent-tip-1.svg"
-                }
-              />
-              <span>Tips</span>
-            </Button> */}
-            <Dropdown className="feed-post-dropdown">
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                className="feed-post-dropdown-btn"
-              >
+          <div>
+            <div className="new-feed-user-btn-sec">
+              <div className="new-feed-post-time-sec">
+                <p>{post.created}</p>
+              </div>
+              {/* <Button className="sent-tip-btn" onClick={() => setSendTip(true)}>
                 <Image
-                  className="three-dots-icon"
+                  className="sent-tip-icon"
                   src={
                     window.location.origin +
-                    "/assets/images/feed-story/3-vertical-dots.svg"
+                    "/assets/images/feed-story/sent-tip-1.svg"
                   }
                 />
-              </Dropdown.Toggle>
+                <span>Tips</span>
+              </Button> */}
+              <Dropdown className="feed-post-dropdown">
+                <Dropdown.Toggle
+                  variant="success"
+                  id="dropdown-basic"
+                  className="feed-post-dropdown-btn"
+                >
+                  <Image
+                    className="three-dots-icon"
+                    src={
+                      window.location.origin +
+                      "/assets/images/feed-story/3-vertical-dots.svg"
+                    }
+                  />
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <CopyToClipboard text={post.share_link} onCopy={onCopy}>
+                <Dropdown.Menu>
+                  <CopyToClipboard text={post.share_link} onCopy={onCopy}>
+                    <Media as="li">
+                      <Link to="#" className="dropdown-a">
+                        {" "}
+                        {t("copy_link_to_post")}{" "}
+                      </Link>
+                    </Media>
+                  </CopyToClipboard>
+                  <Media as="li" className="divider"></Media>
                   <Media as="li">
-                    <Link to="#" className="dropdown-a">
-                      {" "}
-                      {t("copy_link_to_post")}{" "}
+                    <Link
+                      to="#"
+                      // onClick={(event) => handleReportPost(event, post)}
+                      onClick={() => setReportMode(true)}
+                      className="dropdown-a"
+                    >
+                      {t("report")}
                     </Link>
                   </Media>
-                </CopyToClipboard>
-                <Media as="li" className="divider"></Media>
-                <Media as="li">
-                  <Link
-                    to="#"
-                    // onClick={(event) => handleReportPost(event, post)}
-                    onClick={() => setReportMode(true)}
-                    className="dropdown-a"
-                  >
-                    {t("report")}
-                  </Link>
-                </Media>
-                <Media as="li">
-                  <Link
-                    to="#"
-                    onClick={(event) => handleBlockUser(event, post)}
-                    className="dropdown-a"
-                  >
-                    {" "}
-                    {t("add_to_blocklist_para")}
-                  </Link>
-                </Media>
-                {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
-              </Dropdown.Menu>
-            </Dropdown>
+                  <Media as="li">
+                    <Link
+                      to="#"
+                      onClick={(event) => handleBlockUser(event, post)}
+                      className="dropdown-a"
+                    >
+                      {" "}
+                      {t("add_to_blocklist_para")}
+                    </Link>
+                  </Media>
+                  {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+            {post.amount !== 0 && (
+              <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                <span style={{ fontSize: "16px", fontWeight: "400", color: "#9896A1" }}>${post.amount}</span>
+                {post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
+                  <Image
+                    className="profile-lock-icon"
+                    style={{ width: "18px" }}
+                    src={
+                      window.location.origin +
+                      "/assets/images/new-home/icon/lock-icon1.png"
+                    }
+                  />
+                ) : (
+                  <Image
+                    className="profile-lock-icon"
+                    style={{ width: "18px" }}
+                    src={
+                      window.location.origin +
+                      "/assets/images/icons/unlock.svg"
+                    }
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className="new-feed-post-description-sec">
@@ -804,168 +781,188 @@ const NewFeedDisplayCard = (props) => {
             </AutoplaySlider>
           )}
         </div>
-
-        {post.is_campaign && post.is_campaign === '1'?
-          <div className="new-feed-campaign-footer-sec">
-            <div className="new-feed-footer-action-btn-sec campaign-option">
-              <div className="new-feed-footer-action-left-sec campaign-option-target">
-                <span> <Image
-                  className="three-dots-icon"
-                  src={
-                    window.location.origin +
-                    "/assets/images/icons/target_dollar.svg"
-                  }
-                /> $ {post.total_compaign_amt ? post.total_compaign_amt.toFixed(2) : 0}</span>
-              </div>
-              <div className="new-feed-footer-action-right-sec campaign-option-target">
-                <span>$ {post.campaign_goal_amt?post.campaign_goal_amt:0}</span>
+        <div style={{ border: "1px solid #d7d7db" }}>
+          {post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
+            <div style={{ padding: "16px", backgroundColor: "#e9e9eb" }}>
+              <div style={{ border: "1px solid #d7d7db", padding: "14px", borderRadius: "8px" }}>
+                {post.postFiles.map((file, i) => (
+                  file.file_type === "video" && (
+                    <div key={i}>
+                      <Image
+                        src={
+                          window.location.origin +
+                          "/assets/images/icons/video-camera.png"
+                        }
+                        className="svg-clone"
+                      />
+                      {/* <span>{post}</span> */}
+                    </div>)
+                  ))
+                }
+                <div className="user-subscription-btn-sec">
+                  <div
+                    className="subscription-btn"
+                    onClick={e =>
+                      post.payment_info.post_payment_type === "ppv" ?
+                        setPaymentModal(true) 
+                        : post.payment_info.post_payment_type === "subscription" ?
+                          redirectToProfile()
+                          : e.preventDefault()
+                    }
+                  >
+                    UNLOCK POST FOR {post.amount} $ 
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="new-feed-footer-campaign-option-sec" >
-            {post.campaign_options.split(',').map((item, i) => {
-                return <Button className="new-feed-campaign-btn" key={i} onClick={() => setCampaignModal(item,post.campaign_options)}>
-                   <span>$ {item}</span>
-                 </Button>
-              })
-            }
+          ) : null }
+
+          {post.is_campaign && post.is_campaign === '1'?
+            <div className="new-feed-campaign-footer-sec">
+              <div className="new-feed-footer-action-btn-sec campaign-option">
+                <div className="new-feed-footer-action-left-sec campaign-option-target">
+                  <span> <Image
+                    className="three-dots-icon"
+                    src={
+                      window.location.origin +
+                      "/assets/images/icons/target_dollar.svg"
+                    }
+                  /> $ {post.total_compaign_amt ? post.total_compaign_amt.toFixed(2) : 0}</span>
+                </div>
+                <div className="new-feed-footer-action-right-sec campaign-option-target">
+                  <span>$ {post.campaign_goal_amt?post.campaign_goal_amt:0}</span>
+                </div>
+              </div>
+              <div className="new-feed-footer-campaign-option-sec" >
+              {post.campaign_options.split(',').map((item, i) => {
+                  return <Button className="new-feed-campaign-btn" key={i} onClick={() => setCampaignModal(item,post.campaign_options)}>
+                    <span>$ {item}</span>
+                  </Button>
+                })
+              }
+              </div>
+
             </div>
+            :
+            null
+          }
 
-          </div>
-          :
-          null
-        }
+          <div className="new-feed-footer-sec">
+            <div className="new-feed-footer-action-btn-sec">
 
+              <div className="new-feed-footer-action-left-sec">
+                <Button
+                  className="new-feed-wishlist-btn"
+                  onClick={(event) => handleLike()}
+                >
+                  {post.is_user_liked ? (
+                    <Image
+                      className="new-feed-wishlist-icon"
+                      src={
+                        window.location.origin +
+                        "/assets/images/feed-story/heart.svg"
+                      }
+                    />
+                  ) : (
+                    <Image
+                      className="new-feed-wishlist-icon"
+                      src={
+                        window.location.origin +
+                        "/assets/images/feed-story/heart-outline.svg"
+                      }
+                    />
+                  )}
+                  <span>{post.post_fake_likes > 0 ? post.post_fake_likes : post.like_count}</span>
+                </Button>
 
-        <div className="new-feed-footer-sec">
-          <div className="new-feed-footer-action-btn-sec">
-
-            <div className="new-feed-footer-action-left-sec">
-              <Button
-                className="new-feed-wishlist-btn"
-                onClick={(event) => handleLike()}
-              >
-                {post.is_user_liked ? (
+                <Button
+                  className="new-feed-wishlist-btn"
+                  onClick={() => history.push(`/story/${post.post_unique_id}`)}
+                >
                   <Image
                     className="new-feed-wishlist-icon"
                     src={
                       window.location.origin +
-                      "/assets/images/feed-story/heart.svg"
+                      "/assets/images/feed-story/comments.svg"
                     }
                   />
-                ) : (
+                  <span>{post.total_comments}</span>
+                </Button>
+                <Button className="new-feed-wishlist-btn send_tip_custom_button" onClick={() => setSendTip(true)}>
                   <Image
                     className="new-feed-wishlist-icon"
                     src={
                       window.location.origin +
-                      "/assets/images/feed-story/heart-outline.svg"
+                      "/assets/images/feed-story/circuler_dollar_icon.svg"
                     }
                   />
-                )}
-                <span>{post.post_fake_likes > 0 ? post.post_fake_likes : post.like_count}</span>
-              </Button>
-
-              <Button
-                className="new-feed-wishlist-btn"
-                onClick={() => history.push(`/story/${post.post_unique_id}`)}
-              >
-                <Image
-                  className="new-feed-wishlist-icon"
-                  src={
-                    window.location.origin +
-                    "/assets/images/feed-story/comments.svg"
-                  }
-                />
-                <span>{post.total_comments}</span>
-              </Button>
-              <Button className="new-feed-wishlist-btn send_tip_custom_button" onClick={() => setSendTip(true)}>
-                <Image
-                  className="new-feed-wishlist-icon"
-                  src={
-                    window.location.origin +
-                    "/assets/images/feed-story/circuler_dollar_icon.svg"
-                  }
-                />
-                <span>SEND TIP</span>
-              </Button>
-            </div>
-            <div className="new-feed-footer-action-right-sec">
-              <Button
-                className="new-feed-bookmark-btn"
-                onClick={() => handleBookmark()}
-              >
-                {post.is_user_bookmarked === 1 ? (
-                  <Image
-                    className="new-feed-bookmark-icon"
-                    src={
-                      window.location.origin +
-                      "/assets/images/feed-story/bookmark-fill.svg"
-                    }
-                  />
-                ) : (
-                  <Image
-                    className="new-feed-bookmark-icon"
-                    src={
-                      window.location.origin +
-                      "/assets/images/feed-story/bookmark-outline.svg"
-                    }
-                  />
-                )}
-              </Button>
-            </div>
-          </div>
-          <div className="new-feeds-liked-by-users">
-            {/* <h5>Liked by <span>Elvin</span> and <span>102 others</span></h5> */}
-            <h5>{post.liked_by_formatted}</h5>
-            {post.recent_likes && post.recent_likes.length > 0 ? (
-              <div className="new-feeds-liked-users-img-sec">
-                {post.recent_likes.map((likedUser, i) => (
-                  <Image
-                    key={i}
-                    className="new-feeds-liked-users-img"
-                    src={likedUser.picture}
-                  />
-                ))}
+                  <span>SEND TIP</span>
+                </Button>
               </div>
-            ) : null}
+              <div className="new-feed-footer-action-right-sec">
+                <Button
+                  className="new-feed-bookmark-btn"
+                  onClick={() => handleBookmark()}
+                >
+                  {post.is_user_bookmarked === 1 ? (
+                    <Image
+                      className="new-feed-bookmark-icon"
+                      src={
+                        window.location.origin +
+                        "/assets/images/feed-story/bookmark-fill.svg"
+                      }
+                    />
+                  ) : (
+                    <Image
+                      className="new-feed-bookmark-icon"
+                      src={
+                        window.location.origin +
+                        "/assets/images/feed-story/bookmark-outline.svg"
+                      }
+                    />
+                  )}
+                </Button>
+              </div>
+            </div>
+            <div className="new-feeds-liked-by-users">
+              {/* <h5>Liked by <span>Elvin</span> and <span>102 others</span></h5> */}
+              <h5>{post.liked_by_formatted}</h5>
+              {post.recent_likes && post.recent_likes.length > 0 ? (
+                <div className="new-feeds-liked-users-img-sec">
+                  {post.recent_likes.map((likedUser, i) => (
+                    <Image
+                      key={i}
+                      className="new-feeds-liked-users-img"
+                      src={likedUser.picture}
+                    />
+                  ))}
+                </div>
+              ) : null}
+            </div>
+            {/* <div className="new-feed-post-description-sec">
+            <p
+              dangerouslySetInnerHTML={{
+                __html:
+                post.content_formatted,
+              }}
+            ></p>
+            </div> */}
+            {post.total_comments > 0 ? (
+              <div className="new-feed-view-link-sec">
+                <Link to={`/story/${post.post_unique_id}`}>
+                  {t("view_all")}
+                  <span> {post.total_comments}</span> {t("comments")}
+                </Link>
+              </div>
+            ) : (
+              <div className="new-feed-view-link-sec">
+                <Link to={`/story/${post.post_unique_id}`}>
+                  {t("add_comments")}
+                </Link>
+              </div>
+            )}
           </div>
-          {/* <div className="new-feed-post-description-sec">
-          <p
-            dangerouslySetInnerHTML={{
-              __html:
-               post.content_formatted,
-            }}
-          ></p>
-          </div> */}
-          {post.total_comments > 0 ? (
-            <div className="new-feed-view-link-sec">
-              <Link to={`/story/${post.post_unique_id}`}>
-                {t("view_all")}
-                <span> {post.total_comments}</span> {t("comments")}
-              </Link>
-            </div>
-          ) : (
-            <div className="new-feed-view-link-sec">
-              <Link to={`/story/${post.post_unique_id}`}>
-                {t("add_comments")}
-              </Link>
-            </div>
-          )}
         </div>
-        {post.payment_info.is_user_needs_pay === 1 ? (
-        <div className="user-subscription-btn-sec">
-          <div
-            className="subscription-btn"
-            onClick={e =>
-              post.payment_info.post_payment_type === "ppv" ?
-                setPaymentModal(true) 
-                : post.payment_info.post_payment_type === "subscription" ?
-                  redirectToProfile()
-                  : e.preventDefault()
-            }
-          >
-            UNLOCK POST FOR {post.amount_formatted} 
-          </div>
-        </div>) : null }
       </div>
       {/* {
         sendTip ? <SendTipModal
@@ -1000,7 +997,7 @@ const NewFeedDisplayCard = (props) => {
           <ReportModeModal
             reportMode={reportMode}
             closeReportModeModal={closeReportModeModal}
-            post={post}
+            post={postFile.post_file}
           />
         ) : null
       }

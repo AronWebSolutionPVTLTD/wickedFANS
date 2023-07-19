@@ -1771,25 +1771,25 @@ const SingleProfile = (props) => {
                       </Col>
 
                       {userDetails.data.payment_info.unsubscribe_btn_status === 0 && (
-                        userDetails.data.payment_info.is_free_account === 0 ? (
-                          <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
-                            <div
-                              className="subscription-btn"
-                              onClick={(event) =>
-                                subscriptionPayment(
-                                  event,
-                                  "months",
-                                  userDetails.data.payment_info.subscription_info
-                                    .monthly_amount,
-                                  userDetails.data.payment_info.subscription_info
-                                    .monthly_amount_formatted
-                                )
-                              }
-                            >
-                              SUBSCRIBE TO SEE USER'S POSTS
-                            </div>
-                          </div>
-                        ) : (
+                        // userDetails.data.payment_info.is_free_account === 0 ? (
+                        //   <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
+                        //     <div
+                        //       className="subscription-btn"
+                        //       onClick={(event) =>
+                        //         subscriptionPayment(
+                        //           event,
+                        //           "months",
+                        //           userDetails.data.payment_info.subscription_info
+                        //             .monthly_amount,
+                        //           userDetails.data.payment_info.subscription_info
+                        //             .monthly_amount_formatted
+                        //         )
+                        //       }
+                        //     >
+                        //       SUBSCRIBE TO SEE USER'S POSTS
+                        //     </div>
+                        //   </div>
+                        // ) : (
                           <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
                             <div
                               className="subscription-btn"
@@ -1818,7 +1818,7 @@ const SingleProfile = (props) => {
                             </div>
                           </div>
                         )
-                      )}
+                      }
 
                       {userDetails.data.payment_info.unsubscribe_btn_status === 1 && (
                         <Col md={12}>
@@ -1919,7 +1919,8 @@ const SingleProfile = (props) => {
                             subscriptionData={subscriptionData}
                             username={userDetails.data.user.username}
                         /> */}
-          {subscrptionPayment ? (
+
+          {/* {subscrptionPayment ? (
             <SubscriptionPaymentModal
               paymentsModal={subscrptionPayment}
               closepaymentsModal={closePaymentModal}
@@ -1927,7 +1928,10 @@ const SingleProfile = (props) => {
               user_unique_id={userDetails.data.user.user_unique_id}
               subscriptionData={subscriptionData}
             />
-          ) : null}
+          ) : null} */}
+
+
+
           <PrivateCallModal
             requestVideoCall={requestVideoCall}
             closePrivateCallModal={closePrivateCallModal}
