@@ -7,6 +7,7 @@ import { translate, t } from "react-multi-lang";
 import NoDataFound from "../NoDataFound/NoDataFound";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ReactPlayer from "react-player";
 // import {
 //   Button,
 //   Container,
@@ -24,7 +25,7 @@ const ProfileSinglePost = ({ post }) => {
     <>
       {postFile.file_type === "image" ? (
         //Image File
-        post.payment_info.is_user_needs_pay == 1 ? (
+        post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
           //Locked Image
           <Link to={`/post/${post.post_unique_id}`}>
             <div className="profile-lock-post-card">
@@ -148,7 +149,7 @@ const ProfileSinglePost = ({ post }) => {
                   src={postFile.post_file}
                   effect="blur"
                 />
-                {post.amount > 0 ? (
+                {/* {post.amount > 0 ? (
                   <div className="ppv-icon">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +205,7 @@ const ProfileSinglePost = ({ post }) => {
                   </div>
                 ) : (
                   ""
-                )}
+                )} */}
                 {post.postFiles.length > 1 && (
                   <div className="multiple-icon-sec">
                     <Image
@@ -223,30 +224,49 @@ const ProfileSinglePost = ({ post }) => {
         )
       ) : postFile.file_type === "video" ? (
         // Video Section
-        post.payment_info.is_user_needs_pay == 1 ? (
+        post.payment_info.is_user_needs_pay == 1 && post.amount !== 0 ? (
           //Locked Video
           <Link to={`/post/${post.post_unique_id}`}>
             <div className="profile-lock-post-card">
               <div className="profile-lock-img-sec">
                 {postFile.video_preview_file ? (
-                  <video
-                    autoplay
-                    controls
-                    id="myVideo"
-                    className="user-profile1 w-100"
-                    effect="blur"
-                  >
-                    <source src={postFile.video_preview_file} type="video/mp4" />
-                  </video>
+                  postFile.preview_file_type === "image" ? (
+                    <LazyLoadImage
+                      className="profile-lock-img"
+                      src={ postFile.video_preview_file}
+                      effect="blur"
+                    />
+                  ) : (
+                    <video
+                      autoplay
+                      controls
+                      id="myVideo"
+                      className="user-profile1 w-100"
+                      effect="blur"
+                    >
+                      <source src={postFile.video_preview_file} type="video/mp4" />
+                    </video>
+                  )
                 ) : (
-                  <LazyLoadImage
-                    className="profile-lock-img"
-                    src={ postFile.blur_file}
-                    effect="blur"
-                  />
+                  <>
+                    <LazyLoadImage
+                      className="profile-lock-img"
+                      src={ postFile.blur_file}
+                      effect="blur"
+                    />
+                    <div className="profile-lock-icon-sec">
+                      <Image
+                        className="profile-lock-icon"
+                        src={
+                          window.location.origin +
+                          "/assets/images/new-home/icon/lock-icon.png"
+                        }
+                      />
+                    </div>
+                  </>
                 )}
                 
-                <div className="profile-lock-icon-sec">
+                {/* <div className="profile-lock-icon-sec">
                   <Image
                     className="profile-lock-icon"
                     src={
@@ -254,7 +274,7 @@ const ProfileSinglePost = ({ post }) => {
                       "/assets/images/new-home/icon/lock-icon.png"
                     }
                   />
-                </div>
+                </div> */}
                 <div className="ppv-icon">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -344,14 +364,30 @@ const ProfileSinglePost = ({ post }) => {
         ) : (
           //Free Video
           <Link to={`/post/${post.post_unique_id}`}>
-            <div className="profile-video-post-card">
-              <div className="profile-video-img-sec">
-                <LazyLoadImage
+            <div className="profile-video-post-card" style={{ height: "100%" }}>
+              <div className="profile-video-img-sec" style={{ height: "100%" }}>
+                {/* <LazyLoadImage
                   className="profile-video-img"
                   src={ postFile.post_file}//add thumbnail
                   effect="blur"
+                /> */}
+                <ReactPlayer
+                  // light={postFile.preview_file}
+                  url={postFile.post_file}
+                  controls={true}
+                  width="100%"
+                  height="100%"
+                  playing={false}
+                  muted={false}
+                  autoPlay={false}
+                  config={{
+                    file: {
+                      attributes: { controlsList: "nodownload" },
+                    },
+                  }}
+                  className="post-video-size"
                 />
-                {post.amount > 0 ? (
+                {/* {post.amount > 0 ? (
                   <div className="ppv-icon">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -407,7 +443,7 @@ const ProfileSinglePost = ({ post }) => {
                   </div>
                 ) : (
                   ""
-                )}
+                )} */}
                 <div className="profile-video-icon-sec">
                   <Image
                     className="profile-video-icon"
@@ -435,7 +471,7 @@ const ProfileSinglePost = ({ post }) => {
         )
       ) : postFile.file_type === "audio" ? (
         // Audio
-        post.payment_info.is_user_needs_pay == 1 ? (
+        post.payment_info.is_user_needs_pay == 1 && post.amount !== 0 ? (
           //Locked Audio
           <Link to={`/post/${post.post_unique_id}`}>
             <div className="profile-lock-post-card">
@@ -540,7 +576,7 @@ const ProfileSinglePost = ({ post }) => {
                   }
                   effect="blur"
                 />
-                {post.amount > 0 ? (
+                {/* {post.amount > 0 ? (
                   <div className="ppv-icon">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -596,7 +632,7 @@ const ProfileSinglePost = ({ post }) => {
                   </div>
                 ) : (
                   ""
-                )}
+                )} */}
                 <div className="profile-audio-icon-sec">
                   <Image
                     className="profile-audio-icon"

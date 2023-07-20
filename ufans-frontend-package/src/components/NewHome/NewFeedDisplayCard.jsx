@@ -259,31 +259,42 @@ const NewFeedDisplayCard = (props) => {
           <div className="profile-lock-post-card">
             <div className="profile-lock-img-sec">
               {postFile.video_preview_file ? (
-                <video
-                  autoplay
-                  controls
-                  id="myVideo"
-                  className="user-profile1 w-100"
-                  effect="blur"
-                >
-                  <source src={postFile.video_preview_file} type="video/mp4" />
-                </video>
+                postFile.preview_file_type === "image" ? (
+                  <LazyLoadImage
+                    className="new-feed-post-img"
+                    src={ postFile.video_preview_file}
+                    effect="blur"
+                  />
+                ) : (
+                  <video
+                    autoplay
+                    controls
+                    id="myVideo"
+                    className="user-profile1 w-100"
+                    effect="blur"
+                  >
+                    <source src={postFile.video_preview_file} type="video/mp4" />
+                  </video>
+                )
               ) : (
-                <LazyLoadImage
-                  className="new-feed-post-img"
-                  src={ postFile.blur_file}
-                  effect="blur"
-                />
+                <>
+                  <LazyLoadImage
+                    className="new-feed-post-img"
+                    src={ postFile.blur_file}
+                    effect="blur"
+                  />
+                  <div className="profile-lock-icon-sec">
+                    <Image
+                      className="profile-lock-icon"
+                      src={
+                        window.location.origin +
+                        "/assets/images/new-home/icon/lock-icon.png"
+                      }
+                    />
+                  </div>
+                </>
               )}
-              <div className="profile-lock-icon-sec">
-                <Image
-                  className="profile-lock-icon"
-                  src={
-                    window.location.origin +
-                    "/assets/images/new-home/icon/lock-icon.png"
-                  }
-                />
-              </div>
+              
               {/* <div className="ppv-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -784,7 +795,7 @@ const NewFeedDisplayCard = (props) => {
         <div style={{ border: "1px solid #d7d7db" }}>
           {post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
             <div style={{ padding: "16px", backgroundColor: "#e9e9eb" }}>
-              <div style={{ border: "1px solid #d7d7db", padding: "14px", borderRadius: "8px" }}>
+              <div style={{ border: "1px solid #d7d7db", padding: "12px", borderRadius: "10px" }}>
                 {post.postFiles.map((file, i) => (
                   file.file_type === "video" && (
                     <div key={i}>

@@ -119,19 +119,29 @@ const NewSinglePostSlider = (props) => {
                             />
                             </div>
                             :
-                            <Image className="single-post-img"
-                              src={postFile.post_file}
-                              data-fancybox />
+                            <>
+                              <Image className="single-post-img"
+                                src={postFile.post_file}
+                                data-fancybox />
+                              <div className="post-lock-icon-sec">
+                                <Image
+                                  className="profile-lock-icon"
+                                  src={
+                                    window.location.origin + "/assets/images/new-home/icon/lock-icon.png"
+                                  }
+                                />
+                              </div>
+                            </>
                           }
                           
-                          <div className="post-lock-icon-sec">
+                          {/* <div className="post-lock-icon-sec">
                             <Image
                               className="profile-lock-icon"
                               src={
                                 window.location.origin + "/assets/images/new-home/icon/lock-icon.png"
                               }
                             />
-                          </div>
+                          </div> */}
                         </div>
                           :
                           <div className="video-blur-image" style={{backgroundImage:"url(https://wickedfans.com/admin/storage/app/public/uploads/posts/6/272177-post-image.jpeg)",backgroundSize:'cover',backgroundPosition:'center'}}>
