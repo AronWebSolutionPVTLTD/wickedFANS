@@ -79,8 +79,8 @@
 .sidebar-user-img {
     /* height: 7em;
     width: 7em; */
-    height: 10em;
-    width: 10em;
+    height: 100%;
+    width: 100%;
     object-fit: cover;
 }
 
@@ -464,6 +464,7 @@
 
 .user-profile1 {
     height: 100%;
+    border-radius: 10px;
 }
 
 .profile-lock-icon-sec {

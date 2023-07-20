@@ -310,7 +310,7 @@ class PostsApiController extends Controller
      */
     public function posts_save_for_owner(Request $request)
     {
-
+        
         try {
 
             DB::begintransaction();
@@ -458,6 +458,8 @@ class PostsApiController extends Controller
                             Helper::storage_delete_file($post_file->video_preview_file, $folder_path);
 
                             $post_file->video_preview_file = Helper::storage_upload_file($request->file('video_preview_file'), $folder_path);
+                            $previewMimeType = $request->file('video_preview_file')->getMimeType();
+                            $post_file->preview_file_type = str_contains($previewMimeType, 'video') ? 'video' : 'image';
                         }
 
                         $post_file->save();

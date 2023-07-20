@@ -399,7 +399,6 @@ class AdminPostController extends Controller
                                     $video_preview_file = Helper::post_upload_file($request->video_preview_file, $folder_path, $video_preview_filename) ?? Setting::get('post_video_placeholder');
 
                                     $post_file->video_preview_file = $video_preview_file;
-
                                 }
                                 
                             }

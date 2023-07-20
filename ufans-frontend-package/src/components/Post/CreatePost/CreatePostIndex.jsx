@@ -475,15 +475,70 @@ const CreatePostIndex = (props) => {
                           })
                         }
                       />
-                      <div className="check-preview">
+                      {/* <div className="check-preview">
                         <input type="checkbox" className="check-preview-box" checked={videoThumbnailStatus} onChange={handleCheckBox} />
-                        <span className="check-preview-content">Show preview image or video</span>
-                      </div>
+                        <span className="check-preview-content">Show preview video or optional thumbnail</span>
+                      </div> */}
                     </Form.Group>
                   ) : (
                     ""
                   )}
-                  {videoThumbnailStatus === true ? (
+                  {videoPreviewUrl &&
+                    <div>
+                      <Form.Group className="md-mrg-btm mb-3 mb-lg-3">
+                        <label className="text-muted m-1 mt-3 f-12 text-uppercase mb-3 mb-lg-3">
+                          {t("upload_post_preview")}
+                        </label>
+                        <Form.Control
+                          style={{ display: "block" }}
+                          type="file"
+                          placeholder={t("upload_post_preview_placeholder")}
+                          name="preview_file"
+                          width="50%"
+                          className="form-control"
+                          accept="video/mp4,video/x-m4v,video/*,.gif,.jpg,.jpeg,.gif,.png,.jpg,.jpeg,.png"
+                          onChange={(event) => handleVideoPreview(event)}
+                        />
+                      </Form.Group>
+                      {videoPreview.previewVideo !== "" ? (
+                        <>
+                          {inputData.video_preview_file.type.indexOf('video') !== -1 ? (
+                            <Row>
+                              <Col sm={12} md={6} className="mb-3 mb-lg-4">
+                                <div className="post-img-preview-sec m-0">
+                                  <div className="post-img-preview-sec my-3 my-lg-4">
+                                    <video
+                                      autoplay
+                                      controls
+                                      id="myVideo"
+                                      className="user-profile1 w-100"
+                                    >
+                                      <source src={videoPreview.previewVideo} type="video/mp4" />
+                                    </video>
+                                  </div>
+                                </div>
+                              </Col>
+                            </Row>
+                          ) : (
+                            <Row>
+                              <Col sm={12} md={6} className="mb-3 mb-lg-4">
+                                <div className="post-img-preview-sec m-0">
+                                  <div className="post-img-preview-sec my-3 my-lg-4">
+                                    <Image
+                                      className="sidebar-user-img profile-image"
+                                      src={videoPreview.previewVideo}
+                                    />
+                                  </div>
+                                </div>
+                              </Col>
+                            </Row>
+                          )}
+                        </>
+                        ) : null}
+                    </div>
+                  }
+                  {/* ) : ""} */}
+                  {/* {videoThumbnailStatus === true ? (
                     <>
                       <Form.Group className="md-mrg-btm mb-3 mb-lg-3">
                         <label className="text-muted m-1 mt-3 f-12 text-uppercase mb-3 mb-lg-3">
@@ -516,8 +571,8 @@ const CreatePostIndex = (props) => {
                     </>
                   ) : (
                     ""
-                  )}
-                  {videoThumbnailStatus === true && inputData.amount > 0 ? (
+                  )} */}
+                  {/* {videoThumbnailStatus === true && inputData.amount > 0 ? (
                     <>
                       <Form.Group className="md-mrg-btm mb-3 mb-lg-3">
                         <label className="text-muted m-1 mt-3 f-12 text-uppercase mb-3 mb-lg-3">
@@ -555,7 +610,7 @@ const CreatePostIndex = (props) => {
                     </>
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </Col>
 
                 <Col sm={12} md={6} className="mt-3 mt-lg-4">

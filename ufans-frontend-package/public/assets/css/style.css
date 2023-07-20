@@ -11233,10 +11233,9 @@ padding-right: 3em !important;
   box-shadow: none !important;
 }
 
-.profile-image{
-  border-radius: 50% !important;
+/* .profile-image{
   border: 2px solid var(--primary-color)!important;
-}
+} */
 
 .lazy-load-image-background.blur.lazy-load-image-loaded{
   width:100% !important;
