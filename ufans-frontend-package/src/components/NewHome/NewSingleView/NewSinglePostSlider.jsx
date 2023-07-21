@@ -56,7 +56,7 @@ const NewSinglePostSlider = (props) => {
                { postFile.file_type === "image" ?
                <div className="single_post_blur_image">
                   <div>
-                    {post.payment_info.is_user_needs_pay == 1 ?
+                    {post.payment_info.is_user_needs_pay == 1 && post.amount !== 0 ?
                       <div
                         onClick={e =>
                           post.payment_info.post_payment_type === "ppv" ?
@@ -90,7 +90,7 @@ const NewSinglePostSlider = (props) => {
                   </div>
                   : postFile.file_type === "video" ?
                     <div>
-                      {post.payment_info.is_user_needs_pay == 1 ?
+                      {post.payment_info.is_user_needs_pay == 1 && post.amount !== 0 ?
                         <div
                           onClick={e =>
                             post.payment_info.post_payment_type === "ppv" ?
@@ -102,22 +102,29 @@ const NewSinglePostSlider = (props) => {
                         >
              
                           {postFile.video_preview_file ?
-                           <div  className="video-blur-image" style={{backgroundImage:"url(https://wickedfans.com/admin/storage/app/public/uploads/posts/6/272177-post-image.jpeg)",backgroundSize:'cover',backgroundPosition:'center'}}>
-                            <ReactPlayer
-                              url={postFile.video_preview_file}
-                              controls={false}
-                              width="100%"
-                              height="100%"
-                              playing={true}
-                              loop={true}
-                              muted={true}
-                              autoplay={true}
-                              controlsList={"nodownload"}
-                              className="post-video-size video-bg-black"
-                          // style={{backgroundImage: `url(${postFile.video_preview_file})`}}
+                            postFile.preview_file_type === "image" ? (
+                              <Image
+                                className="single-post-img"
+                                src={postFile.video_preview_file}
+                              />
+                            ) : (
+                              <div  className="video-blur-image" style={{backgroundImage:"url(https://wickedfans.com/admin/storage/app/public/uploads/      posts/6/272177-post-image.jpeg)",backgroundSize:'cover',backgroundPosition:'center'}}>
+                                <ReactPlayer
+                                  url={postFile.video_preview_file}
+                                  controls={false}
+                                  width="100%"
+                                  height="100%"
+                                  playing={true}
+                                  loop={true}
+                                  muted={true}
+                                  autoplay={true}
+                                  controlsList={"nodownload"}
+                                  className="post-video-size video-bg-black"
+                                  // style={{backgroundImage: `url(${postFile.video_preview_file})`}}
 
-                            />
-                            </div>
+                                />
+                              </div>
+                            )
                             :
                             <>
                               <Image className="single-post-img"

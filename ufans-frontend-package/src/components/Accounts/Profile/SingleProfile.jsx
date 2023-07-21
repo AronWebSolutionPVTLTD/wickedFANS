@@ -51,7 +51,7 @@ import PaymentModal from "../../helper/PaymentModal";
 import PrivateCallModal from "../../helper/PrivateCallModal";
 import PrivateAudioCallModal from "../../helper/PrivateAudioCallModal";
 import { subscriptionPaymentStripeStart } from "../../../store/actions/SubscriptionAction";
-import { unFollowUserStart } from "../../../store/actions/FollowAction";
+import { followUserStart, unFollowUserStart } from "../../../store/actions/FollowAction";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoDataFound from "../../NoDataFound/NoDataFound";
 import Skeleton from "react-loading-skeleton";
@@ -1796,11 +1796,8 @@ const SingleProfile = (props) => {
                               onClick={(event) => {
                                 if (localStorage.getItem("userId")) {
                                   props.dispatch(
-                                    subscriptionPaymentStripeStart({
-                                      user_unique_id:
-                                        userDetails.data.user.user_unique_id,
-                                      plan_type: "months",
-                                      is_free: 0,
+                                    followUserStart({
+                                      user_id: userDetails.data.user.user_id
                                     })
                                   );
                                 } else {

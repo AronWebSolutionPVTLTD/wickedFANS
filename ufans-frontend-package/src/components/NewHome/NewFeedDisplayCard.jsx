@@ -798,7 +798,7 @@ const NewFeedDisplayCard = (props) => {
               <div style={{ border: "1px solid #d7d7db", padding: "12px", borderRadius: "10px" }}>
                 {post.postFiles.map((file, i) => (
                   file.file_type === "video" && (
-                    <div key={i}>
+                    <div key={i} style={{ display: "flex", gap: "6px" }}>
                       <Image
                         src={
                           window.location.origin +
@@ -806,7 +806,19 @@ const NewFeedDisplayCard = (props) => {
                         }
                         className="svg-clone"
                       />
-                      {/* <span>{post}</span> */}
+                      {file.duration < 60 ? (
+                        file.duration >= 10 ? (
+                        <span style={{ fontSize: "16px" }}>00:{file.duration}</span>
+                        ) : (
+                        <span style={{ fontSize: "16px" }}>00:0{file.duration}</span>
+                        )
+                      ) : (
+                        parseInt(file.duration / 60) >= 10 ? (
+                        <span style={{ fontSize: "16px" }}>{parseInt(file.duration / 60)}:{file.duration % 60}</span>
+                        ) : (
+                        <span style={{ fontSize: "16px" }}>0{parseInt(file.duration / 60)}:{file.duration % 60}</span> 
+                        ) 
+                      )}
                     </div>)
                   ))
                 }

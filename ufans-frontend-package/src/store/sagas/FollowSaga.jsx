@@ -58,6 +58,7 @@ function* followUserAPI() {
         "total_followings",
         JSON.stringify(response.data.data.total_followings)
       );
+      window.location.reload();
     } else {
       yield put(followUserFailure(response.data.error));
       const notificationMessage = getErrorNotificationMessage(
