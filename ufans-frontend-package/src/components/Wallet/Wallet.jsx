@@ -137,7 +137,8 @@ const Wallet = (props) => {
 										{props.transaction.loading ? (
 											<CommonCenterLoader></CommonCenterLoader>
 										) : props.transaction.data.history.length > 0 ? (
-											props.transaction.data.history.map((data) => (
+											props.transaction.data.history.filter((item) => item.status === 1)
+												.map((data) => (
 												<tr>
 													<td>{data.status_formatted}</td>
 													{configuration.get("configData.is_only_wallet_payment") == 0 ?

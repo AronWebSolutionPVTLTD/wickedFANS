@@ -32,8 +32,7 @@ class BtcpayPaymentController extends Controller
             case 'InvoiceCreated':
                 $user_wallet_payment->status = USER_WALLET_PAYMENT_INITIALIZE;
                 break;
-            case 'InvoiceSettled':
-            case 'InvoicePaymentSettled':
+            case 'InvoiceReceivedPayment':
                 $user_wallet_payment->status = USER_WALLET_PAYMENT_PAID;
                 break;
             case 'InvoiceInvalid':
@@ -42,16 +41,13 @@ class BtcpayPaymentController extends Controller
             case 'InvoiceExpired':
                 $user_wallet_payment->status = USER_WALLET_PAYMENT_UNPAID;
                 break;
-            case 'InvoiceProcessing':
-                $user_wallet_payment->status = USER_WALLET_PAYMENT_WAITING;
-                break;
             default:
                 break;
         }
 
         $user_wallet_payment->save();
 
-        if ($user_wallet_payment->status == USER_WALLET_PAYMENT_PAID) {
+        if ($event_type == 'InvoiceReceivedPayment' && $user_wallet_payment->status == USER_WALLET_PAYMENT_PAID) {
             PaymentRepo::user_wallet_update($user_wallet_payment);
         }
     }
