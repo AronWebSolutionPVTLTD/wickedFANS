@@ -136,7 +136,7 @@
 }
 
 .new-feed-header-sec {
-  padding: 2em;
+  padding: 2em 2em 1em;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -400,12 +400,12 @@
   border-radius: 50%;
 }
 
-.new-feed-post-description-sec p {
+.new-feed-post-description-sec > p {
   /* color: var(--quaternary-color); */
   margin-bottom: 0;
   font-size: 16px;
   font-weight: 400;
-  padding: 0 20px 20px;
+  padding: 0 20px 10px;
 }
 
 .new-feed-view-link-sec {
