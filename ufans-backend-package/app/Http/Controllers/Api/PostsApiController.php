@@ -574,6 +574,7 @@ class PostsApiController extends Controller
             $rules = [
                 'file' => 'required',
                 'file_type' => 'required',
+                'duration' => 'required',
                 'post_id' => 'nullable|exists:posts,id'
             ];
 
@@ -624,6 +625,8 @@ class PostsApiController extends Controller
                     $post_file->file = $post_file_url;
 
                     $post_file->file_type = $request->file_type;
+
+                    $post_file->duration = $request->duration;
 
                     $post_file->blur_file = $request->file_type == "image" && !in_array($ext, $video_extensions) ? Setting::get('ppv_image_placeholder') : Setting::get('post_video_placeholder');
 
@@ -705,6 +708,8 @@ class PostsApiController extends Controller
                         $post_file->file = $post_file_url;
 
                         $post_file->file_type = $request->file_type;
+
+                        $post_file->duration = $request->duration;
 
                         $post_file->blur_file = $request->file_type == "image" && !in_array($ext, $video_extensions) ? Setting::get('ppv_image_placeholder') : Setting::get('post_video_placeholder');
 

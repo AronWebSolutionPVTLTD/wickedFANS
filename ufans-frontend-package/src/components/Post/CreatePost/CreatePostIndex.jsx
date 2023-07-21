@@ -152,6 +152,10 @@ const CreatePostIndex = (props) => {
   const handleChangeVideo = (event, fileType) => {
     let data_obj = {};
 
+    var files = event.target.files[0];
+    var video = document.createElement('video');
+    video.preload = 'metadata';
+
     [...event.target.files].forEach((file, key) => {
 
       let name = 'file[' + key + ']';
@@ -162,13 +166,18 @@ const CreatePostIndex = (props) => {
 
     data_obj['file_type'] = fileType;
 
-    setPaidPost(true);
-    setFileUploadStatus(true);
-    setVideoThumbnailStatus(true);
-    setDisableImage(true);
-    setDisableAudio(true);
-    setVideoPreviewUrl(true);
-    props.dispatch(postFileUploadStart(data_obj));
+    video.onloadedmetadata = function () {
+      data_obj['duration'] = parseInt(video.duration);
+
+      setPaidPost(true);
+      setFileUploadStatus(true);
+      setVideoThumbnailStatus(true);
+      setDisableImage(true);
+      setDisableAudio(true);
+      setVideoPreviewUrl(true);
+      props.dispatch(postFileUploadStart(data_obj));
+    };
+    video.src = URL.createObjectURL(files);
   };
 
   const handleChangeAudio = (event, fileType) => {
