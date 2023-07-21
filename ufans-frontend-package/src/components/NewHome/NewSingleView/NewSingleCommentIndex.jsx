@@ -330,7 +330,7 @@ const NewSingleCommentIndex = (props) => {
                           <p
                             dangerouslySetInnerHTML={{
                               __html:
-                                props.singlePost.data.post.content_formatted,
+                                props.singlePost.data.post.content
                             }}
                           ></p>
                         </div>

@@ -574,7 +574,6 @@ class PostsApiController extends Controller
             $rules = [
                 'file' => 'required',
                 'file_type' => 'required',
-                'duration' => 'required',
                 'post_id' => 'nullable|exists:posts,id'
             ];
 

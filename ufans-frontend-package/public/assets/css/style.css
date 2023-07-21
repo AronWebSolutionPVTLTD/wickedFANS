@@ -8302,7 +8302,7 @@ input.authentication-input {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 2px 10px rgb(0 0 0 / 15%);
-  padding-left: 1em;
+  /* padding-left: 1em; */
   border-radius: 10px;
 }
 
@@ -11239,6 +11239,7 @@ padding-right: 3em !important;
 
 .lazy-load-image-background.blur.lazy-load-image-loaded{
   width:100% !important;
+  height: 100%;
 }
 
 .profile-all-post-box a, .new-category-list-img-sec{
@@ -11625,7 +11626,7 @@ input.form-control.campaign_box {
   position: absolute;
   top: 15px;
   right: 15px;
-  z-index: 9;
+  z-index: 100;
   display: flex;
   align-items: center;
   gap: 0.5em;

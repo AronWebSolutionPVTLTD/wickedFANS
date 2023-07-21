@@ -769,7 +769,7 @@ const NewFeedDisplayCard = (props) => {
         <div className="new-feed-post-description-sec">
           <p
             dangerouslySetInnerHTML={{
-              __html: post.content_formatted,
+              __html: post.content
             }}
           ></p>
         </div>

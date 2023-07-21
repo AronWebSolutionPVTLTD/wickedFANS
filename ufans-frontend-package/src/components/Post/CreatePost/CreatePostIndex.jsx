@@ -30,7 +30,8 @@ import { Multiselect } from "multiselect-react-dropdown";
 import ContentCreatorSteps from "./ContentCreatorSteps";
 import { Checkbox } from "@material-ui/core";
 import "./CreatePost.css"
-
+import 'quill/dist/quill.snow.css'
+import ReactQuill from 'react-quill'
 
 const CreatePostIndex = (props) => {
 
@@ -48,7 +49,7 @@ const CreatePostIndex = (props) => {
 
   const mentionsRef = useRef();
 
-  const [editorContentState, setEditorContentstate] = useState("");
+  // const [editorContentState, setEditorContentstate] = useState("");
 
   const [editorHtmlContent, setEditorHtmlContent] = useState("");
 
@@ -83,7 +84,33 @@ const CreatePostIndex = (props) => {
   const [errorCount ,setErrorCount] = useState(0);
 
 
+  const modules = {
+    toolbar: [
+      [{ size: ["small", false, "large", "huge"] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+        { align: [] }
+      ],
+      [{ "color": ["#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'] }],
+    ]
+  };
 
+  const formats = [
+    "header", "height", "bold", "italic",
+    "underline", "strike", "blockquote",
+    "list", "color", "bullet", "indent",
+    "link", "image", "align", "size",
+  ];
+
+  const handleProcedureContentChange = (content) => {
+    setEditorHtmlContent(content);
+  };
 
   useEffect(() => {
     props.dispatch(fetchPostCategoriesStart());
@@ -426,7 +453,7 @@ const CreatePostIndex = (props) => {
               </div> */}
                   <div className="searchMentions">
                     <div className="PostEditor">
-                      <PostEditor
+                      {/* <PostEditor
                         className="PostEditor__input"
                         placeholder={t("new_post_placeholder")}
                         ref={mentionsRef}
@@ -434,7 +461,16 @@ const CreatePostIndex = (props) => {
                         getEditorHtmlContent={setEditorHtmlContent}
                         dispatch={props.dispatch}
                       // searchUser={props.searchUser}
-                      />
+                      /> */}
+                        <ReactQuill
+                          theme="snow"
+                          modules={modules}
+                          formats={formats}
+                          placeholder={t("new_post_placeholder")}
+                          onChange={handleProcedureContentChange}
+                          // style={{ height: "220px" }}
+                        >
+                        </ReactQuill>
                     </div>
                   </div>
                 </Col>

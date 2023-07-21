@@ -371,22 +371,15 @@ const ProfileSinglePost = ({ post }) => {
                   src={ postFile.post_file}//add thumbnail
                   effect="blur"
                 /> */}
-                <ReactPlayer
-                  // light={postFile.preview_file}
-                  url={postFile.post_file}
-                  controls={true}
-                  width="100%"
-                  height="100%"
-                  playing={false}
-                  muted={false}
-                  autoPlay={false}
-                  config={{
-                    file: {
-                      attributes: { controlsList: "nodownload" },
-                    },
-                  }}
-                  className="post-video-size"
-                />
+                <video
+                  autoplay
+                  controls
+                  id="myVideo"
+                  className="user-profile1 w-100"
+                  effect="blur"
+                >
+                  <source src={postFile.post_file} type="video/mp4" />
+                </video>
                 {/* {post.amount > 0 ? (
                   <div className="ppv-icon">
                     <svg
@@ -444,7 +437,7 @@ const ProfileSinglePost = ({ post }) => {
                 ) : (
                   ""
                 )} */}
-                <div className="profile-video-icon-sec">
+                {/* <div className="profile-video-icon-sec">
                   <Image
                     className="profile-video-icon"
                     src={
@@ -452,7 +445,7 @@ const ProfileSinglePost = ({ post }) => {
                       "/assets/images/new-home/icon/video-icon.png"
                     }
                   />
-                </div>
+                </div> */}
                 {post.postFiles.length > 1 && (
                   <div className="multiple-icon-sec">
                     <Image
