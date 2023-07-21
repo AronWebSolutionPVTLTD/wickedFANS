@@ -1854,10 +1854,10 @@ Version: 1.0
     height: 11em !important;
   }
   .profile-lock-img {
-    height: 11em !important;
+    height: 100% !important;
   }
   .profile-video-img {
-    height: 11em !important;
+    height: 100% !important;
   }
   .profile-image-img {
     height: 11em !important;

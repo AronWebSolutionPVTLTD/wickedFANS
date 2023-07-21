@@ -436,7 +436,7 @@
 /*Post Lock CSS*/
 
 .profile-lock-img {
-    height: 14em;
+    height: 100%;
     width: 100%;
     object-fit: cover;
     border-radius: 10px;
@@ -542,7 +542,7 @@
 /* Post Image CSS*/
 
 .profile-image-img {
-    height: 14em;
+    height: 100%;
     width: 100%;
     object-fit: cover;
     border-radius: 10px;
@@ -550,6 +550,11 @@
 
 .profile-image-post-card {
     position: relative;
+    height: 100%;
+}
+
+.profile-image-img-sec {
+    height: 100%;
 }
 
 .profile-img-post-box {
