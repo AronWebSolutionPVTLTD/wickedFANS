@@ -1235,7 +1235,7 @@ const SingleProfile = (props) => {
                             /Month
                           </div>
                           <div
-                            className="subscription-btn"
+                            className="subscription-btn1"
                             onClick={(event) =>
                               subscriptionPayment(
                                 event,
@@ -1257,15 +1257,12 @@ const SingleProfile = (props) => {
                       ) : (
                         <div className="user-subscription-btn-sec">
                           <div
-                            className="subscription-btn"
+                            className="subscription-btn1"
                             onClick={(event) => {
                               if (localStorage.getItem("userId")) {
                                 props.dispatch(
-                                  subscriptionPaymentStripeStart({
-                                    user_unique_id:
-                                      userDetails.data.user.user_unique_id,
-                                    plan_type: "months",
-                                    is_free: 0,
+                                  followUserStart({
+                                    user_id: userDetails.data.user.user_id
                                   })
                                 );
                               } else {
@@ -1290,7 +1287,7 @@ const SingleProfile = (props) => {
                         <>
                           <div className="user-subscription-btn-sec">
                             <div
-                              className="subscription-btn"
+                              className="subscription-btn1"
                               onClick={() => handleUnfollowModalShow()}
                             >
                               {t("unfollow")}
@@ -1346,7 +1343,7 @@ const SingleProfile = (props) => {
                   <div className="user-subscription-plans-details">
                     <div className="user-subscription-btn-sec">
                       <div
-                        className="subscription-btn"
+                        className="subscription-btn1"
                         onClick={(event) =>
                           handleBlockUser(event, userDetails.data.user.user_id)
                         }
@@ -1770,112 +1767,181 @@ const SingleProfile = (props) => {
                         </Nav>
                       </Col>
 
-                      {userDetails.data.payment_info.unsubscribe_btn_status === 0 && (
-                        // userDetails.data.payment_info.is_free_account === 0 ? (
-                        //   <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
-                        //     <div
-                        //       className="subscription-btn"
-                        //       onClick={(event) =>
-                        //         subscriptionPayment(
-                        //           event,
-                        //           "months",
-                        //           userDetails.data.payment_info.subscription_info
-                        //             .monthly_amount,
-                        //           userDetails.data.payment_info.subscription_info
-                        //             .monthly_amount_formatted
-                        //         )
-                        //       }
-                        //     >
-                        //       SUBSCRIBE TO SEE USER'S POSTS
-                        //     </div>
-                        //   </div>
-                        // ) : (
+                      {userDetails.data.payment_info.is_user_needs_pay == 1 && userDetails.data.payment_info.unsubscribe_btn_status === 0 && (
+                        userDetails.data.payment_info.is_free_account === 0 ? (
                           <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
                             <div
-                              className="subscription-btn"
-                              onClick={(event) => {
-                                if (localStorage.getItem("userId")) {
-                                  props.dispatch(
-                                    followUserStart({
-                                      user_id: userDetails.data.user.user_id
-                                    })
-                                  );
-                                } else {
-                                  const notificationMessage =
-                                    getErrorNotificationMessage(
-                                      t("login_to_continue")
-                                    );
-                                  props.dispatch(
-                                    createNotification(notificationMessage)
-                                  );
-                                }
-                              }}
+                              className="subscription-btn1"
+                              onClick={(event) =>
+                                subscriptionPayment(
+                                  event,
+                                  "months",
+                                  userDetails.data.payment_info.subscription_info
+                                    .monthly_amount,
+                                  userDetails.data.payment_info.subscription_info
+                                    .monthly_amount_formatted
+                                )
+                              }
                             >
                               SUBSCRIBE TO SEE USER'S POSTS
                             </div>
-                          </div>
+                          </div>) : ""
+                        // ) : (
+                        //   <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
+                        //     <div
+                        //       className="subscription-btn"
+                        //       onClick={(event) => {
+                        //         if (localStorage.getItem("userId")) {
+                        //           props.dispatch(
+                        //             followUserStart({
+                        //               user_id: userDetails.data.user.user_id
+                        //             })
+                        //           );
+                        //         } else {
+                        //           const notificationMessage =
+                        //             getErrorNotificationMessage(
+                        //               t("login_to_continue")
+                        //             );
+                        //           props.dispatch(
+                        //             createNotification(notificationMessage)
+                        //           );
+                        //         }
+                        //       }}
+                        //     >
+                        //       SUBSCRIBE TO SEE USER'S POSTS
+                        //     </div>
+                        //   </div>) : ""
                         )
                       }
-
-                      {userDetails.data.payment_info.unsubscribe_btn_status === 1 && (
-                        <Col md={12}>
-                          {activeSec === "product" ? (
-                            <Col md={12}>
-                              <ModelProfileStoreSec
-                                activeSec={activeSec}
-                                setActiveSec={setActiveSec}
-                                products={props.products}
-                                otherUserUniquId={props.match.params.username}
-                              />
-                            </Col>
-                          ) : (
-                            <Col sm={12}>
-                              {props.userPosts.loading ? (
-                                <div className="profile-all-post-box">
-                                  {[...Array(8)].map(() => (
-                                    <Skeleton className="profile-post-card-loader" />
-                                  ))}
-                                </div>
-                              ) : (
-                                <>
-                                  {props.userPosts.data.posts.length > 0 ? (
-                                    <InfiniteScroll
-                                      dataLength={props.userPosts.data.posts.length}
-                                      next={fetchMorePost}
-                                      hasMore={
-                                        props.userPosts.data.posts.length <
-                                        props.userPosts.data.total
-                                      }
-                                      loader={
+                      {props.userPosts.data.posts.map((post) => (
+                        <>
+                          {
+                            post?.user.user_account_type_formatted === "Premium" ? (
+                              <>
+                                {userDetails.data.payment_info.unsubscribe_btn_status === 1 ? (
+                                  <Col md={12}>
+                                    {activeSec === "product" ? (
+                                      <Col md={12}>
+                                        <ModelProfileStoreSec
+                                          activeSec={activeSec}
+                                          setActiveSec={setActiveSec}
+                                          products={props.products}
+                                          otherUserUniquId={props.match.params.username}
+                                        />
+                                      </Col>
+                                    ) : (
+                                      <Col sm={12}>
+                                        {props.userPosts.loading ? (
+                                          <div className="profile-all-post-box">
+                                            {[...Array(8)].map(() => (
+                                              <Skeleton className="profile-post-card-loader" />
+                                            ))}
+                                          </div>
+                                        ) : (
+                                          <>
+                                            {props.userPosts.data.posts.length > 0 ? (
+                                              <InfiniteScroll
+                                                dataLength={props.userPosts.data.posts.length}
+                                                next={fetchMorePost}
+                                                hasMore={
+                                                  props.userPosts.data.posts.length <
+                                                  props.userPosts.data.total
+                                                }
+                                                loader={
+                                                  <div className="profile-all-post-box">
+                                                    {[...Array(4)].map(() => (
+                                                      <Skeleton className="profile-post-card-loader" />
+                                                    ))}
+                                                  </div>
+                                                }
+                                                style={{ height: "auto", overflow: "hidden" }}
+                                              >
+                                                <div className="profile-all-post-box">
+                                                  {props.userPosts.data.posts.map((post) => (
+                                                    <>
+                                                      {post.postFiles &&
+                                                        post.postFiles.length > 0 && (
+                                                          // post.postFiles.map((postFile, index) =>
+                                                          <ProfileSinglePost post={post} />
+                                                        )}
+                                                    </>
+                                                  ))}
+                                                </div>
+                                              </InfiniteScroll>
+                                            ) : (
+                                              <NoDataFound />
+                                            )}
+                                          </>
+                                        )}
+                                      </Col>
+                                    )}
+                                  </Col>
+                                ) : ""}
+                              </>
+                            ) : (
+                              <Col md={12}>
+                                  {activeSec === "product" ? (
+                                    <Col md={12}>
+                                      <ModelProfileStoreSec
+                                        activeSec={activeSec}
+                                        setActiveSec={setActiveSec}
+                                        products={props.products}
+                                        otherUserUniquId={props.match.params.username}
+                                      />
+                                    </Col>
+                                  ) : (
+                                    <Col sm={12}>
+                                      {props.userPosts.loading ? (
                                         <div className="profile-all-post-box">
-                                          {[...Array(4)].map(() => (
+                                          {[...Array(8)].map(() => (
                                             <Skeleton className="profile-post-card-loader" />
                                           ))}
                                         </div>
-                                      }
-                                      style={{ height: "auto", overflow: "hidden" }}
-                                    >
-                                      <div className="profile-all-post-box">
-                                        {props.userPosts.data.posts.map((post) => (
-                                          <>
-                                            {post.postFiles &&
-                                              post.postFiles.length > 0 && (
-                                                // post.postFiles.map((postFile, index) =>
-                                                <ProfileSinglePost post={post} />
-                                              )}
-                                          </>
-                                        ))}
-                                      </div>
-                                    </InfiniteScroll>
-                                  ) : (
-                                    <NoDataFound />
+                                      ) : (
+                                        <>
+                                          {props.userPosts.data.posts.length > 0 ? (
+                                            <InfiniteScroll
+                                              dataLength={props.userPosts.data.posts.length}
+                                              next={fetchMorePost}
+                                              hasMore={
+                                                props.userPosts.data.posts.length <
+                                                props.userPosts.data.total
+                                              }
+                                              loader={
+                                                <div className="profile-all-post-box">
+                                                  {[...Array(4)].map(() => (
+                                                    <Skeleton className="profile-post-card-loader" />
+                                                  ))}
+                                                </div>
+                                              }
+                                              style={{ height: "auto", overflow: "hidden" }}
+                                            >
+                                              <div className="profile-all-post-box">
+                                                {props.userPosts.data.posts.map((post) => (
+                                                  <>
+                                                    {post.postFiles &&
+                                                      post.postFiles.length > 0 && (
+                                                        // post.postFiles.map((postFile, index) =>
+                                                        <ProfileSinglePost post={post} />
+                                                      )}
+                                                  </>
+                                                ))}
+                                              </div>
+                                            </InfiniteScroll>
+                                          ) : (
+                                            <NoDataFound />
+                                          )}
+                                        </>
+                                      )}
+                                    </Col>
                                   )}
-                                </>
-                              )}
-                            </Col>
-                          )}
-                      </Col>
+                              </Col>
+                            )
+                          }
+                        </>
+                        )
                       )}
+                      
                     </Row>
                   </Tab.Container>
                 </div>
@@ -1908,16 +1974,16 @@ const SingleProfile = (props) => {
             />
           ) : null}
           {/* <PaymentModal
-                            subscrptionPayment={subscrptionPayment}
-                            closePaymentModal={closePaymentModal}
-                            userPicture={userDetails.data.user.picture}
-                            name={userDetails.data.user.name}
-                            user_unique_id={userDetails.data.user.user_unique_id}
-                            subscriptionData={subscriptionData}
-                            username={userDetails.data.user.username}
-                        /> */}
+            subscrptionPayment={subscrptionPayment}
+            closePaymentModal={closePaymentModal}
+            userPicture={userDetails.data.user.picture}
+            name={userDetails.data.user.name}
+            user_unique_id={userDetails.data.user.user_unique_id}
+            subscriptionData={subscriptionData}
+            username={userDetails.data.user.username}
+          /> */}
 
-          {/* {subscrptionPayment ? (
+          {subscrptionPayment ? (
             <SubscriptionPaymentModal
               paymentsModal={subscrptionPayment}
               closepaymentsModal={closePaymentModal}
@@ -1925,7 +1991,7 @@ const SingleProfile = (props) => {
               user_unique_id={userDetails.data.user.user_unique_id}
               subscriptionData={subscriptionData}
             />
-          ) : null} */}
+          ) : null}
 
 
 
