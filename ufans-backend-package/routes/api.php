@@ -89,6 +89,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
 
         Route::post('profile', 'Api\UserAccountApiController@profile');
 
+        Route::get('all_users', 'Api\UserAccountApiController@allUsers');
+
         Route::post('update_profile', 'Api\UserAccountApiController@update_profile')->middleware(['CheckEmailVerify']);
 
         Route::post('user_premium_account_check', 'Api\UserAccountApiController@user_premium_account_check');

@@ -1859,8 +1859,11 @@ Version: 1.0
   .profile-video-img {
     height: 100% !important;
   }
-  .profile-image-img {
+  .profile-all-post-box a {
     height: 11em !important;
+  }
+  .profile-image-img {
+    height: 100% !important;
   }
   .user-cover-img-sec .user-cover-img {
     height: 15em !important;

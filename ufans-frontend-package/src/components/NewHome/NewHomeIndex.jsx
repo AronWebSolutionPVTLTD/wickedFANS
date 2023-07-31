@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useMediaQuery } from 'react-responsive';
 import {
   Modal,
   Container,
@@ -44,14 +45,32 @@ import NewFeedTrendingCard from "./NewFeedTrendingCard";
 const NewHomeIndex = (props) => {
 
   const [verificationShow, setVerificationShow] = useState(false);
+  const isTablet = useMediaQuery({ maxWidth: 991 });
 
-  useEffect(() => {
+  const initialize = () => {
     props.dispatch(
       fetchHomePostsStart({
         skip: 0,
         take: 12,
       })
     );
+  }
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    if (position == 0 && isTablet) {
+      initialize();
+    }
+  };
+
+  useEffect(() => {
+    initialize();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -131,7 +150,17 @@ const NewHomeIndex = (props) => {
 
   return (
     <>
-      <div className="new-home-page-sec">
+      {props.posts.loading ? (
+        // <div className="row" style={{ display: "block" }}>
+        //   <HomeLoader />
+        // </div>
+        <div className="spinner-container">
+          <div className="loading-spinner">
+          </div>
+        </div>
+      ) : ""}
+      
+      <div className="new-home-page-sec" onWheel={handleScroll}>
         <Container>
           <Row>
             <Col md={12}>
@@ -165,11 +194,7 @@ const NewHomeIndex = (props) => {
                       <NewFeatureStoryIndex />
                       {/* <NewFeedIndex /> */}
                       
-                      {props.posts.loading ? (
-                        <div className="row" style={{ display: "block" }}>
-                          <HomeLoader />
-                        </div>
-                      ) : props.posts.data.posts.length > 0 ? (
+                      {props.posts.data.posts.length > 0 ? (
                         <InfiniteScroll
                           dataLength={props.posts.data.posts}
                           next={fetchMoreData}
@@ -215,7 +240,8 @@ const NewHomeIndex = (props) => {
   );
 };
 
-const mapStateToPros = (state) => ({ 
+const mapStateToPros = (state) => ({
+  loading: state.home.homePost.loading,
   posts: state.home.homePost,
   searchUser: state.home.searchUser,
   trendingUsers: state.home.trendingUsers,

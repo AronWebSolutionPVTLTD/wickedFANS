@@ -29,6 +29,7 @@ import ReportModeModal from "../helper/ReportModeModal";
 import { saveBlockUserStart } from "../../store/actions/UserAction";
 import { saveBookmarkStart } from "../../store/actions/BookmarkAction";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import FancyBox from "./NewSingleView/FancyBox";
 import PPVPaymentModal from "../Model/PaymentModal/PPVPaymentModal";
 
 const NewFeedDisplayCard = (props) => {
@@ -89,10 +90,10 @@ const NewFeedDisplayCard = (props) => {
 
   const AutoplaySlider = withAutoplay(AwesomeSlider);
 
-  const handleImageClick = (image) => {
-    setIsModalOpen(true);
-    setSelectedImage(image);
-  };
+  // const handleImageClick = (image) => {
+  //   setIsModalOpen(true);
+  //   setSelectedImage(image);
+  // };
 
   const closePaymentModal = () => {
     setPaymentModal(false);
@@ -168,18 +169,26 @@ const NewFeedDisplayCard = (props) => {
           </div>
         ) : (
           //Free Image
+          <FancyBox>
           <div className="profile-image-post-card">
             <div className="profile-image-img-sec">
               {/* <Image
                                                           className="profile-image-img"
                                                           src={postFile.post_file}
                                                       /> */}
-              <LazyLoadImage
+              {/* <LazyLoadImage
                 className="new-feed-post-img"
                 src={postFile.post_file}
                 onClick={() => handleImageClick(postFile.post_file)}
                 effect="blur"
+              /> */}
+
+              <Image
+                className="new-feed-post-img"
+                src={postFile.post_file}
+                data-fancybox
               />
+
               {/* {post.amount > 0 ? (
                 <div className="ppv-icon">
                   <svg
@@ -251,6 +260,7 @@ const NewFeedDisplayCard = (props) => {
               )}
             </div>
           </div>
+          </FancyBox>
         )
       ) : postFile.file_type === "video" ? (
         // Video Section
@@ -1041,7 +1051,7 @@ const NewFeedDisplayCard = (props) => {
         : null
       }
 
-      <Modal
+      {/* <Modal
         className="modal-dialog-center"
         centered
         show={isModalOpen}
@@ -1053,7 +1063,7 @@ const NewFeedDisplayCard = (props) => {
             <Image className="new-feed-post-img" src={selectedImage} />
           </div>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

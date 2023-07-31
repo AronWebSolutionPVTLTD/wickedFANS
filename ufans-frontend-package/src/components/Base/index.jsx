@@ -844,7 +844,7 @@ class App extends Component {
           <PrivateRoute
             authentication={this.state.authentication}
             path={"/post/:post_unique_id"}
-            component={NewSingleCommentIndex}
+            component={NewSingleStoryIndex}
             layout={MainLayout}
           />
           <PrivateRoute
