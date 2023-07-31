@@ -8,11 +8,12 @@ import { chatUser, fetchChatUsersStart, fetchMoreChatUsersStart, forceChatUsersS
 import CommonCenterLoader from "../Loader/CommonCenterLoader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Skeleton from "react-loading-skeleton";
+import NewMessages from "./NewMessages";
 
 const NewChatList = (props) => {
-
   const [skipRender, setSkipRender] = useState(true);
   const [search, setSearch] = useState("");
+  const [isNewMessage, setIsNewMessage] = useState(false);
 
   useEffect(() => {
     props.dispatch(fetchChatUsersStart({
@@ -63,6 +64,22 @@ const NewChatList = (props) => {
       <div className="new-chat-list-sec">
         <div className="new-chat-title-sec">
           <h2>Chats</h2>
+          <div className="new-chat-title-icon">
+            {!isNewMessage ? (
+              <Image
+                className="new-feeds-add-icon"
+                onClick={() => setIsNewMessage(true)}
+                src="/assets/images/plus.png"
+              />
+            ) : (
+              <Image
+                className="new-feeds-back-icon"
+                onClick={() => setIsNewMessage(false)}
+                src="/assets/images/icons/back.svg"
+              />
+            )
+            }
+          </div>
         </div>
         <div className="new-chat-search-sec">
           <Form onSubmit={e => e.preventDefault()}>
@@ -88,107 +105,112 @@ const NewChatList = (props) => {
             </InputGroup>
           </Form>
         </div>
-        <div className="new-chat-list-wrapper-card">
+        {!isNewMessage ? (
+          <div className="new-chat-list-wrapper-card">
 
           {props.chatUsers.loading ?
             <div className="new-chat-list-box">
               {[...Array(6)].map((val, i) =>
-                <div className="new-chat-list-card" key={i} >
+                  <div className="new-chat-list-card" key={i} >
                   <div className="new-chat-list-user-msg-sec">
-                    <div className="new-chat-list-user-img-sec">
+                      <div className="new-chat-list-user-img-sec">
                       <Skeleton circle={true} className="new-chat-list-user-img" />
-                    </div>
-                    <div className="new-chat-list-user-msg">
+                      </div>
+                      <div className="new-chat-list-user-msg">
                       <Skeleton height={50} />
-                    </div>
+                      </div>
                   </div>
-                </div>
+                  </div>
               )}
             </div>
 
             : props.chatUsers.data.users &&
-              props.chatUsers.data.users.length > 0 ?
+            props.chatUsers.data.users.length > 0 ?
               <>
                 <div style={{
-                  maxHeight: 'calc(100vh - 190px)',
-                  overflowY: 'auto',
-                  // paddingRight: '1em',
-                  marginTop: '2em'
+                maxHeight: 'calc(100vh - 190px)',
+                overflowY: 'auto',
+                // paddingRight: '1em',
+                marginTop: '2em'
                 }} id="usersDiv">
                   <InfiniteScroll
-                    dataLength={props.chatUsers.data.users.length}
-                    next={fetchMoreUsers}
-                    hasMore={props.chatUsers.data.users.length < props.chatUsers.data.total}
-                    loader={<div className="new-chat-list-box">
+                      dataLength={props.chatUsers.data.users.length}
+                      next={fetchMoreUsers}
+                      hasMore={props.chatUsers.data.users.length < props.chatUsers.data.total}
+                      loader={<div className="new-chat-list-box">
                       {[...Array(6)].map((val, i) =>
-                        <div className="new-chat-list-card" key={i} >
+                          <div className="new-chat-list-card" key={i} >
                           <div className="new-chat-list-user-msg-sec">
-                            <div className="new-chat-list-user-img-sec">
+                              <div className="new-chat-list-user-img-sec">
                               <Skeleton circle={true} className="new-chat-list-user-img" />
-                            </div>
-                            <div className="new-chat-list-user-msg">
+                              </div>
+                              <div className="new-chat-list-user-msg">
                               <Skeleton height={50} />
-                            </div>
+                              </div>
                           </div>
-                        </div>
+                          </div>
                       )}
-                    </div>
-                    }
-                    scrollableTarget="usersDiv"
+                      </div>
+                      }
+                      scrollableTarget="usersDiv"
                   >
-                    <div className="new-chat-list-box">
+                      <div className="new-chat-list-box">
                       {props.chatUsers.data.users.map((user, i) =>
-                        <div className={`new-chat-list-card 
-                        ${user.to_user.user_id === props.chatUser?.user_id
-                            ? "active" : ""
+                          <div className={`new-chat-list-card 
+                          ${user.to_user.user_id === props.chatUser?.user_id
+                              ? "active" : ""
                           }
-                        `}
+                          `}
                           key={i}
                           onClick={() => props.dispatch(chatUser(user.to_user))}>
                           <div className="new-chat-list-user-msg-sec">
-                            <div className="new-chat-list-user-img-sec">
+                              <div className="new-chat-list-user-img-sec">
                               <Image
-                                className="new-chat-list-user-img"
-                                src={user.to_userpicture}
+                                  className="new-chat-list-user-img"
+                                  src={user.to_userpicture}
                               />
-                            </div>
-                            <div className="new-chat-list-user-msg">
+                              </div>
+                              <div className="new-chat-list-user-msg">
                               <h4>{user.to_displayname}</h4>
                               <p>{user.message}</p>
-                            </div>
+                              </div>
                           </div>
                           <div className="new-chat-list-notify-sec">
-                            <div className="new-chat-list-time-sec">
+                              <div className="new-chat-list-time-sec">
                               <p>{user.time_formatted}</p>
-                            </div>
-                            {/* <div className="new-chat-list-new-msg-notify-sec">
+                              </div>
+                              {/* <div className="new-chat-list-new-msg-notify-sec">
                           5
-                        </div> */}
+                          </div> */}
                           </div>
-                        </div>
+                          </div>
                       )}
-                    </div>
+                      </div>
                   </InfiniteScroll>
                 </div>
               </>
               : <>
-                {search ?
-                  <Image
-                    style={{ width: "100%" }}
-                    alt="No user found"
-                    src={window.location.origin + "/assets/images/new-chat/no-user-found.png"} />
-                  : <div className="no-chats-container">
+                  {search ?
                     <Image
                       style={{ width: "100%" }}
+                      alt="No user found"
+                      src={window.location.origin + "/assets/images/new-chat/no-user-found.png"} />
+                  : <div className="no-chats-container">
+                      <Image
+                      style={{ width: "100%" }}
                       src={window.location.origin + "/assets/images/new-chat/no-chats-yet.png"} />
-                    <Link to="/explore">
+                      <Link to="/explore">
                       Explore
-                    </Link>
-                  </div>
-                }
-              </>
+                      </Link>
+                    </div>
+                  }
+                </>
           }
-        </div>
+          </div>
+        ) : (
+          <NewMessages search={search} />
+        )
+        }
       </div>
     </>
   );

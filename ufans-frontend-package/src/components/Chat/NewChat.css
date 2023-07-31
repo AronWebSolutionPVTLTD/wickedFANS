@@ -36,10 +36,28 @@
   padding-top: 2em;
 }
 
+.new-chat-title-sec {
+  display: flex;
+  justify-content: space-between;
+}
+
 .new-chat-title-sec h2 {
   font-size: 2.2em;
   font-weight: 700;
   color: var(--tertiary-color);
+  margin-bottom: 0;
+}
+
+.new-chat-title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.new-feeds-add-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .new-chat-search-sec {
@@ -170,6 +188,52 @@
   width: 20%;
   /* flex: 1; */
   white-space: nowrap;
+}
+
+/*Style to send bulk message*/
+.bulk-messaging-body {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 1.5em;
+  padding: 1.5em;
+}
+
+.bulk-messaging-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bulk-messaging-header-btn {
+  display: flex;
+  justify-content: center;
+  border: none;
+  background-color: #ffffff;
+  font-size: 12px;
+}
+
+.bulk-messaging-body h3 {
+  padding-bottom: 0.5em;
+}
+
+.bulk-messaging-content {
+  display: flex;
+  font-size: 12px;
+}
+
+.bulk-messaging-btn {
+  background-color: #eeeef0;
+  border-radius: 10px;
+  padding: 5px;
+  margin-right: 11px;
+  border: none;
+  color: #000000;
+}
+
+.bulk-messaging-btn:hover,
+.bulk-messaging-btn:focus,
+.bulk-messaging-btn:active {
+  background-color: #cfced1;
+  color: #000000 !important;
 }
 
 .new-chat-list-wrapper-card ::-webkit-scrollbar-track {

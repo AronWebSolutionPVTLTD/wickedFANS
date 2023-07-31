@@ -308,12 +308,19 @@ const NewSingleStoryIndex = (props) => {
                                                           className="profile-image-img"
                                                           src={postFile.post_file}
                                                       /> */}
-              <LazyLoadImage
+              {/* <LazyLoadImage
                 className="new-feed-post-img"
                 src={file.post_file}
                 onClick={() => handleImageClick(file.post_file)}
                 effect="blur"
+              /> */}
+
+              <Image
+                className="new-feed-post-img"
+                src={file.post_file}
+                data-fancybox
               />
+
               {/* {post.amount > 0 ? (
                 <div className="ppv-icon">
                   <svg
@@ -791,11 +798,16 @@ const NewSingleStoryIndex = (props) => {
               ) : (
                 <div className="new-home-page-box row">
                   <div className="new-home-page-left col-sm-9 col-md-9 col-lg-6 col-12">
-                    <Link to={`/home`}>
+                    <Button variant="link" onClick={() => history.goBack()}>
+                      <div className="back-icon">
+                        <i className="fas fa-chevron-left"></i> Back
+                      </div>
+                    </Button>
+                    {/* <Link to={`/home`}>
                       <div className="back-icon">
                         <i className="fas fa-chevron-left"></i> Home
                       </div>
-                    </Link>
+                    </Link> */}
                     <div className="new-feed-display-card">
                       <div className="new-feed-header-sec">
                         <div className="new-feed-user-info">

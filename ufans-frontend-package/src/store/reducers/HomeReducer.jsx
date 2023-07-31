@@ -101,27 +101,21 @@ const initialState = {
 const HomeReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_HOME_POSTS_START:
+      const newState = {
+        ...state
+      }
+      newState.homePost.loading = true
       return {
-        ...state,
-        homePost: {
-          data: {
-            // posts: [...state.homePost.data.posts],
-            posts: [],
-            total: 0,
-          },
-          loading: true,
-          error: false,
-        },
+        ...newState,
       };
     case FETCH_MORE_HOME_POSTS_START:
       return state;
     case FETCH_HOME_POSTS_SUCCESS:
-      console.log('action', action.data)
       return {
         ...state,
         homePost: {
           data: {
-            posts: [...state.homePost.data.posts, ...action.data.posts],
+            posts: [...action.data.posts],
             total: action.data.total,
           },
           loading: false,

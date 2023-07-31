@@ -1292,6 +1292,14 @@ class UserAccountApiController extends Controller
 
             $user->payment_info = CommonRepo::subscriptions_user_payment_check($user, $request);
 
+            $user->totalFollowers = $user->followers()->with(['user' => function ($query) {
+                                        }])->where('status',FOLLOWER_ACTIVE)->get();
+
+            $user->totalFollowings = $user->followings()->with(['user' => function ($query) {
+            }])->where('status', YES)->get();
+
+            $user->allUsers = User::select('picture', 'username')->get();
+
             return $this->sendResponse($message = "", $success_code = "", $user);
 
         } catch(Exception $e) {
@@ -4369,6 +4377,11 @@ class UserAccountApiController extends Controller
             return $this->sendError($e->getMessage(), $e->getCode());
         
         }
+    }
+
+    public function allUsers(Request $request) {
+        $users = User::get();
+        return $this->sendResponse($message = "", $success_code = "", $users);
     }
 
 }

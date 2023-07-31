@@ -21,9 +21,38 @@ a {
   color: var(--primary-color);
 }
 
+.back-icon {
+  color: #E34498;
+  font-size: 16px;
+  text-decoration: none;
+}
+.back-icon:hover {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+.back-icon:focus {
+  text-decoration: none;
+  color: #007bff;
+}
+.back-icon:active {
+  text-decoration: none;
+  color: #007bff;
+}
+
+body button {
+  color: #E34498;
+}
+button:hover {
+  color: var(--primary-color) !important;
+  text-decoration: none !important;
+}
+button:focus,button:active{
+  text-decoration: none !important;
+  color: #007bff !important;
+}
+
 body a {
   color: #E34498;
- 
 }
 a:hover {
   color: var(--primary-color) !important;

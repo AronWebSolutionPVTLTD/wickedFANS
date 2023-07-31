@@ -77,6 +77,7 @@
     "react-redux": "^7.2.0",
     "react-redux-notify": "^4.2.1",
     "react-render-html": "^0.6.0",
+    "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.21",
     "react-responsive-masonry": "^2.1.4",
     "react-router": "^5.0.1",
