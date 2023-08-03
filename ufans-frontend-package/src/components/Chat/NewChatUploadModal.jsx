@@ -51,7 +51,7 @@ const NewChatUploadModal = (props) => {
       setTriggeredOnce(true);
       props.dispatch(chatAssetFilesUploadStart({
         from_user_id: props.profile.data.user_id,
-        to_user_id: props.selectedUser.user_id,
+        to_user_id: props.selectedUser.user_id,//.map((eachUser) => eachUser.user_id),
         file_type: chatMessage.fileType,
         ...files,
       }));

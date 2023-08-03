@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, Container, Row, Col, Button, Form, Image, Media, Dropdown, InputGroup } from "react-bootstrap";
 import "./NewChat.css";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NewChatUploadModal from "./NewChatUploadModal";
 import AltraChatAudioPlayer from "../CustomComponents/AudioPlayer/AltraChatAudioPlayer";
 import SendChat from "./SendChat";
@@ -15,6 +15,10 @@ import {
   fetchMoreChatMessagesStart,
   updateChatMessagesSuccess
 } from "../../store/actions/ChatAction";
+import {
+  chatAssetFileUploadStart,
+  uploadAssetDetails,
+} from "../../store/actions/ChatAssetAction";
 import InfiniteScroll from "react-infinite-scroll-component";
 import configuration from "react-global-configuration";
 import io from "socket.io-client";
@@ -34,7 +38,6 @@ import Picker from '@emoji-mart/react'
 let chatSocket = io();
 
 const NewChatRoom = (props) => {
-  const history = useHistory();
   const { height, width } = useWindowDimensions();
 
   const userId = localStorage.getItem("userId");
@@ -61,7 +64,6 @@ const NewChatRoom = (props) => {
       setIsChat(true);
     }
   }, [width]);
-
   useEffect(() => {
     if (newMsg) {
       const rect = latest.current.getBoundingClientRect();
@@ -76,17 +78,19 @@ const NewChatRoom = (props) => {
   }, [newMsg]);
 
   useEffect(() => {
-    props.dispatch(fetchChatMessagesStart({
-      from_user_id: userId,
-      to_user_id: props.selectedUser.user_id,
-    }));
-    if (chatSocket) {
-      chatSocket.disconnect();
-    }
-    chatSocketConnect(props.selectedUser.user_id);
-    setIsChat(true);
-    return () => {
-      chatSocket.disconnect();
+    if(!props.isNewMessage) {
+      props.dispatch(fetchChatMessagesStart({
+        from_user_id: userId,
+        to_user_id: props.selectedUser.user_id,
+      }));
+      if (chatSocket) {
+        chatSocket.disconnect();
+      }
+      chatSocketConnect(props.selectedUser.user_id);
+      setIsChat(true);
+      return () => {
+        chatSocket.disconnect();
+      }
     }
   }, [props.selectedUser.user_id]);
 
@@ -150,33 +154,49 @@ const NewChatRoom = (props) => {
 
   // Message Send
   const handleMessageSubmit = ({ msgAmount = 0, fileType = "text", chatAssets = [] }) => {
-    
     if ((message && message.trim()) || chatAssets.length > 0) {
-      const now = new Date();
-      const date = `${("0" + now.getDate()).slice(-2)} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()}`;
-      const time = dayjs(now).format("hh:mm a");
+      if (!props.isNewMessage) {
+        const now = new Date();
+        const date = `${("0" + now.getDate()).slice(-2)} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()}`;
+        const time = dayjs(now).format("hh:mm a");
 
-      const chatData = {
-        from_user_id: userId,
-        to_user_id: props.selectedUser.user_id,
-        message: message,
-        amount: msgAmount,
-        is_user_needs_pay: msgAmount > 0 ? 1 : 0,
-        file_type: fileType,
-        loggedin_user_id: userId,
-        chat_asset_id: chatAssets.map(asset => asset.chat_asset_id).toString(),
-        date_formatted: date,
-        time_formatted: time,
-        amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
+        const chatData = {
+          from_user_id: userId,
+          to_user_id: props.selectedUser.user_id,
+          message: message,
+          amount: msgAmount,
+          is_user_needs_pay: msgAmount > 0 ? 1 : 0,
+          file_type: fileType,
+          loggedin_user_id: userId,
+          chat_asset_id: chatAssets.map(asset => asset.chat_asset_id).toString(),
+          date_formatted: date,
+          time_formatted: time,
+          amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
+        }
+        chatSocket.emit("message", chatData);
+        setMessage("");
+        props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
+        
+        setNewChatUpload(false);
+        setShowEmojis(false);
+        messageField.current.focus();
+        latest.current.scrollIntoView()
+      } else {
+        props.dispatch(
+          chatAssetFileUploadStart({
+            from_user_id: userId,
+            to_user_ids: props.selectedUser.map((eachUser) => eachUser.user_id),
+            file_type: fileType,
+            message: message,
+            amount: msgAmount,
+            chat_asset_id: chatAssets.map(asset => asset.chat_asset_id).toString(),
+          })
+        );
+        const notificationMessage = getSuccessNotificationMessage(
+          "the message is successfully sent."
+        );
+        props.dispatch(createNotification(notificationMessage));
       }
-      chatSocket.emit("message", chatData);
-      setMessage("");
-      props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
-      
-      setNewChatUpload(false);
-      setShowEmojis(false);
-      messageField.current.focus();
-      latest.current.scrollIntoView()
     }
   }
 
@@ -206,101 +226,108 @@ const NewChatRoom = (props) => {
     index--;
   }
 
+  const backToInbox = () => {
+    props.setIsNewMessage(false);
+    props.setSelectedUser([]);
+  }
+
   return (
     <>
 
-      <div className="new-chat-room-header-sec">
-        <div className="new-chat-room-user-details" onClick={e =>
-          width < 992 ? setIsChat(!isChat) : e.preventDefault()
-        }>
-          <div className="back-btn-mobile-show" onClick={() => history.push("/inbox")}>
-            <Image
-              className="back-btn-mobile"
-              src={
-                window.location.origin + "/assets/images/new-chat/back-icon.svg"
-              }
-            />
-          </div>
-          <div className="new-chat-room-user-img-sec">
-            <CustomLazyLoad
-              src={props.selectedUser.picture}
-              className={"new-chat-room-user-img"}
-            />
-          </div>
-          <div className="new-chat-room-user-name">
-            <h4>{props.selectedUser.name}</h4>
-            {/* {props.chatMessages.loading ?
-              <>
-                {props.selectedUser.is_online_status == 1 ?
-                  <p>{props.selectedUser.is_user_online == 1 ? "Online" : "Offline"}</p>
-                  : ""}
+      {!props.isNewMessage && 
+        <div className="new-chat-room-header-sec">
+          <div className="new-chat-room-user-details" onClick={e =>
+            width < 992 ? setIsChat(!isChat) : e.preventDefault()
+          }>
+            <div className="back-btn-mobile-show" onClick={backToInbox}>
+              <Image
+                className="back-btn-mobile"
+                src={
+                  window.location.origin + "/assets/images/new-chat/back-icon.svg"
+                }
+              />
+            </div>
+            <div className="new-chat-room-user-img-sec">
+              <CustomLazyLoad
+                src={props.selectedUser.picture}
+                className={"new-chat-room-user-img"}
+              />
+            </div>
+            <div className="new-chat-room-user-name">
+              <h4>{props.selectedUser.name}</h4>
+              {/* {props.chatMessages.loading ?
+                <>
+                  {props.selectedUser.is_online_status == 1 ?
+                    <p>{props.selectedUser.is_user_online == 1 ? "Online" : "Offline"}</p>
+                    : ""}
+                </>
+                :  */}
+              <>{props.chatMessages.data.user && props.chatMessages.data.user.is_online_status == 1 ?
+                <p>{props.chatMessages.data.user.is_user_online == 1 ? "Online" : "Offline"}</p>
+                : ""}
               </>
-              :  */}
-            <>{props.chatMessages.data.user && props.chatMessages.data.user.is_online_status == 1 ?
-              <p>{props.chatMessages.data.user.is_user_online == 1 ? "Online" : "Offline"}</p>
-              : ""}
-            </>
+            </div>
+          </div>
+          <div className="new-chat-room-user-action-btn-sec">
+            <ul className="new-chat-room-user-action-btn-list list-unstyled">
+              <Media as="li">
+                <Link to="#" onClick={() => setRequestAudioCall(true)}>
+                  <Image
+                    className="new-chat-room-user-action-icon"
+                    src={
+                      window.location.origin + "/assets/images/new-chat/audio-call.svg"
+                    }
+                  />
+                </Link>
+              </Media>
+              <Media as="li">
+                <Link to="#" onClick={() => setRequestVideoCall(true)}>
+                  <Image
+                    className="new-chat-room-user-action-icon"
+                    src={
+                      window.location.origin + "/assets/images/new-chat/video-call.svg"
+                    }
+                  />
+                </Link>
+              </Media>
+              <Media as="li">
+                <Link to="#">
+                  <Dropdown className="new-chat-room-dropdown">
+                    <Dropdown.Toggle variant="success" id="dropdown-basic" className="new-chat-room-dropdown-btn">
+                      <Image
+                        className="three-dots-icon"
+                        src={
+                          window.location.origin + "/assets/images/new-chat/three-dots.svg"
+                        }
+                      />
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Link
+                        className="dropdown-item"
+                        to={`/${props.selectedUser.user_unique_id}`}
+                      >
+                        View Profile
+                      </Link>
+                      <Link
+                        className="dropdown-item"
+                        to="#"
+                        onClick={() => handleBlockUser()}
+                      >
+                        Block User
+                      </Link>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Link>
+              </Media>
+            </ul>
           </div>
         </div>
-        <div className="new-chat-room-user-action-btn-sec">
-          <ul className="new-chat-room-user-action-btn-list list-unstyled">
-            <Media as="li">
-              <Link to="#" onClick={() => setRequestAudioCall(true)}>
-                <Image
-                  className="new-chat-room-user-action-icon"
-                  src={
-                    window.location.origin + "/assets/images/new-chat/audio-call.svg"
-                  }
-                />
-              </Link>
-            </Media>
-            <Media as="li">
-              <Link to="#" onClick={() => setRequestVideoCall(true)}>
-                <Image
-                  className="new-chat-room-user-action-icon"
-                  src={
-                    window.location.origin + "/assets/images/new-chat/video-call.svg"
-                  }
-                />
-              </Link>
-            </Media>
-            <Media as="li">
-              <Link to="#">
-                <Dropdown className="new-chat-room-dropdown">
-                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="new-chat-room-dropdown-btn">
-                    <Image
-                      className="three-dots-icon"
-                      src={
-                        window.location.origin + "/assets/images/new-chat/three-dots.svg"
-                      }
-                    />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Link
-                      className="dropdown-item"
-                      to={`/${props.selectedUser.user_unique_id}`}
-                    >
-                      View Profile
-                    </Link>
-                    <Link
-                      className="dropdown-item"
-                      to="#"
-                      onClick={() => handleBlockUser()}
-                    >
-                      Block User
-                    </Link>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Link>
-            </Media>
-          </ul>
-        </div>
-      </div>
+      }
       {
         isChat ?
           <>
-            {props.chatMessages.data.messages ?
+            {!props.isNewMessage && props.chatMessages.data.messages ?
               <>
                 <div
                   className="new-chat-room-message-sec"
@@ -404,16 +431,72 @@ const NewChatRoom = (props) => {
                   </Form>
                 </div>
               </>
-              : null
+              : 
+              <div className="new-chat-room-input-sec">
+                <Form className="new-chat-room-form" onSubmit={e => {
+                  e.preventDefault();
+                  handleMessageSubmit({});
+                }}>
+                  <div className={`emoji-container ${showEmojis ? "show" : "hide"}`}>
+                    <Picker data={data} onEmojiSelect={onEmojiPick} onClickOutside={() => {
+                      console.log("Outside triggered");
+                      if (showEmojis)
+                        setShowEmojis(false);
+                    }} />
+                  </div>
+                  <InputGroup className="mb-0">
+                    <InputGroup.Text onClick={() => handleToggleEmojis()}>
+                      <Image
+                        className="new-chat-emoji-icon"
+                        src={
+                          window.location.origin + "/assets/images/feed-story/comments-emoji.svg"
+                        }
+                      />
+                    </InputGroup.Text>
+                    <Form.Control
+                      ref={messageField}
+                      placeholder="Type something"
+                      value={!newChatUpload ? message : ""}
+                      onChange={e => setMessage(e.target.value)}
+                      // onKeyPress={e => {
+                      //   if (e.key === "Enter")
+                      //     handleMessageSubmit({})
+                      // }}
+                      autoFocus={true}
+                      on
+                    />
+                    <InputGroup.Text onClick={() => setNewChatUpload(true)}>
+                      <Image
+                        className="new-chat-file-icon"
+                        src={
+                          window.location.origin + "/assets/images/new-chat/attach-file.png"
+                        }
+                      />
+                    </InputGroup.Text>
+                    <InputGroup.Text onClick={() => handleMessageSubmit({})}>
+                      <Image
+                        className="new-chat-send-icon"
+                        src={
+                          window.location.origin + "/assets/images/feed-story/comments-send.svg"
+                        }
+                      />
+                    </InputGroup.Text>
+                  </InputGroup>
+                </Form>
+              </div>
             }
           </> :
-          <NewChatUserInfo selectedUser={props.selectedUser} />
+          <>
+            {!props.isNewMessage && 
+              <NewChatUserInfo selectedUser={props.selectedUser} />
+            }          
+          </>
       }
       {
         newChatUpload ?
           <NewChatUploadModal
             newChatUpload={newChatUpload}
-            selectedUser={props.selectedUser}
+            selectedUser={props.isNewMessage ? props.selectedUser[0] : props.selectedUser}
             message={message}
             setMessage={setMessage}
             handleMessageSubmit={handleMessageSubmit}
@@ -422,32 +505,36 @@ const NewChatRoom = (props) => {
           />
           : null
       }
-      {
-        requestVideoCall ?
-          <PrivateCallModal
-            requestVideoCall={requestVideoCall}
-            closePrivateCallModal={closePrivateCallModal}
-            username={props.selectedUser.username}
-            userPicture={props.selectedUser.picture}
-            videoAmount={props.selectedUser.video_call_amount_formatted}
-            name={props.selectedUser.name}
-            post_id={null}
-            user_id={props.selectedUser.user_id}
-          /> : null
-      }
-      {
-        requestAudioCall ?
-          <PrivateAudioCallModal
-            requestAudioCall={requestAudioCall}
-            closePrivateCallModal={closePrivateCallModal}
-            username={props.selectedUser.username}
-            userPicture={props.selectedUser.picture}
-            AudioAmount={props.selectedUser.audio_call_amount_formatted}
-            name={props.selectedUser.name}
-            post_id={null}
-            user_id={props.selectedUser.user_id}
-          />
-          : null
+      {!props.isNewMessage &&
+        <>
+          {
+            requestVideoCall ?
+              <PrivateCallModal
+                requestVideoCall={requestVideoCall}
+                closePrivateCallModal={closePrivateCallModal}
+                username={props.selectedUser.username}
+                userPicture={props.selectedUser.picture}
+                videoAmount={props.selectedUser.video_call_amount_formatted}
+                name={props.selectedUser.name}
+                post_id={null}
+                user_id={props.selectedUser.user_id}
+              /> : null
+          }
+          {
+            requestAudioCall ?
+              <PrivateAudioCallModal
+                requestAudioCall={requestAudioCall}
+                closePrivateCallModal={closePrivateCallModal}
+                username={props.selectedUser.username}
+                userPicture={props.selectedUser.picture}
+                AudioAmount={props.selectedUser.audio_call_amount_formatted}
+                name={props.selectedUser.name}
+                post_id={null}
+                user_id={props.selectedUser.user_id}
+              />
+              : null
+          }
+        </>
       }
     </>
   );

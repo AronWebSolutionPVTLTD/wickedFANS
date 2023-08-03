@@ -11,20 +11,26 @@ import { connect } from "react-redux";
 const NewMessages = (props) => {
     const [isMessageToFans, setIsMessageToFans] = useState(false);
     const [isMessageToFollowings, setIsMessageToFollowings] = useState(false);
+    const [allChecked, setAllChecked] = useState(false);
+    const [followerChecked, setFollowerChecked] = useState(true);
+    const [followingChecked, setFollowingChecked] = useState(true);
 
     const handleMessagingToAll = () => {
         setIsMessageToFans(false);
         setIsMessageToFollowings(false);
+        props.setSelectedUser([], true);
     }
 
     const handleMessagingToFans = () => {
         setIsMessageToFans(true);
         setIsMessageToFollowings(false);
+        props.setSelectedUser(props.profile.data.totalFollowers.map(each => each.user), true);
     }
 
     const handleMessagingToFollowings = () => {
         setIsMessageToFollowings(true);
         setIsMessageToFans(false);
+        props.setSelectedUser(props.profile.data.totalFollowings.map(each => each.user), true);
     }
 
     const fetchMoreUsers = () => {
@@ -33,6 +39,21 @@ const NewMessages = (props) => {
           take: 12,
           search_key: props.search,
         }));
+    }
+
+    const handleSelectAllUser = (user) => {
+        setAllChecked((state) => !state);
+        props.setSelectedUser([user], false);
+    }
+
+    const handleSelectFollower = (follower) => {
+        setFollowerChecked((state) => !state);
+        props.setSelectedUser([follower], false);
+    }
+
+    const handleSelectFollowing = (following) => {
+        setFollowingChecked((state) => !state);
+        props.setSelectedUser([following], false);
     }
 
     return (
@@ -85,7 +106,7 @@ const NewMessages = (props) => {
                             props.profile.data.allUsers.length > 0 ?
                             <>
                             <div style={{
-                                maxHeight: 'calc(100vh - 190px)',
+                                maxHeight: 'calc(100vh - 310px)',
                                 overflowY: 'auto',
                                 // paddingRight: '1em',
                                 marginTop: '2em'
@@ -132,10 +153,13 @@ const NewMessages = (props) => {
                                                     <h4>{user.username}</h4>
                                                 </div>
                                             </div>
-                                            <div className="new-chat-list-notify-sec">
+                                            {/* <div className="new-chat-list-notify-sec">
                                                 <div className="new-chat-list-time-sec">
-                                                    {/* <p>{user.time_formatted}</p> */}
+                                                    <p>{user.time_formatted}</p>
                                                 </div>
+                                            </div> */}
+                                            <div className="new-chat-list-check-sec">
+                                                <input type="checkbox" className="new-chat-list-check-box" defaultChecked={allChecked} onChange={(e) => handleSelectAllUser(user)}/>
                                             </div>
                                         </div>
                                         )}
@@ -208,29 +232,34 @@ const NewMessages = (props) => {
                                             <div className="new-chat-list-box">
                                             {/*followers*/}
                                             {props.profile.data.totalFollowers.map((follower, i) =>
-                                                <div className={`new-chat-list-card 
+                                                <div className={`new-chat-list-card-bulk 
                                                     ${follower.user.user_id === props.chatUser?.user_id
                                                         ? "active" : ""
                                                     }
                                                     `}
                                                     key={i}
                                                     onClick={() => props.dispatch(chatUser(follower.user.to_user))}>
-                                                <div className="new-chat-list-user-msg-sec">
-                                                    <div className="new-chat-list-user-img-sec">
-                                                    <Image
-                                                        className="new-chat-list-user-img"
-                                                        src={follower.user.picture}
-                                                    />
+                                                <div className="new-chat-list-user-bulk-msg-sec">
+                                                    <div className="new-chat-list-user-info-sec">
+                                                        <div className="new-chat-list-user-img-sec">
+                                                            <Image
+                                                                className="new-chat-list-user-img"
+                                                                src={follower.user.picture}
+                                                            />
+                                                        </div>
+                                                        <div className="new-chat-list-user-msg">
+                                                            <h4>{follower.user.name}</h4>
+                                                        </div>
                                                     </div>
-                                                    <div className="new-chat-list-user-msg">
-                                                        <h4>{follower.user.username}</h4>
+                                                    <div className="new-chat-list-user-check">
+                                                        <input type="checkbox" className="new-chat-list-user-check-box" defaultChecked={followerChecked} onChange={(e) => handleSelectFollower(follower.user)}/>
                                                     </div>
                                                 </div>
-                                                <div className="new-chat-list-notify-sec">
+                                                {/* <div className="new-chat-list-notify-sec">
                                                     <div className="new-chat-list-time-sec">
-                                                    {/* <p>{follower.user.time_formatted}</p> */}
+                                                    <p>{follower.user.time_formatted}</p>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 </div>
                                             )}
                                             </div>
@@ -315,13 +344,11 @@ const NewMessages = (props) => {
                                                         />
                                                         </div>
                                                         <div className="new-chat-list-user-msg">
-                                                        <h4>{following.user.username}</h4>
+                                                        <h4>{following.user.name}</h4>
                                                         </div>
                                                     </div>
-                                                    <div className="new-chat-list-notify-sec">
-                                                        <div className="new-chat-list-time-sec">
-                                                        {/* <p>{following.user.time_formatted}</p> */}
-                                                        </div>
+                                                    <div className="new-chat-list-user-check">
+                                                        <input type="checkbox" className="new-chat-list-user-check-box" defaultChecked={followingChecked} onChange={(e) => handleSelectFollowing(following.user)}/>
                                                     </div>
                                                     </div>
                                                 )}

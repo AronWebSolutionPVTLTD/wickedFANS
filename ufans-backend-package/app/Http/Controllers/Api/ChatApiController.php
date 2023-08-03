@@ -54,101 +54,97 @@ class ChatApiController extends Controller
 
             $rules = [
                 'from_user_id' => 'required|exists:users,id',
-                'to_user_id' => 'required|exists:users,id',
+                // 'to_user_id' => 'required|exists:users,id',
                 'message' => 'nullable',
-                'amount' => 'nullable|numeric|min:1',
-                'file' => 'required',
+                'amount' => 'nullable|numeric|min:0',
+                // 'file' => 'required',
             ];
 
             Helper::custom_validator($request->all(),$rules);
             
             $message = $request->message;
+            $to_user_ids = $request->to_user_ids;
+            if (gettype($request->to_user_ids) == 'string') $to_user_ids = explode(",", $request->to_user_ids);
 
-            $from_chat_user_inputs = ['from_user_id' => $request->from_user_id, 'to_user_id' => $request->to_user_id];
+            $data['chat_message'] = [];
+            $data['chat_asset'] = [];
+            
+            foreach($to_user_ids as $to_user_id) {
+                $from_chat_user_inputs = ['from_user_id' => $request->from_user_id, 'to_user_id' => $to_user_id];
 
-            $from_chat_user = \App\Models\ChatUser::updateOrCreate($from_chat_user_inputs);
+                $from_chat_user = \App\Models\ChatUser::updateOrCreate($from_chat_user_inputs);
 
-            $to_chat_user_inputs = ['from_user_id' => $request->to_user_id, 'to_user_id' => $request->from_user_id];
+                $to_chat_user_inputs = ['from_user_id' => $to_user_id, 'to_user_id' => $request->from_user_id];
 
-            $to_chat_user = \App\Models\ChatUser::updateOrCreate($to_chat_user_inputs);
+                $to_chat_user = \App\Models\ChatUser::updateOrCreate($to_chat_user_inputs);
 
-            $chat_message = new \App\Models\ChatMessage;
+                $chat_message = new \App\Models\ChatMessage;
 
-            $chat_message->from_user_id = $request->from_user_id;
+                $chat_message->from_user_id = $request->from_user_id;
 
-            $chat_message->to_user_id = $request->to_user_id;
+                $chat_message->to_user_id = $to_user_id;
 
-            $chat_message->message = $request->message ?? '';
+                $chat_message->message = $request->message ?? '';
 
-            $chat_message->is_file_uploaded = YES;
+                $chat_message->is_file_uploaded = YES;
 
-            $amount = $request->amount ?? 0.00;
+                $amount = $request->amount ?? 0.00;
 
-            if(Setting::get('is_only_wallet_payment')) {
+                if(Setting::get('is_only_wallet_payment')) {
 
-                $chat_message->token = $amount;
+                    $chat_message->token = $amount;
 
-                $chat_message->amount = $chat_message->token * Setting::get('token_amount');
+                    $chat_message->amount = $chat_message->token * Setting::get('token_amount');
 
-            } else {
+                } else {
 
-                $chat_message->amount = $amount;
+                    $chat_message->amount = $amount;
 
-            }
+                }
 
-            $chat_message->is_paid = $chat_message->amount > 0 ? YES : NO;
+                $chat_message->is_paid = $chat_message->amount > 0 ? YES : NO;
 
-            if ($chat_message->save()) {
+                if ($chat_message->save()) {
+                    if ($request->has('chat_asset_id') && $request->chat_asset_id) {
+                        $chatAssetIds = $request->chat_asset_id;
 
-
-                if ($request->has('file')) {
-
-                    $files = $request->file;
-
-                    if(!is_array($files)) {
-
-                        $chat_asset = new \App\Models\ChatAsset;
-
-                        $chat_asset->from_user_id = $request->from_user_id;
-
-                        $chat_asset->to_user_id = $request->to_user_id;
-
-                        $chat_asset->chat_message_id = $chat_message->chat_message_id;
-
-                        $filename = rand(1,1000000).'-chat_asset-'.$request->file_type ?? 'image';
-
-                        $chat_assets_file_url = Helper::storage_upload_file($request->file, CHAT_ASSETS_PATH, $filename);
-
-                        $chat_asset->file = $chat_assets_file_url;
-
-                        if($chat_assets_file_url) {
-
-                            $chat_asset->file_type = $request->file_type ?? FILE_TYPE_IMAGE;
-
-                            $chat_asset->token = $chat_message->token ?? 0.00;
-
-                            $chat_asset->amount = $chat_message->amount ?? 0.00;
-
-                            $chat_asset->blur_file = $request->file_type == FILE_TYPE_IMAGE ? \App\Helpers\Helper::generate_chat_blur_file($chat_asset->file, $request->file) : Setting::get('post_video_placeholder');  
-
-                            $chat_asset->save();
-
+                        if (gettype($request->chat_asset_id) == 'string') $chatAssetIds = explode(",", $request->chat_asset_id);
+                        foreach($chatAssetIds as $chatAssetId) {
+                            $chatAsset = \App\Models\ChatAsset::find($chatAssetId);
+                            if ($chatAsset->to_user_id == $to_user_id) {
+                                $chatAsset->chat_message_id = $chat_message->chat_message_id;
+                                $chatAsset->save();
+                            } else {
+                                $newChatAsset = new \App\Models\ChatAsset;
+                                $newChatAsset->from_user_id = $chatAsset->from_user_id;
+                                $newChatAsset->to_user_id = $to_user_id;
+                                $newChatAsset->chat_message_id = $chat_message->chat_message_id;
+                                $newChatAsset->file = $chatAsset->file;
+                                $newChatAsset->file_type = $chatAsset->file_type;
+                                $newChatAsset->token = $chatAsset->token;
+                                $newChatAsset->amount = $chatAsset->amount;
+                                $newChatAsset->blur_file = $chatAsset->blur_file;  
+                                $newChatAsset->save();
+                            }
                         }
-                    } else {
+                    }
+                    if ($request->has('file')) {
 
-                        foreach($files as $file){
+                        $files = $request->file;
+
+                        if(!is_array($files)) {
 
                             $chat_asset = new \App\Models\ChatAsset;
 
                             $chat_asset->from_user_id = $request->from_user_id;
 
-                            $chat_asset->to_user_id = $request->to_user_id;
+                            $chat_asset->to_user_id = $to_user_id;
 
                             $chat_asset->chat_message_id = $chat_message->chat_message_id;
 
                             $filename = rand(1,1000000).'-chat_asset-'.$request->file_type ?? 'image';
 
-                            $chat_assets_file_url = Helper::storage_upload_file($file, CHAT_ASSETS_PATH, $filename);
+                            $chat_assets_file_url = Helper::storage_upload_file($request->file, CHAT_ASSETS_PATH, $filename);
 
                             $chat_asset->file = $chat_assets_file_url;
 
@@ -160,23 +156,56 @@ class ChatApiController extends Controller
 
                                 $chat_asset->amount = $chat_message->amount ?? 0.00;
 
-                                $chat_asset->blur_file = $request->file_type == FILE_TYPE_IMAGE ? \App\Helpers\Helper::generate_chat_blur_file($chat_asset->file, $file) : Setting::get('post_video_placeholder');  
+                                $chat_asset->blur_file = $request->file_type == FILE_TYPE_IMAGE ? \App\Helpers\Helper::generate_chat_blur_file($chat_asset->file, $request->file) : Setting::get('post_video_placeholder');  
 
                                 $chat_asset->save();
-                            }
-                        }
 
+                            }
+                        } else {
+
+                            foreach($files as $file){
+
+                                $chat_asset = new \App\Models\ChatAsset;
+
+                                $chat_asset->from_user_id = $request->from_user_id;
+
+                                $chat_asset->to_user_id = $to_user_id;
+
+                                $chat_asset->chat_message_id = $chat_message->chat_message_id;
+
+                                $filename = rand(1,1000000).'-chat_asset-'.$request->file_type ?? 'image';
+
+                                $chat_assets_file_url = Helper::storage_upload_file($file, CHAT_ASSETS_PATH, $filename);
+
+                                $chat_asset->file = $chat_assets_file_url;
+
+                                if($chat_assets_file_url) {
+
+                                    $chat_asset->file_type = $request->file_type ?? FILE_TYPE_IMAGE;
+
+                                    $chat_asset->token = $chat_message->token ?? 0.00;
+
+                                    $chat_asset->amount = $chat_message->amount ?? 0.00;
+
+                                    $chat_asset->blur_file = $request->file_type == FILE_TYPE_IMAGE ? \App\Helpers\Helper::generate_chat_blur_file($chat_asset->file, $file) : Setting::get('post_video_placeholder');  
+
+                                    $chat_asset->save();
+                                }
+                            }
+
+                        }
                     }
+
+                    DB::commit();
                 }
 
-                DB::commit();
+                $chat_message = \App\Repositories\CommonRepository::chat_messages_single_response($chat_message, $request);
+
+                $data['chat_message'][] = $chat_message;
+
+                if (isset($chat_asset))
+                    $data['chat_asset'][] = $chat_asset;
             }
-
-            $chat_message = \App\Repositories\CommonRepository::chat_messages_single_response($chat_message, $request);
-
-            $data['chat_message'] = $chat_message;
-
-            $data['chat_asset'] = $chat_asset;
 
             return $this->sendResponse("", "", $data);
 
@@ -753,10 +782,10 @@ class ChatApiController extends Controller
 
             $rules = [
                 'from_user_id' => 'required|exists:users,id',
-                'to_user_id' => 'required|exists:users,id',
+                // 'to_user_id' => 'required|exists:users,id',
                 'message' => 'nullable',
                 'amount' => 'nullable|numeric|min:1',
-                'file' => 'required',
+                // 'file' => 'required',
             ];
 
             Helper::custom_validator($request->all(),$rules);
