@@ -1298,7 +1298,7 @@ class UserAccountApiController extends Controller
             $user->totalFollowings = $user->followings()->with(['user' => function ($query) {
             }])->where('status', YES)->get();
 
-            $user->allUsers = User::select('picture', 'username')->get();
+            $user->allUsers = User::select('picture', 'username', 'id')->get();
 
             return $this->sendResponse($message = "", $success_code = "", $user);
 

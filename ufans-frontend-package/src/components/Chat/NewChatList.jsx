@@ -13,7 +13,6 @@ import NewMessages from "./NewMessages";
 const NewChatList = (props) => {
   const [skipRender, setSkipRender] = useState(true);
   const [search, setSearch] = useState("");
-  const [isNewMessage, setIsNewMessage] = useState(false);
 
   useEffect(() => {
     props.dispatch(fetchChatUsersStart({
@@ -28,7 +27,7 @@ const NewChatList = (props) => {
         const updatedUsers = {
           ...props.chatUsers.data,
           users: props.chatUsers.data.users.map((user) =>
-            user.from_user_id === props.chatUser.user_id || user.to_user_id === props.chatUser.user_id
+            user.from_user_id === props.chatUser?.user_id || user.to_user_id === props.chatUser?.user_id
               ? {
                 ...user,
                 message: latestMsg.message ? latestMsg.message : latestMsg.file_type.toUpperCase(),
@@ -59,22 +58,27 @@ const NewChatList = (props) => {
     }));
   }
 
+  const backToInbox = () => {
+    props.setIsNewMessage(false);
+    props.setSelectedUser([]);
+  }
+
   return (
     <>
       <div className="new-chat-list-sec">
         <div className="new-chat-title-sec">
           <h2>Chats</h2>
           <div className="new-chat-title-icon">
-            {!isNewMessage ? (
+            {!props.isNewMessage ? (
               <Image
                 className="new-feeds-add-icon"
-                onClick={() => setIsNewMessage(true)}
+                onClick={() => props.setIsNewMessage(true)}
                 src="/assets/images/plus.png"
               />
             ) : (
               <Image
                 className="new-feeds-back-icon"
-                onClick={() => setIsNewMessage(false)}
+                onClick={backToInbox}
                 src="/assets/images/icons/back.svg"
               />
             )
@@ -105,7 +109,7 @@ const NewChatList = (props) => {
             </InputGroup>
           </Form>
         </div>
-        {!isNewMessage ? (
+        {!props.isNewMessage ? (
           <div className="new-chat-list-wrapper-card">
 
           {props.chatUsers.loading ?
@@ -208,7 +212,7 @@ const NewChatList = (props) => {
           }
           </div>
         ) : (
-          <NewMessages search={search} />
+          <NewMessages search={search} setSelectedUser={props.setSelectedUser} />
         )
         }
       </div>
