@@ -91,8 +91,24 @@ const NewChatRoom = (props) => {
       return () => {
         chatSocket.disconnect();
       }
+    } else {
+      // props.dispatch(fetchChatMessagesStart({
+      //   from_user_id: userId,
+      //   to_user_id: props.selectedUser.user_id,
+      // }));
+      props.selectedUser.forEach(eachUser => {
+        if (chatSocket) {
+          chatSocket.disconnect();
+        }
+        chatSocketConnect(eachUser.user_id);
+        // setIsChat(true);
+        return () => {
+          chatSocket.disconnect();
+        }
+      })
+      
     }
-  }, [props.selectedUser.user_id]);
+  }, [props.selectedUser]);
 
   useEffect(() => {
     if (!skipRender) {
@@ -145,6 +161,7 @@ const NewChatRoom = (props) => {
         myid: userId,
       });
       chatSocket.on("message", (newData) => {
+        console.log('message', newData);
         setNewMsg(true);
         props.dispatch(updateChatMessagesSuccess(newData));
       });
@@ -182,21 +199,53 @@ const NewChatRoom = (props) => {
         messageField.current.focus();
         latest.current.scrollIntoView()
       } else {
-        props.dispatch(
-          chatAssetFileUploadStart({
+        console.log('props.selectedUser', props.selectedUser)
+        const now = new Date();
+        const date = `${("0" + now.getDate()).slice(-2)} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()}`;
+        const time = dayjs(now).format("hh:mm a");
+        props.selectedUser.forEach(eachUser => {
+          console.log('eachUser', eachUser.user_id);
+
+          const chatData = {
             from_user_id: userId,
-            to_user_ids: props.selectedUser.map((eachUser) => eachUser.user_id),
-            file_type: fileType,
+            to_user_id: eachUser.user_id,
             message: message,
             amount: msgAmount,
+            is_user_needs_pay: msgAmount > 0 ? 1 : 0,
+            file_type: fileType,
+            loggedin_user_id: userId,
             chat_asset_id: chatAssets.map(asset => asset.chat_asset_id).toString(),
-          })
-        );
-        const notificationMessage = getSuccessNotificationMessage(
-          "the message is successfully sent."
-        );
-        props.dispatch(createNotification(notificationMessage));
+            date_formatted: date,
+            time_formatted: time,
+            amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
+          }
+          console.log('chatData', chatData);
+          chatSocket.emit("message", chatData);
+          // setMessage("");
+          // props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
+          
+          // setNewChatUpload(false);
+          // setShowEmojis(false);
+          // messageField.current.focus();
+          // latest.current.scrollIntoView()
+        })
       }
+    
+      // props.dispatch(
+      //   chatAssetFileUploadStart({
+      //     from_user_id: userId,
+      //     to_user_ids: props.selectedUser.map((eachUser) => eachUser.user_id),
+      //     file_type: fileType,
+      //     message: message,
+      //     amount: msgAmount,
+      //     chat_asset_id: chatAssets.map(asset => asset.chat_asset_id).toString(),
+      //   })
+      // );
+      // const notificationMessage = getSuccessNotificationMessage(
+      //   "the message is successfully sent."
+      // );
+      // props.dispatch(createNotification(notificationMessage));
+      
     }
   }
 
