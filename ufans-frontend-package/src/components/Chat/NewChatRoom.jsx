@@ -161,7 +161,6 @@ const NewChatRoom = (props) => {
         myid: userId,
       });
       chatSocket.on("message", (newData) => {
-        console.log('message', newData);
         setNewMsg(true);
         props.dispatch(updateChatMessagesSuccess(newData));
       });
@@ -199,12 +198,10 @@ const NewChatRoom = (props) => {
         messageField.current.focus();
         latest.current.scrollIntoView()
       } else {
-        console.log('props.selectedUser', props.selectedUser)
         const now = new Date();
         const date = `${("0" + now.getDate()).slice(-2)} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()}`;
         const time = dayjs(now).format("hh:mm a");
         props.selectedUser.forEach(eachUser => {
-          console.log('eachUser', eachUser.user_id);
 
           const chatData = {
             from_user_id: userId,
