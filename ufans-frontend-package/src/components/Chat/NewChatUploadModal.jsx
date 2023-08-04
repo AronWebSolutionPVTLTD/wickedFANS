@@ -89,6 +89,7 @@ const NewChatUploadModal = (props) => {
         msgAmount: parseInt(chatMessage.msgAmount)
       });
     }
+    props.closeNewChatUploadModal()
   }
 
   return (
