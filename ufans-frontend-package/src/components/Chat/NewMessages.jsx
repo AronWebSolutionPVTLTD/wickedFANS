@@ -15,6 +15,15 @@ const NewMessages = (props) => {
     const [followerChecked, setFollowerChecked] = useState(true);
     const [followingChecked, setFollowingChecked] = useState(true);
 
+    props.profile.data.totalFollowers.forEach(follower => {
+        props.profile.data.totalFollowings.forEach((following, idx) => {
+        if (follower.user.user_id === following.user.user_id || follower.user.name === following.user.name) {
+            delete props.profile.data.totalFollowings[idx]
+        }
+        });
+    });
+    const allUsers = props.profile.data.totalFollowers.concat(props.profile.data.totalFollowings);
+
     const handleMessagingToAll = () => {
         setIsMessageToFans(false);
         setIsMessageToFollowings(false);
@@ -35,7 +44,7 @@ const NewMessages = (props) => {
 
     const fetchMoreUsers = () => {
         props.dispatch(fetchMoreChatUsersStart({
-          skip: props.profile.data.allUsers.length,
+          skip: allUsers.length,//props.profile.data.allUsers.length
           take: 12,
           search_key: props.search,
         }));
@@ -102,8 +111,8 @@ const NewMessages = (props) => {
                                 )}
                             </div>
                 
-                        : props.profile.data.allUsers &&
-                            props.profile.data.allUsers.length > 0 ?
+                        : allUsers && //props.profile.data.allUsers
+                            allUsers.length > 0 ?  //props.profile.data.allUsers
                             <>
                             <div style={{
                                 maxHeight: 'calc(100vh - 310px)',
@@ -138,19 +147,19 @@ const NewMessages = (props) => {
                                             // ${user.to_user.user_id === props.chatUser?.user_id
                                             //     ? "active" : ""
                                             //     }*/}
-                                        {props.profile.data.allUsers.map((user, i) =>
+                                        {allUsers.map((eachuser, i) =>  //props.profile.data.allUsers
                                         <div className="new-chat-list-card"
                                             key={i}
-                                            onClick={() => props.dispatch(chatUser(user.to_user))}>
+                                            onClick={() => props.dispatch(chatUser(eachuser.user.to_user))}>
                                             <div className="new-chat-list-user-msg-sec">
                                                 <div className="new-chat-list-user-img-sec">
                                                     <Image
                                                         className="new-chat-list-user-img"
-                                                        src={user.picture}
+                                                        src={eachuser.user.picture}
                                                     />
                                                 </div>
                                                 <div className="new-chat-list-user-msg">
-                                                    <h4>{user.username}</h4>
+                                                    <h4>{eachuser.user.name}</h4>
                                                 </div>
                                             </div>
                                             {/* <div className="new-chat-list-notify-sec">
@@ -159,7 +168,7 @@ const NewMessages = (props) => {
                                                 </div>
                                             </div> */}
                                             <div className="new-chat-list-check-sec">
-                                                <input type="checkbox" className="new-chat-list-check-box" defaultChecked={allChecked} onChange={(e) => handleSelectAllUser(user)}/>
+                                                <input type="checkbox" className="new-chat-list-check-box" defaultChecked={allChecked} onChange={(e) => handleSelectAllUser(eachuser)}/>
                                             </div>
                                         </div>
                                         )}

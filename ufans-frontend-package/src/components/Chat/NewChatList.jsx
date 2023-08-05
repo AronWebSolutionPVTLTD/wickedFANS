@@ -71,11 +71,12 @@ const NewChatList = (props) => {
           <h2>Chats</h2>
           <div className="new-chat-title-icon">
             {!props.isNewMessage ? (
-              <Image
-                className="new-feeds-add-icon"
-                onClick={() => props.setIsNewMessage(true)}
-                src="/assets/images/plus.png"
-              />
+              props.profile?.data.is_content_creator === 2 &&
+                <Image
+                  className="new-feeds-add-icon"
+                  onClick={() => props.setIsNewMessage(true)}
+                  src="/assets/images/plus.png"
+                />
             ) : (
               <Image
                 className="new-feeds-back-icon"
@@ -225,6 +226,7 @@ const mapStateToPros = (state) => ({
   chatUsers: state.chat.chatUsers,
   chatUser: state.chat.chatUser,
   chatMessages: state.chat.chatMessages,
+  profile: state.users.profile,
 });
 
 function mapDispatchToProps(dispatch) {
