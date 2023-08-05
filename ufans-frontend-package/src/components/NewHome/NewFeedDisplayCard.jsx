@@ -658,7 +658,7 @@ const NewFeedDisplayCard = (props) => {
 
   return (
     <>
-      <div className="new-feed-display-card">
+      <div className="new-feed-display-card" style={{ border: "1px solid #d7d7db" }}>
         <div className="new-feed-header-sec">
           <div className="new-feed-user-info">
             <div className="live-streaming-user-img-sec" >
@@ -802,7 +802,7 @@ const NewFeedDisplayCard = (props) => {
             </AutoplaySlider>
           )}
         </div>
-        <div style={{ border: "1px solid #d7d7db" }}>
+        <div>
           {post.payment_info.is_user_needs_pay === 1 && post.amount !== 0 ? (
             <div style={{ padding: "16px", backgroundColor: "#e9e9eb" }}>
               <div style={{ border: "1px solid #d7d7db", padding: "12px", borderRadius: "10px" }}>

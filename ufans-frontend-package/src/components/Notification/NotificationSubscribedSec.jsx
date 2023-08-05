@@ -34,7 +34,6 @@ const NotificationSubscribedSec = (props) => {
                totalNotifications &&
                notificatoin.errorCount < 2
               }
-              loader={<h4>{t("loading")}</h4>}
             >
               <div className="notify-item">
                 <div className="post-header">
