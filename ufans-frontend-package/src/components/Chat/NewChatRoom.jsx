@@ -150,7 +150,6 @@ const NewChatRoom = (props) => {
 
   const chatSocketConnect = (to_user_id) => {
     // check the socket url is configured
-    console.log("Input ID", to_user_id);
     
     if (chatSocketUrl) {
       chatSocket = io(chatSocketUrl, {
@@ -216,7 +215,6 @@ const NewChatRoom = (props) => {
             time_formatted: time,
             amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
           }
-          console.log('chatData', chatData);
           chatSocket.emit("message", chatData);
           // setMessage("");
           // props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
@@ -238,10 +236,10 @@ const NewChatRoom = (props) => {
       //     chat_asset_id: chatAssets.map(asset => asset.chat_asset_id).toString(),
       //   })
       // );
-      // const notificationMessage = getSuccessNotificationMessage(
-      //   "the message is successfully sent."
-      // );
-      // props.dispatch(createNotification(notificationMessage));
+      const notificationMessage = getSuccessNotificationMessage(
+        "the message is successfully sent."
+      );
+      props.dispatch(createNotification(notificationMessage));
       
     }
   }

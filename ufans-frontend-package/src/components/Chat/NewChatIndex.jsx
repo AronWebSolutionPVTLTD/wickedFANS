@@ -31,7 +31,6 @@ const NewChatIndex = (props) => {
   }, [props.chatUser]);
 
   const handleSelectUser = (sUsers, isGroupSelect) => {
-    console.log("!!!!!!!!!!", sUsers);
     if (isGroupSelect) {
       setSelectedUser([...sUsers]);
     } else {

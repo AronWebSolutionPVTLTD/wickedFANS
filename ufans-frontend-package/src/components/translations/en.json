@@ -741,5 +741,13 @@
     "payment_processing":"Your payment is processing.",
     "payment_failed":"Your payment was not successful, please try again.",
     "add_wallet_min_amount":"Min amount should be 1",
-    "zipcode" : "Zipcode"
+    "zipcode" : "Zipcode",
+
+    "trial_links":"Trial Links",
+    "create_trial_link_note":"Create and share separate links with free trial subscription.",
+    "create_new_free_trial_link":"CREATE NEW FREE TRIAL LINK",
+    "free_trial_link":"FREE TRIAL LINK",
+    "trial_modal_note_first":"Promotional subscription $0.00 USD for selected duration.",
+    "trial_modal_note_second":"User will not be subscripted automatically, only by choice.",
+    "create_link":"CREATE LINK"
   }
