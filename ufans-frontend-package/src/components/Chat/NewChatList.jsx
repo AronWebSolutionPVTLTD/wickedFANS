@@ -61,7 +61,8 @@ const NewChatList = (props) => {
   const backToInbox = () => {
     props.setIsNewMessage(false);
     props.setSelectedUser([]);
-  }
+    props.dispatch(fetchChatUsersStart());
+  };
 
   return (
     <>

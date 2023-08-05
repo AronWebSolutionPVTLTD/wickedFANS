@@ -1292,8 +1292,19 @@ class UserAccountApiController extends Controller
 
             $user->payment_info = CommonRepo::subscriptions_user_payment_check($user, $request);
 
-            $user->totalFollowers = $user->followers()->with(['user' => function ($query) {
-                                        }])->where('status',FOLLOWER_ACTIVE)->get();
+            $followers = $user->followers()->with(['follower' => function ($query) {
+                                        }])->where('status',FOLLOWER_ACTIVE)->get()->toArray();
+
+            $totalFollowers = [];
+
+            foreach($followers as $follower) {
+                $tFollower = $follower;
+                $tFollower['user'] = $follower['follower'];
+                unset($tFollower['follower']);
+                $totalFollowers[] = $tFollower;
+            }
+
+            $user->totalFollowers = $totalFollowers;
 
             $user->totalFollowings = $user->followings()->with(['user' => function ($query) {
             }])->where('status', YES)->get();

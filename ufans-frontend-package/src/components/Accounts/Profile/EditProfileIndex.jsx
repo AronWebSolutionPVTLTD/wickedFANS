@@ -27,6 +27,7 @@ import { Formik, Form as FORM, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { updateUserDetailsStart } from "../../../store/actions/UserAction";
 import configuration from "react-global-configuration";
+import TrialLinkModal from "./TrialLinkModal";
 
 const urlValidation =
   /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm;
@@ -61,6 +62,7 @@ const EditProfileIndex = (props) => {
 
   const [address, setAddress] = useState("");
   const [isContentCreator, setIsContentCreator] = useState(false);
+  const [trialLink, setTrialLink] = useState(false);
 
   const [subscription, setSubscription] = useState({
     monthly_amount: "",
@@ -241,6 +243,14 @@ const EditProfileIndex = (props) => {
     });
     setSubscriptionError(newError);
     return status;
+  };
+
+  const handleTrialLinkModalShow = () => {
+    setTrialLink(true);
+  };
+
+  const closeTrialLinkModal = () => {
+    setTrialLink(false);
   };
 
   return (
@@ -1017,6 +1027,28 @@ const EditProfileIndex = (props) => {
                         </Form>
                       </div>
                     </div>
+                    <div className="create-trial-link-body">
+                      <div className="create-trial-link-box">
+                        <div className="create-trial-link-main-wrapper">
+                          <div className="trial-link-option-card">
+                            <div className="create-trial-link-header">
+                              <span>{t("trial_links")}</span>
+                              <p>{t("create_trial_link_note")}</p>
+                            </div>
+                            <div className="create-trial-link-content">
+                              <div className="create-trial-link-btn-sec">
+                                <div
+                                    className="trial-link-btn"
+                                    onClick={() => handleTrialLinkModalShow()}
+                                >
+                                    {t("create_new_free_trial_link")}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="social-media-links">
@@ -1341,6 +1373,10 @@ const EditProfileIndex = (props) => {
           </Row>
         </Tab.Container>
       </div>
+      <TrialLinkModal
+        trialLink={trialLink}
+        closeModal={closeTrialLinkModal}
+      />
     </>
   );
 };

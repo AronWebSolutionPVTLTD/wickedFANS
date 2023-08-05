@@ -74,6 +74,9 @@ import {
   DELETE_FEATURE_STORY_START,
   DELETE_FEATURE_STORY_SUCCESS,
   DELETE_FEATURE_STORY_FAILURE,
+  SAVE_TRIAL_LINK_OPTION_START,
+  SAVE_TRIAL_LINK_OPTION_SUCCESS,
+  SAVE_TRIAL_LINK_OPTION_FAILURE,
 } from "./ActionConstant";
 
 // Get user details actions.
@@ -632,6 +635,27 @@ export function deleteFeatureStorySuccess(data) {
 export function deleteFeatureStoryFailure(error) {
   return {
     type: DELETE_FEATURE_STORY_FAILURE,
+    error,
+  };
+}
+
+export function saveTrialLinkOptionStart(data) {
+  return {
+    type: SAVE_TRIAL_LINK_OPTION_START,
+    data,
+  };
+}
+
+export function saveTrialLinkOptionSuccess(data) {
+  return {
+    type: SAVE_TRIAL_LINK_OPTION_SUCCESS,
+    data,
+  };
+}
+
+export function saveTrialLinkOptionFailure(error) {
+  return {
+    type: SAVE_TRIAL_LINK_OPTION_FAILURE,
     error,
   };
 }
