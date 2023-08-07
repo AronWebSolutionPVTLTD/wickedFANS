@@ -309,13 +309,24 @@ class ApplicationController extends Controller
 
                         $chat_asset = \App\Models\ChatAsset::find($chat_asset_file_id);
 
-                        $chat_asset->chat_message_id = $chat_message->id;
+                        if ($chat_asset->to_user_id == $request->to_user_id) {
+                            $chat_asset->chat_message_id = $chat_message->id;
+                            $chat_asset->token = $chat_message->token;
+                            $chat_asset->amount = $chat_message->amount;
+                            $chat_asset->save();
 
-                        $chat_asset->token = $chat_message->token;
-
-                        $chat_asset->amount = $chat_message->amount;
-
-                        $chat_asset->save();
+                        } else {
+                            $newChatAsset = new \App\Models\ChatAsset;
+                            $newChatAsset->from_user_id = $chat_asset->from_user_id;
+                            $newChatAsset->to_user_id = $request->to_user_id;
+                            $newChatAsset->chat_message_id = $chat_message->id;
+                            $newChatAsset->file = $chat_asset->file;
+                            $newChatAsset->file_type = $chat_asset->file_type;
+                            $newChatAsset->token = $chat_message->token ? $chat_message->token : $chat_asset->token;
+                            $newChatAsset->amount = $chat_message->amount ? $chat_message->amount : $chat_asset->amount;
+                            $newChatAsset->blur_file = $chat_asset->blur_file;  
+                            $newChatAsset->save();
+                        }
 
                         // $chat_message->file_type = $chat_asset->file_type;
                     }
