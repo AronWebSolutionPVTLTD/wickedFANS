@@ -13,7 +13,8 @@ import {
   changeChatAudio,
   fetchChatMessagesStart,
   fetchMoreChatMessagesStart,
-  updateChatMessagesSuccess
+  updateChatMessagesSuccess,
+  fetchChatUsersStart
 } from "../../store/actions/ChatAction";
 import {
   chatAssetFileUploadStart,
@@ -216,7 +217,7 @@ const NewChatRoom = (props) => {
             amount_formatted: msgAmount + " " + configuration.get("configData.currency"),
           }
           chatSocket.emit("message", chatData);
-          // setMessage("");
+          setMessage("");
           // props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
           
           // setNewChatUpload(false);
@@ -240,6 +241,9 @@ const NewChatRoom = (props) => {
         "the message is successfully sent."
       );
       props.dispatch(createNotification(notificationMessage));
+      props.setIsNewMessage(false);
+      props.dispatch(fetchChatUsersStart());
+      // props.setSelectedUser([]);
       
     }
   }
