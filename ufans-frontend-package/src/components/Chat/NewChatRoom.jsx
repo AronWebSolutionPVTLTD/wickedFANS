@@ -169,7 +169,7 @@ const NewChatRoom = (props) => {
 
 
   // Message Send
-  const handleMessageSubmit = ({ msgAmount = 0, fileType = "text", chatAssets = [] }) => {
+  const handleMessageSubmit = async ({ msgAmount = 0, fileType = "text", chatAssets = [] }) => {
     if ((message && message.trim()) || chatAssets.length > 0) {
       if (!props.isNewMessage) {
         const now = new Date();
@@ -201,7 +201,7 @@ const NewChatRoom = (props) => {
         const now = new Date();
         const date = `${("0" + now.getDate()).slice(-2)} ${now.toLocaleString('default', { month: 'short' })} ${now.getFullYear()}`;
         const time = dayjs(now).format("hh:mm a");
-        props.selectedUser.forEach(eachUser => {
+        await Promise.all(props.selectedUser.map(eachUser => {
 
           const chatData = {
             from_user_id: userId,
@@ -218,13 +218,14 @@ const NewChatRoom = (props) => {
           }
           chatSocket.emit("message", chatData);
           setMessage("");
+          return true;
           // props.dispatch(updateChatMessagesSuccess({ ...chatData, chat_assets: chatAssets }));
           
           // setNewChatUpload(false);
           // setShowEmojis(false);
           // messageField.current.focus();
           // latest.current.scrollIntoView()
-        })
+        }))
       }
     
       // props.dispatch(
@@ -242,7 +243,9 @@ const NewChatRoom = (props) => {
       );
       props.dispatch(createNotification(notificationMessage));
       props.setIsNewMessage(false);
-      props.dispatch(fetchChatUsersStart());
+      setTimeout(() => {
+        props.dispatch(fetchChatUsersStart());
+      }, 500);
       // props.setSelectedUser([]);
       
     }
