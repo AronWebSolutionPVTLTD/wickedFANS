@@ -6943,7 +6943,7 @@ input.authentication-input {
   height: 100vh;
   overflow-y: scroll;
 }*/
-  .dropdown-menu.show:after {
+  /* .dropdown-menu.show:after {
     top: auto;
     bottom: -10px;
     right: 5px;
@@ -6961,7 +6961,7 @@ input.authentication-input {
     border-left: 1px solid rgba(138, 150, 163, 0.25);
     border-top: 1px solid rgba(138, 150, 163, 0.25);
     z-index: 0;
-  }
+  } */
   .dropup.show .dropdown-menu.show {
     top: auto !important;
     bottom: 100px;

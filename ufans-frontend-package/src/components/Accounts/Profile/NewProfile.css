@@ -276,7 +276,7 @@
 }
 
 .user-subscription-plans-details {
-    padding: 2em 1em;
+    padding: 15px;
 }
 
 .user-subscription-plans-details h3 {
@@ -396,7 +396,7 @@
 }
 
 .profile-all-post-box {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     display: grid;
     gap: 2em;
     margin-top: 3em;
@@ -656,4 +656,102 @@
     /* border: 1px solid rgba(0, 0, 0, 0.1); */
     top: 0;
     right: -18px;
+}
+
+.profile-tab-counter {
+    display: flex;
+    gap: 4px;
+}
+.profile-user-cover-img {
+    width: 100%;
+    height: 18em;
+    object-fit: cover;
+}
+.user-avatar {
+    border-radius: 50%;
+    border: 2px solid #fff;
+    width: 100px;
+    height: 100px;
+}
+.user-avatar-container {
+    border-radius: 50%;
+    margin-top: -35px;
+    margin-left: 15px;
+    z-index: 1;
+    position: relative;
+}
+.profile-intro {
+    border: 1px solid rgb(215, 215, 219);
+    /* margin-left: -15px;
+    margin-right: -15px; */
+}
+.profile-subscription {
+    margin-top: 10px;
+    border: 1px solid rgb(215, 215, 219);
+}
+.user-avatar-container .dot-circle-online {
+    width: 1.5em;
+    height: 1.5em;
+    background: #2bd618;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 7px;
+    left: 70px;
+}
+.profile-description {
+    padding: 15px;
+}
+.profile-description-content > p {
+    margin-bottom: 0;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Roboto,sans-serif;
+}
+.profile-user-cover-header {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 10px;
+    color: white;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+}
+.profile-user-cover-header-left {
+    display: flex;
+    gap: 10px;
+}
+.profile-user-cover-header-title-info {
+    display: flex;
+    gap: 5px;
+}
+.profile-user-cover-header-title-info span {
+    font-weight: 500;
+    font-size: 12px;
+}
+.feed-post-dropdown.show > .btn-success.dropdown-toggle {
+    background: none !important;
+}
+.profile-buttons {
+    display: flex !important;
+    flex-direction: column;
+    padding: 15px;
+    margin-top: 10px;
+}
+.profile-buttons .sidebar-links {
+    padding-top: 0;
+}
+.profile-buttons .sidebar-links ul {
+    grid-template-columns: repeat(2, 1fr) !important;
+    display: grid !important;
+    gap: 2em;
+}
+.profile-buttons .sidebar-links ul li {
+    padding-bottom: 0 !important;
+}
+.profile-buttons .sidebar-social-links ul {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-evenly !important;
 }

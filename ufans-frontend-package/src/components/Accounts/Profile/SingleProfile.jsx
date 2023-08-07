@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Dropdown,
   Modal,
   Container,
   Row,
@@ -61,6 +62,9 @@ import { saveBlockUserStart } from "../../../store/actions/UserAction";
 import ModelProfileStoreSec from "../../Model/ModelProfileStoreSec";
 import SendTipPaymentModal from "../../Model/PaymentModal/SendTipPaymentModal";
 import SubscriptionPaymentModal from "../../Model/PaymentModal/SubscriptionPaymentModal";
+import HomeLoader from "../../Loader/HomeLoader";
+import NewFeedDisplayCard from "../../NewHome/NewFeedDisplayCard";
+import NewFeedSuggestionCard from "../../NewHome/NewFeedSuggestionCard";
 
 const SingleProfile = (props) => {
   const history = useHistory();
@@ -78,6 +82,7 @@ const SingleProfile = (props) => {
   const toggleReadMore = () => { setIsReadMore(!isReadMore) };
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(12);
+  const [allCount, setAllCount] = useState(0);
   const [imageCount, setImageCount] = useState(0);
   const [videoCount, setVideoCount] = useState(0);
 
@@ -116,6 +121,7 @@ const SingleProfile = (props) => {
 
       setImageCount(tempImageCount)
       setVideoCount(tempVideoCount)
+      setAllCount(props.userPosts.data.total)
     }
     
   }, [activeSec, props.userPosts])
@@ -267,1630 +273,737 @@ const SingleProfile = (props) => {
     <>
       <div className="new-home-sec">
         {userDetails.loading ? (
-          <ProfileLoader />
+          <HomeLoader />
         ) : (
           <div className="new-home-box">
-            <div className="new-home-sidebar">
-              <div className="profile-logo-sec">
-                <p className="profile-logo-img"></p>
-
-                {/* <Image
-                  className="profile-logo-img"
-                  src={`${configuration.get("configData.site_logo")}`}
-                  width="200"
-                  height="80"
-                /> */}
-              </div>
-              <div className="sibebar-header-sec">
-                {userDetails.data.user.featured_story ? (
-                  <div className="sidebar-user-img-sec">
-                    <div
-                      data-fancybox="gallery"
-                      href={userDetails.data.user.featured_story}
-                    >
-                      <Image
-                        className="sidebar-user-img profile-image"
-                        src={userDetails.data.user.picture}
-                        alt={userDetails.data.user.name}
-                      />
-                    </div>
-                    {userDetails.data.user.is_user_live === 1 && (
-                      <Link
-                        to={`/join/${userDetails.data.user.ongoing_live_video.live_video_unique_id}`}
-                        className="sidebar-live-btn"
-                      >
-                        Live
-                      </Link>
-                    )}
-                    {userDetails.data.user.is_online_status === 1 &&
-                      userDetails.data.user.is_user_online === 1 && (
-                        <div className="dot-circle"></div>
-                      )}
-                  </div>
-                ) : (
-                  <div className="sidebar-user-no-fea-img-sec">
-                    <Image
-                      className="sidebar-user-img profile-image"
-                      src={userDetails.data.user.picture}
-                      alt={userDetails.data.user.name}
-                    />
-                    {userDetails.data.user.is_user_live === 1 && (
-                      <Link
-                        to={`/join/${userDetails.data.user.ongoing_live_video.live_video_unique_id}`}
-                        className="sidebar-live-btn"
-                      >
-                        Live
-                      </Link>
-                    )}
-                    {userDetails.data.user.is_online_status === 1 &&
-                      userDetails.data.user.is_user_online === 1 && (
-                        <div className="dot-circle"></div>
-                      )}
-                  </div>
-                )}
-                <h4>
-                  {userDetails.data.user.name}
-                  <span>
-                    {userDetails.data.user.is_verified_badge == 1 && (
-                      <Image
-                        className="sidebar-verified-icon"
-                        src={
-                          window.location.origin +
-                          "/assets/images/new-home/verified-icon.png"
-                        }
-                      />
-                    )}
-                  </span>
-                </h4>
-                <Link to="#" className="sidebar-user-name">
-                  @{userDetails.data.user.username}
-                </Link>
-                {/* <div className="sidebar-total-count-info-box">
-                  <div className="sidebar-total-count-media-card">
-                    <h5>
-                      <span>
-                        <Image
-                          className="sidebar-verified-icon"
-                          src={
-                            window.location.origin +
-                            "/assets/images/new-home/icon/image-post-1.svg"
-                          }
-                        />
-                      </span>
-                      <span> </span>
-                      {userDetails.data.total_images ? userDetails.data.total_images : 0}
-                    </h5>
-                  </div>
-
-                  <div className="sidebar-total-count-media-card">
-                    <h5>
-                      <span>
-                        <Image
-                          className="sidebar-verified-icon"
-                          src={
-                            window.location.origin +
-                            "/assets/images/new-home/icon/video-post.svg"
-                          }
-                        />
-                      </span>
-                      <span> </span>
-                      {userDetails.data.total_videos ? userDetails.data.total_videos : 0}
-                    </h5>
-
-                  </div>
-                  <div className="sidebar-total-count-media-card">
-                    <h5>
-                      <span>
-                        <Image
-                          className="sidebar-verified-icon"
-                          src={
-                            window.location.origin +
-                            "/assets/images/new-home/icon/eye.svg"
-                          }
-                        />
-                      </span>
-                      <span> </span>
-                      {userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users : 0}
-                    </h5>
-                  </div>
-                </div> */}
-                <div className="sidebar-total-count-info-box">
-                  <div className="sidebar-total-count-card">
-                    <h5>{userDetails.data.user.total_posts}</h5>
-                    <p>{t("posts")}</p>
-                  </div>
-                  <div className="sidebar-total-count-card">
-                    <h5>{userDetails.data.user.total_followers}</h5>
-                    <p>{t("fans")}</p>
-                  </div>
-                  <div className="sidebar-total-count-card">
-                    <h5>{userDetails.data.user.total_followings}</h5>
-                    <p>{t("following")}</p>
-                  </div>
-                </div>
-              </div>
-              {/* <div className="sidebar-links">
-                                <ul className="list-unstyled">
-                                    <Media as="li">
-                                        <Link to={"/edit-profile"}>
-                                            <span>
-                                                <Image
-                                                    className="sidebar-links-icon"
-                                                    src={
-                                                        window.location.origin + "/assets/images/new-home/video-call.png"
-                                                    }
-                                                />
-                                            </span>
-                                            {t("edit_profile")}
-                                        </Link>
-                                    </Media>
-                                    <Media as="li">
-                                        <Link to="#" onClick={handleShareClick}>
-                                            <span>
-                                                <Image
-                                                    className="sidebar-links-icon"
-                                                    src={
-                                                        window.location.origin + "/assets/images/new-home/share.png"
-                                                    }
-                                                />
-                                            </span>
-                                            {t("share")}
-                                        </Link>
-                                    </Media>
-                                    <Popover
-                                        id={popoverId}
-                                        open={open}
-                                        anchorEl={anchorEl}
-                                        onClose={handleClose}
-                                        anchorOrigin={{
-                                            vertical: "bottom",
-                                            horizontal: "center",
-                                        }}
-                                        transformOrigin={{
-                                            vertical: "top",
-                                            horizontal: "center",
-                                        }}
-                                    >
-                                        <Typography>
-                                            <div className="social-share-sec m-3">
-                                                <div className="text-center social-link">
-                                                    <div className="Demo__some-network">
-                                                        <EmailShareButton
-                                                            url={userDetails.data.share_link}
-                                                            subject={configuration.get(
-                                                                "configData.site_name"
-                                                            )}
-                                                            body={userDetails.data.share_message}
-                                                            className="Demo__some-network__share-button"
-                                                        >
-                                                            <EmailIcon size={32} round />
-                                                        </EmailShareButton>
-                                                    </div>
-                                                     <h6 className="social-desc">{t("email")}</h6> 
-                                                </div>
-                                                <div className="text-center social-link">
-                                                    <WhatsappShareButton
-                                                        url={userDetails.data.share_link}
-                                                        title={userDetails.data.share_message}
-                                                        separator=":: "
-                                                        className="Demo__some-network__share-button"
-                                                    >
-                                                        <WhatsappIcon size={32} round />
-                                                    </WhatsappShareButton>
-                                                    <h6 className="social-desc">{t("whatsapp")}</h6>
-                                                </div>
-                                                <div className="text-center social-link">
-                                                    <FacebookShareButton
-                                                        url={userDetails.data.share_link}
-                                                        quote={userDetails.data.share_message}
-                                                        className="Demo__some-network__share-button"
-                                                    >
-                                                        <FacebookIcon size={32} round />
-                                                    </FacebookShareButton>
-                                                    <h6 className="social-desc">{t("facebook")}</h6>
-                                                </div>
-                                                <div className="text-center social-link">
-                                                    <TwitterShareButton
-                                                        url={userDetails.data.share_link}
-                                                        title={userDetails.data.share_message}
-                                                        className="Demo__some-network__share-button"
-                                                    >
-                                                        <TwitterIcon size={32} round />
-                                                    </TwitterShareButton>
-                                                    <h6 className="social-desc">{t("twitter")}</h6>
-                                                </div>
-                                                <div className="text-center social-link">
-                                                    <RedditShareButton
-                                                        url={userDetails.data.share_link}
-                                                        title={userDetails.data.share_message}
-                                                        windowWidth={660}
-                                                        windowHeight={460}
-                                                        className="Demo__some-network__share-button"
-                                                    >
-                                                        <RedditIcon size={32} round />
-                                                    </RedditShareButton>
-                                                    <h6 className="social-desc">{t("reddit")}</h6>
-                                                </div>
-                                                <div className="text-center social-link">
-                                                    <TelegramShareButton
-                                                        url={userDetails.data.share_link}
-                                                        title={userDetails.data.share_message}
-                                                        windowWidth={660}
-                                                        windowHeight={460}
-                                                        className="Demo__some-network__share-button"
-                                                    >
-                                                        <TelegramIcon size={32} round />
-                                                    </TelegramShareButton>
-                                                    <h6 className="social-desc">{t("telegram")}</h6>
-                                                </div>
-                                                <div className="text-center social-link">
-                                                    <CopyToClipboard
-                                                        onCopy={onCopy}
-                                                        text={userDetails.data.share_link}
-                                                        windowWidth={660}
-                                                        windowHeight={460}
-                                                        className="Demo__some-network__share-button"
-                                                    >
-                                                        <button className="react-share__ShareButton Demo__some-network__share-button">
-                                                            <i className="fas fa-copy"></i>
-                                                        </button>
-                                                    </CopyToClipboard>
-                                                </div>
-                                            </div>
-                                        </Typography>
-                                    </Popover>
-                                    {userDetails.data.is_content_creator == 2 ? (
-                                        <Media as="li">
-                                            <Link to={"/dashboard"}>
-                                                <span>
-                                                    <Image
-                                                        className="sidebar-links-icon"
-                                                        src={
-                                                            window.location.origin + "/assets/images/new-home/message.png"
-                                                        }
-                                                    />
-                                                </span>
-                                                {t("dashboard")}
-                                            </Link>
-                                        </Media>)
-                                        : (
-                                            <Media as="li">
-                                                <Link to={"/become-a-content-creator"}>
-                                                    <span>
-                                                        <Image
-                                                            className="sidebar-links-icon"
-                                                            src={
-                                                                window.location.origin + "/assets/images/new-home/share.png"
-                                                            }
-                                                        />
-                                                    </span>
-                                                    {t("become_a_content_creator")}
-                                                </Link>
-                                            </Media>
-                                        )
-                                    }
-                                </ul>
-                            </div> */}
-              {userDetails.data.is_block_user === 0 ? (
-                <div className="sidebar-links">
-                  <ul className="list-unstyled">
-                    <Media as="li">
-                      <Link
-                        to="#"
-                        onClick={() => {
-                          if (localStorage.getItem("userId")) {
-                            setRequestVideoCall(true);
-                          } else {
-                            const notificationMessage =
-                              getErrorNotificationMessage(
-                                t("login_to_continue")
-                              );
-                            props.dispatch(
-                              createNotification(notificationMessage)
-                            );
-                          }
-                        }}
-                      >
-                        <span>
+            <Container>
+              <Row>
+                <Col lg={12}>
+                  <div className="new-home-page-box row">
+                    <div className="profile-container col-md-12 col-lg-8 col-xl-6 col-12">
+                      <div className="profile-intro">
+                        <div className="user-cover-img-sec">
                           <Image
-                            className="sidebar-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/video-call-1.svg"
-                            }
+                            className="profile-user-cover-img"
+                            src={userDetails.data.user.cover}
+                            alt={userDetails.data.user.name}
                           />
-                        </span>
-                        Video Call
-                      </Link>
-                    </Media>
-                    <Media as="li">
-                      <Link
-                        to="#"
-                        onClick={() => {
-                          if (localStorage.getItem("userId")) {
-                            setRequestAudioCall(true);
-                          } else {
-                            const notificationMessage =
-                              getErrorNotificationMessage(
-                                t("login_to_continue")
-                              );
-                            props.dispatch(
-                              createNotification(notificationMessage)
-                            );
-                          }
-                        }}
-                      >
-                        <span>
-                          <Image
-                            className="sidebar-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/audio-call-1.svg"
-                            }
-                          />
-                        </span>
-                        Voice Call
-                      </Link>
-                    </Media>
-                    <Media as="li">
-                      <Link
-                        to="#"
-                        onClick={() => {
-                          if (localStorage.getItem("userId")) {
-                            setSendTip(true);
-                          } else {
-                            const notificationMessage =
-                              getErrorNotificationMessage(
-                                t("login_to_continue")
-                              );
-                            props.dispatch(
-                              createNotification(notificationMessage)
-                            );
-                          }
-                        }}
-                      >
-                        <span>
-                          <Image
-                            className="sidebar-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/sent-tip-1.svg"
-                            }
-                          />
-                        </span>
-                        Tip Me
-                      </Link>
-                    </Media>
-                    <Media as="li">
-                      <Link
-                        to="#"
-                        onClick={(event) =>
-                          handleChatUser(event, userDetails.data.user.user_id)
-                        }
-                      >
-                        <span>
-                          <Image
-                            className="sidebar-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/message-1.svg"
-                            }
-                          />
-                        </span>
-                        Message
-                      </Link>
-                    </Media>
-                    <Media as="li">
-                      <Link to="#" onClick={handleShareClick}>
-                        <span>
-                          <Image
-                            className="sidebar-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/share-theme-1.svg"
-                            }
-                          />
-                        </span>
-                        {t("share")}
-                      </Link>
-                    </Media>
-                    <Popover
-                      id={popoverId}
-                      open={open}
-                      anchorEl={anchorEl}
-                      onClose={handleClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center",
-                      }}
-                    >
-                      <Typography>
-                        <div className="social-share-sec m-3">
-                          <div className="text-center social-link">
-                            <div className="Demo__some-network">
-                              <EmailShareButton
-                                url={userDetails.data.user.share_link}
-                                subject={configuration.get(
-                                  "configData.site_name"
-                                )}
-                                body={userDetails.data.user.share_message}
-                                className="Demo__some-network__share-button"
-                              >
-                                <EmailIcon size={32} round />
-                              </EmailShareButton>
+                          <div className="profile-user-cover-header">
+                            <div className="profile-user-cover-header-left">
+                              <Button variant="link" onClick={() => history.goBack()}>
+                                <div className="back-icon" style={{ color: '#fff' }}>
+                                  <i className="fas fa-chevron-left"></i>
+                                </div>
+                              </Button>
+                              <div className="profile-user-cover-header-title">
+                                <h3>{userDetails.data.user.name}</h3>
+                                <div className="profile-user-cover-header-title-info">
+                                  <span>
+                                    {userDetails.data.user.total_posts} {t("posts")} |
+                                  </span>
+                                  <span>
+                                    {userDetails.data.user.total_followers} {t("fans")} |
+                                  </span>
+                                  <span>
+                                    {userDetails.data.user.total_followings} {t("following")}
+                                  </span>
+                                </div>
+                              </div>
                             </div>
-                            {/* <h6 className="social-desc">{t("email")}</h6> */}
-                          </div>
-                          <div className="text-center social-link">
-                            <WhatsappShareButton
-                              url={userDetails.data.user.share_link}
-                              title={userDetails.data.user.share_message}
-                              separator=":: "
-                              className="Demo__some-network__share-button"
-                            >
-                              <WhatsappIcon size={32} round />
-                            </WhatsappShareButton>
-                            {/* <h6 className="social-desc">{t("whatsapp")}</h6> */}
-                          </div>
-                          <div className="text-center social-link">
-                            <FacebookShareButton
-                              url={userDetails.data.user.share_link}
-                              quote={userDetails.data.user.share_message}
-                              className="Demo__some-network__share-button"
-                            >
-                              <FacebookIcon size={32} round />
-                            </FacebookShareButton>
-                            {/* <h6 className="social-desc">{t("facebook")}</h6> */}
-                          </div>
-                          <div className="text-center social-link">
-                            <TwitterShareButton
-                              url={userDetails.data.user.share_link}
-                              title={userDetails.data.user.share_message}
-                              className="Demo__some-network__share-button"
-                            >
-                              <TwitterIcon size={32} round />
-                            </TwitterShareButton>
-                            {/* <h6 className="social-desc">{t("twitter")}</h6> */}
-                          </div>
-                          <div className="text-center social-link">
-                            <RedditShareButton
-                              url={userDetails.data.user.share_link}
-                              title={userDetails.data.user.share_message}
-                              windowWidth={660}
-                              windowHeight={460}
-                              className="Demo__some-network__share-button"
-                            >
-                              <RedditIcon size={32} round />
-                            </RedditShareButton>
-                            {/* <h6 className="social-desc">{t("reddit")}</h6> */}
-                          </div>
-                          <div className="text-center social-link">
-                            <TelegramShareButton
-                              url={userDetails.data.user.share_link}
-                              title={userDetails.data.user.share_message}
-                              windowWidth={660}
-                              windowHeight={460}
-                              className="Demo__some-network__share-button"
-                            >
-                              <TelegramIcon size={32} round />
-                            </TelegramShareButton>
-                            {/* <h6 className="social-desc">{t("telegram")}</h6> */}
-                          </div>
-                          <div className="text-center social-link">
-                            <CopyToClipboard
-                              onCopy={onCopy}
-                              text={userDetails.data.user.share_link}
-                              windowWidth={660}
-                              windowHeight={460}
-                              className="Demo__some-network__share-button"
-                            >
-                              <button className="react-share__ShareButton Demo__some-network__share-button primary-share-btn">
-                                <i className="fas fa-copy"></i>
-                              </button>
-                            </CopyToClipboard>
+                            <Dropdown className="feed-post-dropdown">
+                              <Dropdown.Toggle
+                                variant="success"
+                                id="dropdown-basic"
+                                className="feed-post-dropdown-btn"
+                              >
+                                {/* <Image
+                                  className="three-dots-icon"
+                                  src={
+                                    window.location.origin +
+                                    "/assets/images/icons/vertical-dots-white.svg"
+                                  }
+                                /> */}
+                                <i class="fas fa-ellipsis-v fa-2x" aria-hidden="true"></i>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <CopyToClipboard text={userDetails.data.user.share_link} onCopy={onCopy}>
+                                  <Media as="li">
+                                    <Link to="#" className="dropdown-a">
+                                      <i className="fas fa-copy" style={{ color: '#E34498' }}></i>
+                                      {" "}
+                                      {t("copy_link_to_profile")}
+                                    </Link>
+                                  </Media>
+                                </CopyToClipboard>
+                                <Media as="li" className="divider"></Media>
+                                <Media as="li">
+                                  <Link to="#" className="dropdown-a" onClick={handleShareClick}>
+                                    <span>
+                                      <Image
+                                        className="sidebar-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/share-theme.svg"
+                                        }
+                                      />
+                                    </span>
+                                    &nbsp;{t("share")}
+                                  </Link>
+                                </Media>
+                                {/* <Media as="li">
+                                  <Link
+                                    to="#"
+                                    // onClick={(event) => handleReportPost(event, post)}
+                                    onClick={() => setReportMode(true)}
+                                    className="dropdown-a"
+                                  >
+                                    {t("report")}
+                                  </Link>
+                                </Media>
+                                <Media as="li">
+                                  <Link
+                                    to="#"
+                                    onClick={(event) => handleBlockUser(event, post)}
+                                    className="dropdown-a"
+                                  >
+                                    {" "}
+                                    {t("add_to_blocklist_para")}
+                                  </Link>
+                                </Media> */}
+                                {/* <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+                              </Dropdown.Menu>
+                            </Dropdown>
                           </div>
                         </div>
-                      </Typography>
-                    </Popover>
-                  </ul>
-                </div>
-              ) : null}
-              {userDetails.data.youtube_link ||
-                userDetails.data.pinterest_link ||
-                userDetails.data.linkedin_link ||
-                userDetails.data.snapchat_link ||
-                userDetails.data.twitter_link ||
-                userDetails.data.instagram_link ||
-                userDetails.data.amazon_wishlist ||
-                userDetails.data.facebook_link ||
-                userDetails.data.twitch_link ||
-                userDetails.data.website ? (
-                <div className="sidebar-social-links">
-                  <ul className="list-unstyled">
-                    {userDetails.data.youtube_link && (
-                      <Media as="li">
-                        <a href={userDetails.data.youtube_link} target="_blank">
+                        <div className="user-avatar-container">
                           <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/you-tube.png"
-                            }
+                            className="user-avatar"
+                            src={userDetails.data.user.picture}
+                            alt={userDetails.data.user.name}
                           />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.pinterest_link && (
-                      <Media as="li">
-                        <a
-                          href={userDetails.data.pinterest_link}
-                          target="_blank"
-                        >
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/pintrest.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.linkedin_link && (
-                      <Media as="li">
-                        <a
-                          href={userDetails.data.linkedin_link}
-                          target="_blank"
-                        >
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/linked-in.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.snapchat_link && (
-                      <Media as="li">
-                        <a
-                          href={userDetails.data.snapchat_link}
-                          target="_blank"
-                        >
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/snap-chat.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.twitter_link && (
-                      <Media as="li">
-                        <a href={userDetails.data.twitter_link} target="_blank">
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/twitter.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.instagram_link && (
-                      <Media as="li">
-                        <a
-                          href={userDetails.data.instagram_link}
-                          target="_blank"
-                        >
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/instagram.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.amazon_wishlist && (
-                      <Media as="li">
-                        <a
-                          href={userDetails.data.amazon_wishlist}
-                          target="_blank"
-                        >
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/amazon.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.facebook_link && (
-                      <Media as="li">
-                        <a
-                          href={userDetails.data.facebook_link}
-                          target="_blank"
-                        >
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/facebook.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.twitch_link && (
-                      <Media as="li">
-                        <a href={userDetails.data.twitch_link} target="_blank">
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/twitch.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                    {userDetails.data.website && (
-                      <Media as="li">
-                        <a href={userDetails.data.website} target="_blank">
-                          <Image
-                            className="sidebar-social-links-icon"
-                            src={
-                              window.location.origin +
-                              "/assets/images/new-home/icon/website.png"
-                            }
-                          />
-                        </a>
-                      </Media>
-                    )}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="new-home-main-wrapper">
-              <div className="user-cover-img-sec">
-                <Image
-                  className="user-cover-img"
-                  src={userDetails.data.user.cover}
-                  alt={userDetails.data.user.name}
-                />
-                <div className="website-hide-sec">
-                  {userDetails.data.user.featured_story ? (
-                    <a
-                      data-fancybox="gallery"
-                      href={userDetails.data.user.featured_story}
-                    >
-                      <Image
-                        src={userDetails.data.user.picture}
-                        alt={userDetails.data.user.name}
-                        className="single-profile-user-img border-red"
-                      />
-                    </a>
-                  ) : (
-                    <Image
-                      src={userDetails.data.user.picture}
-                      alt={userDetails.data.user.name}
-                      className="single-profile-user-img"
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="user-right-content-sec">
-                <div className="user-right-info">
-                  <div className="website-hide-sec">
-                    <div className="mobile-header-sec">
-                      <h4>
-                        {userDetails.data.user.name}
-                        <span>
-                          {userDetails.data.user.is_verified_badge == 1 && (
-                            <Image
-                              className="sidebar-verified-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/verified-icon.png"
-                              }
-                            />
+                          {userDetails.data.user.is_user_live === 1 && (
+                            <Link
+                              to={`/join/${userDetails.data.user.ongoing_live_video.live_video_unique_id}`}
+                              className="sidebar-live-btn"
+                            >
+                              Live
+                            </Link>
                           )}
-                        </span>
-                      </h4>
-                      <Link to="#" className="sidebar-user-name">
-                        {userDetails.data.user.email}
-                      </Link>
-                      <div className="sidebar-total-count-info-box">
-                        {/* <div className="sidebar-total-count-media-card">
-                          <h5>
-                            <span>
-                              <Image
-                                className="sidebar-verified-icon"
-                                src={
-                                  window.location.origin +
-                                  "/assets/images/new-home/icon/image-post-1.svg"
-                                }
-                              />
-                            </span>
-                            <span> </span>
-                            {userDetails.data.total_images ? userDetails.data.total_images : 0}
-                          </h5>
+                          {userDetails.data.user.is_online_status === 1 &&
+                            userDetails.data.user.is_user_online === 1 && (
+                              <div className="dot-circle-online"></div>
+                            )}
                         </div>
-
-                        <div className="sidebar-total-count-media-card">
-                          <h5>
+                        <div className="profile-description">
+                          <h3>
+                            {userDetails.data.user.name}
                             <span>
-                              <Image
-                                className="sidebar-verified-icon"
-                                src={
-                                  window.location.origin +
-                                  "/assets/images/new-home/icon/video-post.svg"
-                                }
-                              />
+                              {userDetails.data.user.is_verified_badge == 1 && (
+                                <Image
+                                  className="sidebar-verified-icon"
+                                  src={
+                                    window.location.origin +
+                                    "/assets/images/new-home/verified-icon.png"
+                                  }
+                                />
+                              )}
                             </span>
-                            <span> </span>
-                            {userDetails.data.total_videos ? userDetails.data.total_videos : 0}
-                          </h5>
-                        </div> */}
-
-                        {/* <div className="sidebar-total-count-media-card">
-                          <h5>
-                            <span>
-                              <Image
-                                className="sidebar-verified-icon"
-                                src={
-                                  window.location.origin +
-                                  "/assets/images/new-home/icon/eye.svg"
+                          </h3>
+                          <Link to="#" className="sidebar-user-name">
+                            @{userDetails.data.user.username}
+                          </Link>
+                          <div className="profile-description-content" style={{ marginTop: 10 }}>
+                            {userDetails.data.user.about_formatted ?
+                              <p>
+                                {/* {userDetails.data.user.about_formatted}
+                              <a href="#">Read More</a> */}
+                                {isReadMore ? userDetails.data.user.about_formatted.slice(0, 300) : userDetails.data.user.about_formatted}
+                                {userDetails.data.user.about_formatted.length > 150 &&
+                                  <span onClick={toggleReadMore} style={{ color: '#E54296', fontSize: '14px', cursor: 'pointer' }}>
+                                    {isReadMore ? '...read more' : ' ...show less'}
+                                  </span>
                                 }
-                              />
-                            </span>
-                            <span> </span>
-                            {userDetails.data.user.total_fav_users ? userDetails.data.user.total_fav_users : 0}
-                          </h5>
-                        </div> */}
-                      </div>
-                      <div className="sidebar-total-count-info-box">
-                        <div className="sidebar-total-count-card">
-                          <h5>{userDetails.data.user.total_posts}</h5>
-                          <p>{t("posts")}</p>
-                        </div>
-                        <div className="sidebar-total-count-card">
-                          <h5>{userDetails.data.user.total_followers}</h5>
-                          <p>{t("fans")}</p>
-                        </div>
-                        <div className="sidebar-total-count-card">
-                          <h5>{userDetails.data.user.total_followings}</h5>
-                          <p>{t("following")}</p>
+                              </p>
+                              :
+                              null
+                            }
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="user-info-desc">
-                    {userDetails.data.user.about_formatted ?
-                      <p>
-                        {/* {userDetails.data.user.about_formatted}
-                      <a href="#">Read More</a> */}
-                        {isReadMore ? userDetails.data.user.about_formatted.slice(0, 300) : userDetails.data.user.about_formatted}
-                        {userDetails.data.user.about_formatted.length > 150 &&
-                          <span onClick={toggleReadMore} style={{ color: '#E54296', fontSize: '14px', cursor: 'pointer' }}>
-                            {isReadMore ? '...read more' : ' ...show less'}
-                          </span>
-                        }
-                      </p>
-                      :
-                      null
-                    }
-                  </div>
-                  <div className="user-info-list">
-                    <ul className="list-unstyled">
-                      {userDetails.data.user.selected_category &&
-                        userDetails.data.user.selected_category.name && (
-                          <Media as="li">
-                            <Link to="#">
-                              <Image
-                                className="user-info-icon"
-                                src={
-                                  window.location.origin +
-                                  "/assets/images/new-home/icon/fashion.svg"
-                                }
-                              />
-                              <span>
-                                {userDetails.data.user.selected_category.name}
-                              </span>
-                            </Link>
-                          </Media>
-                        )}
-                      {userDetails.data.user.date_of_birth && (
-                        <Media as="li">
-                          <Link to="#">
-                            <Image
-                              className="user-info-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/date-icon.svg"
-                              }
-                            />
-                            <span>{userDetails.data.user.date_of_birth}</span>
-                          </Link>
-                        </Media>
-                      )}
-                      {userDetails.data.user.gender &&
-                        userDetails.data.user.gender != "rather-not-select" && (
-                          <Media as="li">
-                            <Link to="#">
-                              <Image
-                                className="user-info-icon"
-                                src={
-                                  window.location.origin +
-                                  "/assets/images/new-home/icon/gender.svg"
-                                }
-                              />
-                              <span>{userDetails.data.user.gender}</span>
-                            </Link>
-                          </Media>
-                        )}
-                      {userDetails.data.user.eyes_color_formatted && (
-                        <Media as="li">
-                          <Link to="#">
-                            <Image
-                              className="user-info-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/eye.svg"
-                              }
-                            />
-                            <span>
-                              {userDetails.data.user.eyes_color_formatted}
-                            </span>
-                          </Link>
-                        </Media>
-                      )}
-                      {userDetails.data.user.height > 0 && (
-                        <Media as="li">
-                          <Link to="#">
-                            <Image
-                              className="user-info-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/scale.svg"
-                              }
-                            />
-                            <span>
-                              {userDetails.data.user.height_formatted}
-                            </span>
-                          </Link>
-                        </Media>
-                      )}
-                      {userDetails.data.user.weight > 0 && (
-                        <Media as="li">
-                          <Link to="#">
-                            <Image
-                              className="user-info-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/weight.svg"
-                              }
-                            />
-                            <span>
-                              {userDetails.data.user.weight_formatted}
-                            </span>
-                          </Link>
-                        </Media>
-                      )}
-                      {userDetails.data.user.address ? (
-                        <Media as="li">
-                          <Link to="#">
-                            <Image
-                              className="user-info-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-settings/map-marker-icon.svg"
-                              }
-                            />
-                            <span>{userDetails.data.user.address}</span>
-                          </Link>
-                        </Media>
-                      ) : null}
-                    </ul>
-                  </div>
-                </div>
-                {userDetails.data.is_block_user == 0 ? (
-                  <div className="user-subscription-plans-details">
-                    <h3>Subscription Plans</h3>
-                    {userDetails.data.payment_info.is_user_needs_pay == 1 &&
-                      userDetails.data.payment_info.unsubscribe_btn_status ==
-                      0 ? (
-                      userDetails.data.payment_info.is_free_account == 0 ? (
-                        <div className="user-subscription-btn-sec">
-                          <div
-                            className="subscription-outline-btn"
-                            onClick={(event) =>
-                              subscriptionPayment(
-                                event,
-                                "months",
-                                userDetails.data.payment_info.subscription_info
-                                  .monthly_amount,
-                                userDetails.data.payment_info.subscription_info
-                                  .monthly_amount_formatted
-                              )
-                            }
-                          >
-                            {
-                              userDetails.data.payment_info.subscription_info
-                                .monthly_amount_formatted
-                            }{" "}
-                            /Month
-                          </div>
-                          <div
-                            className="subscription-btn1"
-                            onClick={(event) =>
-                              subscriptionPayment(
-                                event,
-                                "years",
-                                userDetails.data.payment_info.subscription_info
-                                  .yearly_amount,
-                                userDetails.data.payment_info.subscription_info
-                                  .yearly_amount_formatted
-                              )
-                            }
-                          >
-                            {
-                              userDetails.data.payment_info.subscription_info
-                                .yearly_amount_formatted
-                            }{" "}
-                            /Year
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="user-subscription-btn-sec">
-                          <div
-                            className="subscription-btn1"
-                            onClick={(event) => {
-                              if (localStorage.getItem("userId")) {
-                                props.dispatch(
-                                  followUserStart({
-                                    user_id: userDetails.data.user.user_id
-                                  })
-                                );
-                              } else {
-                                const notificationMessage =
-                                  getErrorNotificationMessage(
-                                    t("login_to_continue")
-                                  );
-                                props.dispatch(
-                                  createNotification(notificationMessage)
-                                );
-                              }
-                            }}
-                          >
-                            Subscribe For Free
-                          </div>
-                        </div>
-                      )
-                    ) : null}
-
-                    {userDetails.data.payment_info.unsubscribe_btn_status ==
-                      1 && (
-                        <>
-                          <div className="user-subscription-btn-sec">
-                            <div
-                              className="subscription-btn1"
-                              onClick={() => handleUnfollowModalShow()}
-                            >
-                              {t("unfollow")}
-                            </div>
-                          </div>
-                          <Modal
-                            show={showUnfollow}
-                            onHide={handleUnfollowModalClose}
-                            backdrop="static"
-                            keyboard={false}
-                            centered
-                            className={`${localStorage.getItem("theme") !== "" &&
-                              localStorage.getItem("theme") !== null &&
-                              localStorage.getItem("theme") !== undefined &&
-                              localStorage.getItem("theme") === "dark"
-                              ? "dark-theme-modal"
-                              : ""
-                              }
-                            `}
-                          >
-                            <Modal.Header closeButton>
-                              <Modal.Title>{t("unsubscribe")}</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                              {t("cancel_subscription_conformation")}
-                            </Modal.Body>
-                            <Modal.Footer>
-                              <Button
-                                variant="secondary"
-                                size="lg"
-                                onClick={handleUnfollowModalClose}
-                              >
-                                {t("close")}
-                              </Button>
-                              <Button
-                                variant="primary"
-                                size="lg"
-                                onClick={(event) =>
-                                  handleUnfollow(
-                                    event,
-                                    userDetails.data.user.user_id
-                                  )
-                                }
-                              >
-                                {t("yes")}
-                              </Button>
-                            </Modal.Footer>
-                          </Modal>
-                        </>
-                      )}
-                  </div>
-                ) : (
-                  <div className="user-subscription-plans-details">
-                    <div className="user-subscription-btn-sec">
-                      <div
-                        className="subscription-btn1"
-                        onClick={(event) =>
-                          handleBlockUser(event, userDetails.data.user.user_id)
-                        }
-                      >
-                        {t("unblock_the_user")}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="mobile-display">
-                {userDetails.data.is_block_user === 0 ? (
-                  <div className="sidebar-links">
-                    <ul className="list-unstyled">
-                      <Media as="li">
-                        <Link
-                          to="#"
-                          onClick={() => {
-                            if (localStorage.getItem("userId")) {
-                              setRequestVideoCall(true);
-                            } else {
-                              const notificationMessage =
-                                getErrorNotificationMessage(
-                                  t("login_to_continue")
-                                );
-                              props.dispatch(
-                                createNotification(notificationMessage)
-                              );
-                            }
-                          }}
-                        >
-                          <span>
-                            <Image
-                              className="sidebar-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/video-call.svg"
-                              }
-                            />
-                          </span>
-                          Video Call
-                        </Link>
-                      </Media>
-                      <Media as="li">
-                        <Link
-                          to="#"
-                          onClick={() => {
-                            if (localStorage.getItem("userId")) {
-                              setRequestAudioCall(true);
-                            } else {
-                              const notificationMessage =
-                                getErrorNotificationMessage(
-                                  t("login_to_continue")
-                                );
-                              props.dispatch(
-                                createNotification(notificationMessage)
-                              );
-                            }
-                          }}
-                        >
-                          <span>
-                            <Image
-                              className="sidebar-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/audio-call.svg"
-                              }
-                            />
-                          </span>
-                          Voice Call
-                        </Link>
-                      </Media>
-                      <Media as="li">
-                        <Link
-                          to="#"
-                          onClick={() => {
-                            if (localStorage.getItem("userId")) {
-                              setSendTip(true);
-                            } else {
-                              const notificationMessage =
-                                getErrorNotificationMessage(
-                                  t("login_to_continue")
-                                );
-                              props.dispatch(
-                                createNotification(notificationMessage)
-                              );
-                            }
-                          }}
-                        >
-                          <span>
-                            <Image
-                              className="sidebar-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/sent-tip.svg"
-                              }
-                            />
-                          </span>
-                          Tip Me
-                        </Link>
-                      </Media>
-                      <Media as="li">
-                        <Link to="#" onClick={handleShareClick}>
-                          <span>
-                            <Image
-                              className="sidebar-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/share-theme.svg"
-                              }
-                            />
-                          </span>
-                          {t("share")}
-                        </Link>
-                      </Media>
-                      <Media as="li">
-                        <Link
-                          to="#"
-                          onClick={(event) =>
-                            handleChatUser(event, userDetails.data.user.user_id)
-                          }
-                        >
-                          <span>
-                            <Image
-                              className="sidebar-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/message.svg"
-                              }
-                            />
-                          </span>
-                          Message
-                        </Link>
-                      </Media>
-                    </ul>
-                  </div>
-                ) : null}
-                {userDetails.data.youtube_link ||
-                  userDetails.data.pinterest_link ||
-                  userDetails.data.linkedin_link ||
-                  userDetails.data.snapchat_link ||
-                  userDetails.data.twitter_link ||
-                  userDetails.data.instagram_link ||
-                  userDetails.data.amazon_wishlist ||
-                  userDetails.data.facebook_link ||
-                  userDetails.data.twitch_link ||
-                  userDetails.data.website ? (
-                  <div className="sidebar-social-links">
-                    <ul className="list-unstyled">
-                      {userDetails.data.youtube_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.youtube_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/you-tube.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.pinterest_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.pinterest_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/pintrest.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.linkedin_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.linkedin_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/linked-in.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.snapchat_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.snapchat_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/snap-chat.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.twitter_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.twitter_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/twitter.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.instagram_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.instagram_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/instagram.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.amazon_wishlist && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.amazon_wishlist}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/amazon.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.facebook_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.facebook_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/facebook.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.twitch_link && (
-                        <Media as="li">
-                          <a
-                            href={userDetails.data.twitch_link}
-                            target="_blank"
-                          >
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/twitch.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                      {userDetails.data.website && (
-                        <Media as="li">
-                          <a href={userDetails.data.website} target="_blank">
-                            <Image
-                              className="sidebar-social-links-icon"
-                              src={
-                                window.location.origin +
-                                "/assets/images/new-home/icon/website.png"
-                              }
-                            />
-                          </a>
-                        </Media>
-                      )}
-                    </ul>
-                  </div>
-                ) : null}
-              </div>
-              {userDetails.data.is_block_user == 0 && (
-                <div className="profile-tab-sec">
-                  <Tab.Container id="left-tabs-example" defaultActiveKey="all">
-                    <Row>
-                      <Col sm={12}>
-                        <Nav
-                          variant="pills"
-                          className={
-                            userDetails.data.user.is_content_creator == 2
-                              ? "grid-five-col"
-                              : "grid-four-col"
-                          }
-                        >
-                          <Nav.Item>
-                            <Nav.Link
-                              eventKey="all"
-                              onClick={(event) =>
-                                setActiveSection(event, "all")
-                              }
-                            >
-                              <span>
-                                <Image
-                                  className="profile-post-tab-icon"
-                                  src={
-                                    window.location.origin +
-                                    "/assets/images/new-home/icon/all-post-1.svg"
-                                  }
-                                />
-                              </span>
-                              <span className="resp-display-none">All</span>
-                            </Nav.Link>
-                          </Nav.Item>
-                          <Nav.Item>
-                            <Nav.Link
-                              eventKey="image"
-                              onClick={(event) =>
-                                setActiveSection(event, "image")
-                              }
-                            >
-                              <span>
-                                <Image
-                                  className="profile-post-tab-icon"
-                                  src={
-                                    window.location.origin +
-                                    "/assets/images/new-home/icon/image-post-1.svg"
-                                  }
-                                />
-                              </span>
-                              <span style={{ minWidth: 82 }}>{imageCount} Images</span>
-                            </Nav.Link>
-                          </Nav.Item>
-                          <Nav.Item>
-                            <Nav.Link
-                              eventKey="video"
-                              onClick={(event) =>
-                                setActiveSection(event, "video")
-                              }
-                            >
-                              <span>
-                                <Image
-                                  className="profile-post-tab-icon"
-                                  src={
-                                    window.location.origin +
-                                    "/assets/images/new-home/icon/video-post-1.svg"
-                                  }
-                                />
-                              </span>
-                              <span style={{ minWidth: 82 }}> {videoCount} Videos</span>
-                            </Nav.Link>
-                          </Nav.Item>
-                          {/* <Nav.Item>
-                            <Nav.Link
-                              eventKey="audio"
-                              onClick={(event) =>
-                                setActiveSection(event, "audio")
-                              }
-                            >
-                              <span>
-                                <Image
-                                  className="profile-post-tab-icon"
-                                  src={
-                                    window.location.origin +
-                                    "/assets/images/new-home/icon/audio-post-1.svg"
-                                  }
-                                />
-                              </span>
-                              <span className="resp-display-none">Musics</span>
-                            </Nav.Link>
-                          </Nav.Item> */}
-                          {/* {userDetails.data.user.is_content_creator == 2 && (
-                            <Nav.Item>
-                              <Nav.Link
-                                eventKey="product"
-                                onClick={(event) =>
-                                  setActiveSection(event, "product")
-                                }
-                              >
-                                <span>
-                                  <Image
-                                    className="profile-post-tab-icon"
-                                    src={
-                                      window.location.origin +
-                                      "/assets/images/new-home/icon/store-icon-1.svg"
+                      <div className="profile-subscription">
+                        {userDetails.data.is_block_user == 0 ? (
+                          <div className="user-subscription-plans-details">
+                            <h3>Subscription Plans</h3>
+                            {userDetails.data.payment_info.is_user_needs_pay == 1 &&
+                              userDetails.data.payment_info.unsubscribe_btn_status ==
+                              0 ? (
+                              userDetails.data.payment_info.is_free_account == 0 ? (
+                                <div className="user-subscription-btn-sec">
+                                  <div
+                                    className="subscription-outline-btn"
+                                    onClick={(event) =>
+                                      subscriptionPayment(
+                                        event,
+                                        "months",
+                                        userDetails.data.payment_info.subscription_info
+                                          .monthly_amount,
+                                        userDetails.data.payment_info.subscription_info
+                                          .monthly_amount_formatted
+                                      )
                                     }
-                                  />
-                                </span>
-                                <span className="resp-display-none">Store</span>
-                              </Nav.Link>
-                            </Nav.Item>
-                          )} */}
-                        </Nav>
-                      </Col>
+                                  >
+                                    {
+                                      userDetails.data.payment_info.subscription_info
+                                        .monthly_amount_formatted
+                                    }{" "}
+                                    /Month
+                                  </div>
+                                  <div
+                                    className="subscription-btn1"
+                                    onClick={(event) =>
+                                      subscriptionPayment(
+                                        event,
+                                        "years",
+                                        userDetails.data.payment_info.subscription_info
+                                          .yearly_amount,
+                                        userDetails.data.payment_info.subscription_info
+                                          .yearly_amount_formatted
+                                      )
+                                    }
+                                  >
+                                    {
+                                      userDetails.data.payment_info.subscription_info
+                                        .yearly_amount_formatted
+                                    }{" "}
+                                    /Year
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="user-subscription-btn-sec">
+                                  <div
+                                    className="subscription-btn1"
+                                    onClick={(event) => {
+                                      if (localStorage.getItem("userId")) {
+                                        props.dispatch(
+                                          followUserStart({
+                                            user_id: userDetails.data.user.user_id
+                                          })
+                                        );
+                                      } else {
+                                        const notificationMessage =
+                                          getErrorNotificationMessage(
+                                            t("login_to_continue")
+                                          );
+                                        props.dispatch(
+                                          createNotification(notificationMessage)
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    Subscribe For Free
+                                  </div>
+                                </div>
+                              )
+                            ) : null}
 
-                      {userDetails.data.payment_info.is_user_needs_pay == 1 && userDetails.data.payment_info.unsubscribe_btn_status === 0 && (
-                        userDetails.data.payment_info.is_free_account === 0 ? (
-                          <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
-                            <div
-                              className="subscription-btn1"
-                              onClick={(event) =>
-                                subscriptionPayment(
-                                  event,
-                                  "months",
-                                  userDetails.data.payment_info.subscription_info
-                                    .monthly_amount,
-                                  userDetails.data.payment_info.subscription_info
-                                    .monthly_amount_formatted
-                                )
-                              }
-                            >
-                              SUBSCRIBE TO SEE USER'S POSTS
+                            {userDetails.data.payment_info.unsubscribe_btn_status ==
+                              1 && (
+                                <>
+                                  <div className="user-subscription-btn-sec">
+                                    <div
+                                      className="subscription-btn1"
+                                      onClick={() => handleUnfollowModalShow()}
+                                    >
+                                      {t("unfollow")}
+                                    </div>
+                                  </div>
+                                  <Modal
+                                    show={showUnfollow}
+                                    onHide={handleUnfollowModalClose}
+                                    backdrop="static"
+                                    keyboard={false}
+                                    centered
+                                    className={`${localStorage.getItem("theme") !== "" &&
+                                      localStorage.getItem("theme") !== null &&
+                                      localStorage.getItem("theme") !== undefined &&
+                                      localStorage.getItem("theme") === "dark"
+                                      ? "dark-theme-modal"
+                                      : ""
+                                      }
+                                    `}
+                                  >
+                                    <Modal.Header closeButton>
+                                      <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                      {t("cancel_subscription_conformation")}
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                      <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        onClick={handleUnfollowModalClose}
+                                      >
+                                        {t("close")}
+                                      </Button>
+                                      <Button
+                                        variant="primary"
+                                        size="lg"
+                                        onClick={(event) =>
+                                          handleUnfollow(
+                                            event,
+                                            userDetails.data.user.user_id
+                                          )
+                                        }
+                                      >
+                                        {t("yes")}
+                                      </Button>
+                                    </Modal.Footer>
+                                  </Modal>
+                                </>
+                              )}
+                          </div>
+                        ) : (
+                          <div className="user-subscription-plans-details">
+                            <div className="user-subscription-btn-sec">
+                              <div
+                                className="subscription-btn1"
+                                onClick={(event) =>
+                                  handleBlockUser(event, userDetails.data.user.user_id)
+                                }
+                              >
+                                {t("unblock_the_user")}
+                              </div>
                             </div>
-                          </div>) : ""
-                        // ) : (
-                        //   <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
-                        //     <div
-                        //       className="subscription-btn"
-                        //       onClick={(event) => {
-                        //         if (localStorage.getItem("userId")) {
-                        //           props.dispatch(
-                        //             followUserStart({
-                        //               user_id: userDetails.data.user.user_id
-                        //             })
-                        //           );
-                        //         } else {
-                        //           const notificationMessage =
-                        //             getErrorNotificationMessage(
-                        //               t("login_to_continue")
-                        //             );
-                        //           props.dispatch(
-                        //             createNotification(notificationMessage)
-                        //           );
-                        //         }
-                        //       }}
-                        //     >
-                        //       SUBSCRIBE TO SEE USER'S POSTS
-                        //     </div>
-                        //   </div>) : ""
-                        )
-                      }
-                      {props.userPosts.data.posts.map((post) => (
-                        <>
-                          {
-                            post?.user.user_account_type_formatted === "Premium" ? (
-                              <>
-                                {userDetails.data.payment_info.unsubscribe_btn_status === 1 ? (
-                                  <Col md={12}>
-                                    {activeSec === "product" ? (
-                                      <Col md={12}>
-                                        <ModelProfileStoreSec
-                                          activeSec={activeSec}
-                                          setActiveSec={setActiveSec}
-                                          products={props.products}
-                                          otherUserUniquId={props.match.params.username}
+                          </div>
+                        )}
+                      </div>
+                      <div className="profile-buttons">
+                        {userDetails.data.is_block_user === 0 ? (
+                          <div className="sidebar-links">
+                            <ul className="list-unstyled">
+                              <Media as="li">
+                                <Link
+                                  to="#"
+                                  onClick={() => {
+                                    if (localStorage.getItem("userId")) {
+                                      setRequestVideoCall(true);
+                                    } else {
+                                      const notificationMessage =
+                                        getErrorNotificationMessage(
+                                          t("login_to_continue")
+                                        );
+                                      props.dispatch(
+                                        createNotification(notificationMessage)
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <span>
+                                    <Image
+                                      className="sidebar-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/video-call.svg"
+                                      }
+                                    />
+                                  </span>
+                                  Video Call
+                                </Link>
+                              </Media>
+                              <Media as="li">
+                                <Link
+                                  to="#"
+                                  onClick={() => {
+                                    if (localStorage.getItem("userId")) {
+                                      setRequestAudioCall(true);
+                                    } else {
+                                      const notificationMessage =
+                                        getErrorNotificationMessage(
+                                          t("login_to_continue")
+                                        );
+                                      props.dispatch(
+                                        createNotification(notificationMessage)
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <span>
+                                    <Image
+                                      className="sidebar-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/audio-call.svg"
+                                      }
+                                    />
+                                  </span>
+                                  Voice Call
+                                </Link>
+                              </Media>
+                              <Media as="li">
+                                <Link
+                                  to="#"
+                                  onClick={() => {
+                                    if (localStorage.getItem("userId")) {
+                                      setSendTip(true);
+                                    } else {
+                                      const notificationMessage =
+                                        getErrorNotificationMessage(
+                                          t("login_to_continue")
+                                        );
+                                      props.dispatch(
+                                        createNotification(notificationMessage)
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <span>
+                                    <Image
+                                      className="sidebar-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/sent-tip.svg"
+                                      }
+                                    />
+                                  </span>
+                                  Tip Me
+                                </Link>
+                              </Media>
+                              <Media as="li">
+                                <Link
+                                  to="#"
+                                  onClick={(event) =>
+                                    handleChatUser(event, userDetails.data.user.user_id)
+                                  }
+                                >
+                                  <span>
+                                    <Image
+                                      className="sidebar-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/message.svg"
+                                      }
+                                    />
+                                  </span>
+                                  Message
+                                </Link>
+                              </Media>
+                            </ul>
+                          </div>
+                        ) : null}
+                        {userDetails.data.youtube_link ||
+                          userDetails.data.pinterest_link ||
+                          userDetails.data.linkedin_link ||
+                          userDetails.data.snapchat_link ||
+                          userDetails.data.twitter_link ||
+                          userDetails.data.instagram_link ||
+                          userDetails.data.amazon_wishlist ||
+                          userDetails.data.facebook_link ||
+                          userDetails.data.twitch_link ||
+                          userDetails.data.website ? (
+                          <div className="sidebar-social-links">
+                            <ul className="list-unstyled">
+                              {userDetails.data.youtube_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.youtube_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/you-tube.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.pinterest_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.pinterest_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/pintrest.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.linkedin_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.linkedin_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/linked-in.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.snapchat_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.snapchat_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/snap-chat.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.twitter_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.twitter_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/twitter.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.instagram_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.instagram_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/instagram.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.amazon_wishlist && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.amazon_wishlist}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/amazon.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.facebook_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.facebook_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/facebook.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.twitch_link && (
+                                <Media as="li">
+                                  <a
+                                    href={userDetails.data.twitch_link}
+                                    target="_blank"
+                                  >
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/twitch.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                              {userDetails.data.website && (
+                                <Media as="li">
+                                  <a href={userDetails.data.website} target="_blank">
+                                    <Image
+                                      className="sidebar-social-links-icon"
+                                      src={
+                                        window.location.origin +
+                                        "/assets/images/new-home/icon/website.png"
+                                      }
+                                    />
+                                  </a>
+                                </Media>
+                              )}
+                            </ul>
+                          </div>
+                        ) : null}
+                      </div>
+                      {userDetails.data.is_block_user == 0 && (
+                        <div className="profile-tab-sec" style={{ padding: 0 }}>
+                          <Tab.Container id="left-tabs-example" defaultActiveKey="all">
+                            <Row>
+                              <Col lg={12}>
+                                <Nav
+                                  variant="pills"
+                                  className={
+                                    userDetails.data.user.is_content_creator == 2
+                                      ? "grid-five-col"
+                                      : "grid-four-col"
+                                  }
+                                >
+                                  <Nav.Item>
+                                    <Nav.Link
+                                      eventKey="all"
+                                      onClick={(event) =>
+                                        setActiveSection(event, "all")
+                                      }
+                                    >
+                                      <span>
+                                        <Image
+                                          className="profile-post-tab-icon"
+                                          src={
+                                            window.location.origin +
+                                            "/assets/images/new-home/icon/all-post-1.svg"
+                                          }
                                         />
-                                      </Col>
-                                    ) : (
-                                      <Col sm={12}>
-                                        {props.userPosts.loading ? (
-                                          <div className="profile-all-post-box">
-                                            {[...Array(8)].map(() => (
-                                              <Skeleton className="profile-post-card-loader" />
+                                      </span>
+                                      <span className="profile-tab-counter">
+                                        <span>{allCount}</span> <span className="profile-tab-counter-label">POSTS</span>
+                                      </span>
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item>
+                                    <Nav.Link
+                                      eventKey="image"
+                                      onClick={(event) =>
+                                        setActiveSection(event, "image")
+                                      }
+                                    >
+                                      <span>
+                                        <Image
+                                          className="profile-post-tab-icon"
+                                          src={
+                                            window.location.origin +
+                                            "/assets/images/new-home/icon/image-post-1.svg"
+                                          }
+                                        />
+                                      </span>
+                                      <span className="profile-tab-counter">
+                                        <span>{imageCount}</span> <span className="profile-tab-counter-label">IMAGES</span>
+                                      </span>
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item>
+                                    <Nav.Link
+                                      eventKey="video"
+                                      onClick={(event) =>
+                                        setActiveSection(event, "video")
+                                      }
+                                    >
+                                      <span>
+                                        <Image
+                                          className="profile-post-tab-icon"
+                                          src={
+                                            window.location.origin +
+                                            "/assets/images/new-home/icon/video-post-1.svg"
+                                          }
+                                        />
+                                      </span>
+                                      <span className="profile-tab-counter">
+                                        <span>{videoCount}</span> <span className="profile-tab-counter-label">VIDEOS</span>
+                                      </span>
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                </Nav>
+                              </Col>
+
+                              {userDetails.data.payment_info.is_user_needs_pay == 1 && 
+                              userDetails.data.payment_info.unsubscribe_btn_status === 0 && 
+                              userDetails.data.payment_info.is_free_account === 0 ? (
+                                <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
+                                  <div
+                                    className="subscription-btn1"
+                                    onClick={(event) =>
+                                      subscriptionPayment(
+                                        event,
+                                        "months",
+                                        userDetails.data.payment_info.subscription_info
+                                          .monthly_amount,
+                                        userDetails.data.payment_info.subscription_info
+                                          .monthly_amount_formatted
+                                      )
+                                    }
+                                  >
+                                    SUBSCRIBE TO SEE USER'S POSTS
+                                  </div>
+                                </div>
+                              ) : (
+                                <Col lg={12}>
+                                  {activeSec === "all" ? (
+                                    <>
+                                      {props.userPosts.data.posts.length > 0 ? (
+                                        <InfiniteScroll
+                                          dataLength={props.userPosts.data.posts}
+                                          next={fetchMorePost}
+                                          hasMore={
+                                            props.userPosts.data.posts.length <
+                                            props.userPosts.data.total
+                                          }
+                                          loader={
+                                            <div className="profile-all-post-box">
+                                              {[...Array(4)].map(() => (
+                                                <Skeleton className="profile-post-card-loader" />
+                                              ))}
+                                            </div>
+                                          }
+                                          style={{ height: "auto", overflow: "hidden" }}
+                                          className="row"
+                                        >
+                                          <div className="new-feed-sec" style={{ paddingLeft: 15, paddingRight: 15 }}>
+                                            {props.userPosts.data.posts.map((post, index) => (
+                                              <NewFeedDisplayCard
+                                                post={post}
+                                                key={index}
+                                                index={index}
+                                              />
                                             ))}
                                           </div>
-                                        ) : (
-                                          <>
-                                            {props.userPosts.data.posts.length > 0 ? (
-                                              <InfiniteScroll
-                                                dataLength={props.userPosts.data.posts.length}
-                                                next={fetchMorePost}
-                                                hasMore={
-                                                  props.userPosts.data.posts.length <
-                                                  props.userPosts.data.total
-                                                }
-                                                loader={
-                                                  <div className="profile-all-post-box">
-                                                    {[...Array(4)].map(() => (
-                                                      <Skeleton className="profile-post-card-loader" />
-                                                    ))}
-                                                  </div>
-                                                }
-                                                style={{ height: "auto", overflow: "hidden" }}
-                                              >
-                                                <div className="profile-all-post-box">
-                                                  {props.userPosts.data.posts.map((post) => (
-                                                    <>
-                                                      {post.postFiles &&
-                                                        post.postFiles.length > 0 && (
-                                                          // post.postFiles.map((postFile, index) =>
-                                                          <ProfileSinglePost post={post} />
-                                                        )}
-                                                    </>
-                                                  ))}
-                                                </div>
-                                              </InfiniteScroll>
-                                            ) : (
-                                              <NoDataFound />
-                                            )}
-                                          </>
-                                        )}
-                                      </Col>
-                                    )}
-                                  </Col>
-                                ) : ""}
-                              </>
-                            ) : (
-                              <Col md={12}>
-                                  {activeSec === "product" ? (
-                                    <Col md={12}>
-                                      <ModelProfileStoreSec
-                                        activeSec={activeSec}
-                                        setActiveSec={setActiveSec}
-                                        products={props.products}
-                                        otherUserUniquId={props.match.params.username}
-                                      />
-                                    </Col>
+                                        </InfiniteScroll>
+                                      ) : (
+                                        <NoDataFound />
+                                      )}
+                                    </>
                                   ) : (
-                                    <Col sm={12}>
+                                    <>
                                       {props.userPosts.loading ? (
                                         <div className="profile-all-post-box">
                                           {[...Array(8)].map(() => (
@@ -1921,7 +1034,6 @@ const SingleProfile = (props) => {
                                                   <>
                                                     {post.postFiles &&
                                                       post.postFiles.length > 0 && (
-                                                        // post.postFiles.map((postFile, index) =>
                                                         <ProfileSinglePost post={post} />
                                                       )}
                                                   </>
@@ -1933,20 +1045,174 @@ const SingleProfile = (props) => {
                                           )}
                                         </>
                                       )}
-                                    </Col>
+                                    </>
                                   )}
-                              </Col>
-                            )
-                          }
-                        </>
-                        )
+                                </Col>
+                              )}
+                              
+                              
+                            </Row>
+                          </Tab.Container>
+                        </div>
                       )}
-                      
-                    </Row>
-                  </Tab.Container>
-                </div>
-              )}
-            </div>
+                    </div>
+                    <div className="new-home-page-right col-lg-4 col-xl-6">
+                      <div className="profile-subscription">
+                        {userDetails.data.is_block_user == 0 ? (
+                          <div className="user-subscription-plans-details">
+                            <h3>Subscription Plans</h3>
+                            {userDetails.data.payment_info.is_user_needs_pay == 1 &&
+                              userDetails.data.payment_info.unsubscribe_btn_status ==
+                              0 ? (
+                              userDetails.data.payment_info.is_free_account == 0 ? (
+                                <div className="user-subscription-btn-sec">
+                                  <div
+                                    className="subscription-outline-btn"
+                                    onClick={(event) =>
+                                      subscriptionPayment(
+                                        event,
+                                        "months",
+                                        userDetails.data.payment_info.subscription_info
+                                          .monthly_amount,
+                                        userDetails.data.payment_info.subscription_info
+                                          .monthly_amount_formatted
+                                      )
+                                    }
+                                  >
+                                    {
+                                      userDetails.data.payment_info.subscription_info
+                                        .monthly_amount_formatted
+                                    }{" "}
+                                    /Month
+                                  </div>
+                                  <div
+                                    className="subscription-btn1"
+                                    onClick={(event) =>
+                                      subscriptionPayment(
+                                        event,
+                                        "years",
+                                        userDetails.data.payment_info.subscription_info
+                                          .yearly_amount,
+                                        userDetails.data.payment_info.subscription_info
+                                          .yearly_amount_formatted
+                                      )
+                                    }
+                                  >
+                                    {
+                                      userDetails.data.payment_info.subscription_info
+                                        .yearly_amount_formatted
+                                    }{" "}
+                                    /Year
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="user-subscription-btn-sec">
+                                  <div
+                                    className="subscription-btn1"
+                                    onClick={(event) => {
+                                      if (localStorage.getItem("userId")) {
+                                        props.dispatch(
+                                          followUserStart({
+                                            user_id: userDetails.data.user.user_id
+                                          })
+                                        );
+                                      } else {
+                                        const notificationMessage =
+                                          getErrorNotificationMessage(
+                                            t("login_to_continue")
+                                          );
+                                        props.dispatch(
+                                          createNotification(notificationMessage)
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    Subscribe For Free
+                                  </div>
+                                </div>
+                              )
+                            ) : null}
+
+                            {userDetails.data.payment_info.unsubscribe_btn_status ==
+                              1 && (
+                                <>
+                                  <div className="user-subscription-btn-sec">
+                                    <div
+                                      className="subscription-btn1"
+                                      onClick={() => handleUnfollowModalShow()}
+                                    >
+                                      {t("unfollow")}
+                                    </div>
+                                  </div>
+                                  <Modal
+                                    show={showUnfollow}
+                                    onHide={handleUnfollowModalClose}
+                                    backdrop="static"
+                                    keyboard={false}
+                                    centered
+                                    className={`${localStorage.getItem("theme") !== "" &&
+                                      localStorage.getItem("theme") !== null &&
+                                      localStorage.getItem("theme") !== undefined &&
+                                      localStorage.getItem("theme") === "dark"
+                                      ? "dark-theme-modal"
+                                      : ""
+                                      }
+                                    `}
+                                  >
+                                    <Modal.Header closeButton>
+                                      <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                      {t("cancel_subscription_conformation")}
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                      <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        onClick={handleUnfollowModalClose}
+                                      >
+                                        {t("close")}
+                                      </Button>
+                                      <Button
+                                        variant="primary"
+                                        size="lg"
+                                        onClick={(event) =>
+                                          handleUnfollow(
+                                            event,
+                                            userDetails.data.user.user_id
+                                          )
+                                        }
+                                      >
+                                        {t("yes")}
+                                      </Button>
+                                    </Modal.Footer>
+                                  </Modal>
+                                </>
+                              )}
+                          </div>
+                        ) : (
+                          <div className="user-subscription-plans-details">
+                            <div className="user-subscription-btn-sec">
+                              <div
+                                className="subscription-btn1"
+                                onClick={(event) =>
+                                  handleBlockUser(event, userDetails.data.user.user_id)
+                                }
+                              >
+                                {t("unblock_the_user")}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="new-feed-suggestions-trending-sec">
+                        <NewFeedSuggestionCard />
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
           </div>
         )}
       </div>

@@ -1829,7 +1829,7 @@ Version: 1.0
     padding-bottom: 0 !important;
   }
   .user-subscription-plans-details {
-    padding: 2em 0 !important;
+    /* padding: 2em 0 !important; */
   }
   .sidebar-links {
     padding-top: 0 !important;
@@ -1860,7 +1860,7 @@ Version: 1.0
     height: 100% !important;
   }
   .profile-all-post-box a {
-    height: 11em !important;
+    height: 17rem !important;
   }
   .profile-image-img {
     height: 100% !important;
@@ -2067,6 +2067,13 @@ Version: 1.0
   }
   .sidebar-total-count-card::before {
     right: -37px !important;
+  }
+  .profile-tab-counter-label {
+    display: none;
+  }
+  .profile-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 }
 
