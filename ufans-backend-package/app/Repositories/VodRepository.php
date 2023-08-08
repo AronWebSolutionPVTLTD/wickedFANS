@@ -34,11 +34,11 @@ class VodRepository {
 
                         $vod->delete_btn_status =  $request->id == $vod->user_id ? YES : NO;
 
-                        $vod->share_link = Setting::get('frontend_url')."vod/".$vod->vod_unique_id;
+                        $vod->share_link = Setting::get('frontend_url')."/vod/".$vod->vod_unique_id;
 
                         $vod->is_user_subscribed = $vod->payment_info->is_user_subscribed ?? NO;
 
-                        $vod->share_link = Setting::get('frontend_url')."vod/".$vod->vod_unique_id;
+                        $vod->share_link = Setting::get('frontend_url')."/vod/".$vod->vod_unique_id;
 
                         $vod->payment_info = self::vods_user_payment_check($vod, $request);
 

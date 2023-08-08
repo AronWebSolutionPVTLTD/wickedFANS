@@ -55,9 +55,10 @@ const NewSingleStoryIndex = (props) => {
   const params = useParams();
   const history = useHistory();
 
+  const [sendTip, setSendTip] = useState(false);
   const [files, setFiles] = useState([]);
   const [reportMode, setReportMode] = useState(false);
-  const [sendTip, setTipModal] = useState(false);
+  // const [sendTip, setTipModal] = useState(false);
   const [skipRender, setSkipRender] = useState(true);
   const [lastPostId, setLastPostId] = useState(null);
   const [selectedComment, setSelectedComment] = useState(null);
@@ -70,7 +71,7 @@ const NewSingleStoryIndex = (props) => {
   };
 
   const closeSendTipModal = () => {
-    setTipModal(false);
+    setSendTip(false);
   };
 
   useEffect(() => {
@@ -844,7 +845,7 @@ const NewSingleStoryIndex = (props) => {
                           <div className="new-feed-post-time-sec">
                             <p>{props.singlePost.data.post.created}</p>
                           </div>
-                          <Button
+                          {/* <Button
                             className="sent-tip-btn"
                             onClick={() => setTipModal(true)}
                           >
@@ -856,7 +857,7 @@ const NewSingleStoryIndex = (props) => {
                               }
                             />
                             <span>Tips</span>
-                          </Button>
+                          </Button> */}
                           <Dropdown className="feed-post-dropdown">
                             <Dropdown.Toggle
                               variant="success"
@@ -1054,6 +1055,17 @@ const NewSingleStoryIndex = (props) => {
                               <span>
                                 {props.singlePost.data.post.total_comments}
                               </span>
+                            </Button>
+
+                            <Button className="new-feed-wishlist-btn send_tip_custom_button" onClick={() => setSendTip(true)}>
+                              <Image
+                                className="new-feed-wishlist-icon"
+                                src={
+                                  window.location.origin +
+                                  "/assets/images/feed-story/circuler_dollar_icon.svg"
+                                }
+                              />
+                              <span>SEND TIP</span>
                             </Button>
                           </div>
                           <div className="new-feed-footer-action-right-sec">
@@ -1325,8 +1337,8 @@ const NewSingleStoryIndex = (props) => {
         <SendTipPaymentModal
           paymentsModal={sendTip}
           closepaymentsModal={closeSendTipModal}
-          post_id={props.singlePost.data.post.data.post.post_id}
-          user_id={props.singlePost.data.post.data.post.user_id}
+          post_id={props.singlePost.data.post.post_id}
+          user_id={props.singlePost.data.post.user_id}
         />
       ) : null}
       <Modal

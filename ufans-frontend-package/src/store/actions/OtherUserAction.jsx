@@ -8,6 +8,7 @@ import {
   SEARCH_USER_POST_START,
   SEARCH_USER_POST_SUCCESS,
   SEARCH_USER_POST_FAILURE,
+  SINGLE_USER_POSTS_SUCCESS,
 } from "./ActionConstant";
 
 export function fetchSingleUserProfileStart(data) {
@@ -71,4 +72,11 @@ export function searchUserPostFailure(error) {
     type: SEARCH_USER_POST_FAILURE,
     error,
   };
+}
+
+export function singleUserPostsSuccess(data) {
+  return {
+    type: SINGLE_USER_POSTS_SUCCESS,
+    data,
+  }
 }

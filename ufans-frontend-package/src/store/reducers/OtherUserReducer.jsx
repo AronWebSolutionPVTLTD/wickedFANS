@@ -8,6 +8,7 @@ import {
   SEARCH_USER_POST_START,
   SEARCH_USER_POST_SUCCESS,
   SEARCH_USER_POST_FAILURE,
+  SINGLE_USER_POSTS_SUCCESS,
 } from "../actions/ActionConstant";
 
 const initialState = {
@@ -149,6 +150,20 @@ const OtherUserReducer = (state = initialState, action) => {
           loading: true,
           error: action.error,
           inputData: {},
+          loadingButtonContent: null,
+          buttonDisable: false,
+        },
+      };
+    case SINGLE_USER_POSTS_SUCCESS:
+      return {
+        ...state,
+        userPosts: {
+          data: {
+            posts: action.data.posts,
+            total: action.data.total,
+          },
+          loading: false,
+          error: false,
           loadingButtonContent: null,
           buttonDisable: false,
         },

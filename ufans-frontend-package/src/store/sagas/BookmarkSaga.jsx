@@ -34,6 +34,7 @@ import {
 } from "../actions/ErrorAction";
 import { homePostsSuccess } from "../actions/HomeAction";
 import { fetchSinglePostSuccess } from "../actions/PostAction";
+import { singleUserPostsSuccess } from "../actions/OtherUserAction";
 
 function* fetchBookmarkAPI(action) {
   try {
@@ -120,6 +121,14 @@ function* saveBookmarkAPI(action) {
         if (singlePostData.post.post_unique_id === response.data.data.post_unique_id) {
           yield put(fetchSinglePostSuccess({ post: response.data.data }));
         }
+      }
+      let otherUserData = yield select((state) => state.otherUser.userPosts.data);
+      if (Object.keys(otherUserData).length > 0) {
+        otherUserData = {
+          ...otherUserData,
+          posts: otherUserData.posts.map((post) => post.post_unique_id === response.data.data.post_unique_id ? response.data.data : post)
+        }
+        yield put(singleUserPostsSuccess(otherUserData));
       }
     } else {
       yield put(saveBookmarkFailure(response.data.error));

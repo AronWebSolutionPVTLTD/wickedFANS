@@ -634,11 +634,13 @@
 }
 
 .dark-mode .user-info-list ul li,
+.dark-mode .profile-social-links ul li,
 .dark-mode .profile-subscription-btn {
     background-color: #000 !important;
 }
 
-.dark-mode .user-info-list ul li a span {
+.dark-mode .user-info-list ul li a span,
+.dark-mode .profile-social-links ul li a span {
     color: var(--secondary-color);
 }
 

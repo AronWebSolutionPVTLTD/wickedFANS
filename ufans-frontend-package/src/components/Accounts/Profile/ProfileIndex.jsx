@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Dropdown,
   Modal,
@@ -81,18 +81,18 @@ const ProfileIndex = (props) => {
     }
   }, []);
 
-  useEffect(() => {
+  useMemo(() => {
 
-    if (activeSec === 'all') {
-      const tempImageCount = props.posts.data.posts.filter((post) => post.post_files.find((eachFile) => eachFile.file_type === "image")).length;
-      const tempVideoCount = props.posts.data.posts.filter((post) => post.post_files.find((eachFile) => eachFile.file_type === "video")).length;
+    if (allCount === 0 && props.posts.data.total > 0) {
+      const tempImageCount = props.posts.data.posts.reduce((acc, post) => acc + post.post_files.filter((eachFile) => eachFile.file_type === "image").length, 0);
+      const tempVideoCount = props.posts.data.posts.reduce((acc, post) => acc + post.post_files.filter((eachFile) => eachFile.file_type === "video").length, 0);
 
       setImageCount(tempImageCount)
       setVideoCount(tempVideoCount)
       setAllCount(props.posts.data.total)
     }
     
-  }, [activeSec, props.posts])
+  }, [allCount, props.posts.data.total])
 
   const setActiveSection = (event, key) => {
     setActiveSec(key);
@@ -286,6 +286,209 @@ const ProfileIndex = (props) => {
                               null
                             }
                           </div>
+                          
+                          {props.profile.data.youtube_link ||
+                          props.profile.data.pinterest_link ||
+                          props.profile.data.linkedin_link ||
+                          props.profile.data.snapchat_link ||
+                          props.profile.data.twitter_link ||
+                          props.profile.data.instagram_link ||
+                          props.profile.data.amazon_wishlist ||
+                          props.profile.data.facebook_link ||
+                          props.profile.data.twitch_link ||
+                          props.profile.data.website ? (
+                            <div className="profile-social-links">
+                              <ul className="list-unstyled">
+                                {props.profile.data.youtube_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.youtube_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/you-tube.png"
+                                        }
+                                      />
+                                      <span>
+                                        Youtube
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.pinterest_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.pinterest_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/pintrest.png"
+                                        }
+                                      />
+                                      <span>
+                                        Pinterest
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.linkedin_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.linkedin_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/linked-in.png"
+                                        }
+                                      />
+                                      <span>
+                                        Linkedin
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.snapchat_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.snapchat_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/snap-chat.png"
+                                        }
+                                      />
+                                      <span>
+                                        Snapchat
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.twitter_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.twitter_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/twitter.png"
+                                        }
+                                      />
+                                      <span>
+                                        Twitter
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.instagram_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.instagram_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/instagram.png"
+                                        }
+                                      />
+                                      <span>
+                                        Instagram
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.amazon_wishlist && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.amazon_wishlist}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/amazon.png"
+                                        }
+                                      />
+                                      <span>
+                                        Amazon
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.facebook_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.facebook_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/facebook.png"
+                                        }
+                                      />
+                                      <span>
+                                        Facebook
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.twitch_link && (
+                                  <Media as="li">
+                                    <a
+                                      href={props.profile.data.twitch_link}
+                                      target="_blank"
+                                    >
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/twitch.png"
+                                        }
+                                      />
+                                      <span>
+                                        Twitch
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                                {props.profile.data.website && (
+                                  <Media as="li">
+                                    <a href={props.profile.data.website} target="_blank">
+                                      <Image
+                                        className="sidebar-social-links-icon"
+                                        src={
+                                          window.location.origin +
+                                          "/assets/images/new-home/icon/website.png"
+                                        }
+                                      />
+                                      <span>
+                                        Website
+                                      </span>
+                                    </a>
+                                  </Media>
+                                )}
+                              </ul>
+                            </div>
+                          ) : null}
                         </div>
                         <div className="user-info-list" style={{ paddingLeft: 15 }}>
                           <ul className="list-unstyled">
@@ -503,178 +706,6 @@ const ProfileIndex = (props) => {
                             )}
                           </ul>
                         </div>
-                        {/* {props.profile.data.youtube_link ||
-                        props.profile.data.pinterest_link ||
-                        props.profile.data.linkedin_link ||
-                        props.profile.data.snapchat_link ||
-                        props.profile.data.twitter_link ||
-                        props.profile.data.instagram_link ||
-                        props.profile.data.amazon_wishlist ||
-                        props.profile.data.facebook_link ||
-                        props.profile.data.twitch_link ||
-                        props.profile.data.website ? (
-                          <div className="sidebar-social-links">
-                            <ul className="list-unstyled">
-                              {props.profile.data.youtube_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.youtube_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/you-tube.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.pinterest_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.pinterest_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/pintrest.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.linkedin_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.linkedin_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/linked-in.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.snapchat_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.snapchat_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/snap-chat.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.twitter_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.twitter_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/twitter.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.instagram_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.instagram_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/instagram.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.amazon_wishlist && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.amazon_wishlist}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/amazon.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.facebook_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.facebook_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/facebook.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.twitch_link && (
-                                <Media as="li">
-                                  <a
-                                    href={props.profile.data.twitch_link}
-                                    target="_blank"
-                                  >
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/twitch.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                              {props.profile.data.website && (
-                                <Media as="li">
-                                  <a href={props.profile.data.website} target="_blank">
-                                    <Image
-                                      className="sidebar-social-links-icon"
-                                      src={
-                                        window.location.origin +
-                                        "/assets/images/new-home/icon/website.png"
-                                      }
-                                    />
-                                  </a>
-                                </Media>
-                              )}
-                            </ul>
-                          </div>
-                        ) : null} */}
                       </div>
                       
                       <div className="profile-tab-sec" style={{ padding: 0 }}>

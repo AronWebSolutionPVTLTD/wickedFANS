@@ -113,7 +113,7 @@ class User extends Authenticatable
 
     public function getShareLinkAttribute() {
 
-        $share_link = \Setting::get('frontend_url').$this->unique_id;
+        $share_link = \Setting::get('frontend_url')."/".$this->unique_id;
         
         return $share_link;
 

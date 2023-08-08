@@ -2689,7 +2689,7 @@ class UserAccountApiController extends Controller
 
             $data['is_favuser'] = \App\Models\FavUser::where('user_id', $request->id)->where('fav_user_id', $user->id)->count() ? YES : NO;
 
-            $data['share_link'] = Setting::get('frontend_url').$request->user_unique_id;
+            $data['share_link'] = Setting::get('frontend_url')."/".$request->user_unique_id;
 
             $data['is_block_user'] = Helper::is_block_user($request->id, $user->user_id);
 
@@ -4187,7 +4187,7 @@ class UserAccountApiController extends Controller
 
                         $post->is_user_liked = $post->postLikes->where('user_id', $request->id)->count() ? YES : NO;
 
-                        $post->share_link = Setting::get('frontend_url')."post/".$post->post_unique_id;
+                        $post->share_link = Setting::get('frontend_url')."/post/".$post->post_unique_id;
 
                         $post->type = CATEGORY_TYPE_POST;
 

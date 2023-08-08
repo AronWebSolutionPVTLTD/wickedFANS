@@ -3117,7 +3117,7 @@ class PostsApiController extends Controller
 
                 $post->is_user_liked = $post->postLikes->where('user_id', $request->id)->count() ? YES : NO;
 
-                $post->share_link = Setting::get('frontend_url') . "post/" . $post->post_unique_id;
+                $post->share_link = Setting::get('frontend_url') . "/post/" . $post->post_unique_id;
 
                 return $post;
             });
@@ -3433,7 +3433,7 @@ class PostsApiController extends Controller
 
                 $post->is_user_liked = $post->postLikes->where('user_id', $request->id)->count() ? YES : NO;
 
-                $post->share_link = Setting::get('frontend_url') . "post/" . $post->post_unique_id;
+                $post->share_link = Setting::get('frontend_url') . "/post/" . $post->post_unique_id;
 
                 return $post;
             });

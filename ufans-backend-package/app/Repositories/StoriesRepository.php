@@ -45,7 +45,7 @@ class StoriesRepository {
                         
             $user->delete_btn_status =  $request->id == $user->user_id ? YES : NO;
 
-            $user->share_link = Setting::get('frontend_url')."stories/".$user->story_unique_id;
+            $user->share_link = Setting::get('frontend_url')."/stories/".$user->story_unique_id;
 
             $user->storyFiles = StoryFile::whereIn('story_id', $story_ids)->orderBy('story_files.id', 'desc')->get();
 
@@ -78,7 +78,7 @@ class StoriesRepository {
 
         $story->delete_btn_status =  $request->id == $story->user_id ? YES : NO;
 
-        $story->share_link = Setting::get('frontend_url')."stories/".$story->story_unique_id;
+        $story->share_link = Setting::get('frontend_url')."/stories/".$story->story_unique_id;
 
         $story->storyFiles = StoryFile::where('story_id', $story->story_id)->when($is_user_needs_pay == NO, function ($q) use ($is_user_needs_pay) {
                                                 
