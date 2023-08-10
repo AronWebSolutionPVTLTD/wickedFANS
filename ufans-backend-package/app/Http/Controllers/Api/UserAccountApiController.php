@@ -598,7 +598,7 @@ class UserAccountApiController extends Controller
 
                     if($user->login_by == 'manual') {
 
-                        $email_data['subject'] = tr('user_welcome_title').' '.Setting::get('site_name');
+                        $email_data['subject'] = 'Please confirm your e-mail address';
 
                         $email_data['page'] = "emails.users.welcome";
 
@@ -609,6 +609,8 @@ class UserAccountApiController extends Controller
                         $email_data['name'] = $user->name;
 
                         $email_data['verification_code'] = $user->verification_code;
+
+                        $email_data['verification_link'] = Setting::get('frontend_url')."/verify/".$user->verification_code;
 
                         $this->dispatch(new \App\Jobs\SendEmailJob($email_data));
 

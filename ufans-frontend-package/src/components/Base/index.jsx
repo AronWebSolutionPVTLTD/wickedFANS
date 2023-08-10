@@ -60,6 +60,7 @@ import ProductList from "../Ecom/Product/ProductList";
 import ExploreIndex from "../Post/Explore/ExploreIndex";
 import StoriesIndex from "../Home/Stories/StoriesIndex";
 import VerificationIndex from "../Verification/VerificationIndex";
+import VerificationResultIndex from "../Verification/VerificationResultIndex";
 // import RegisterVerifyIndex from "../Verification/RegisterVerifyIndex";
 
 import UserLiveVideosIndex from "../LiveVideos/UserLiveVideosIndex";
@@ -880,6 +881,13 @@ class App extends Component {
             authentication={this.state.authentication}
             path={"/new-wallet"}
             component={NewWalletIndex}
+            layout={MainLayout}
+          />
+
+          <PrivateRoute
+            authentication={this.state.authentication}
+            path={"/verify/:verification_code"}
+            component={VerificationResultIndex}
             layout={MainLayout}
           />
 

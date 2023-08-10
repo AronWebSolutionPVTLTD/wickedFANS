@@ -444,7 +444,7 @@ function* registerVerify() {
         response.data.message
       );
       yield put(createNotification(notificationMessage));
-      window.location.assign("/home");
+      // window.location.assign("/home");
     } else {
       yield put(registerVerifyFailure(response.data.error));
       const notificationMessage = getErrorNotificationMessage(

@@ -300,7 +300,7 @@
     }
     
     .email-content {
-      width: 100%;
+      width: 570px;
       margin: 0;
       padding: 0;
       -premailer-width: 100%;
@@ -310,8 +310,9 @@
     /* Masthead ----------------------- */
     
     .email-masthead {
-      padding: 25px 0;
+      padding: 20px 0;
       text-align: center;
+      background: hsl(344.55deg 83.08% 39.41%);
     }
     
     .email-masthead_logo {
@@ -379,11 +380,12 @@
     }
     
     .content-cell {
-      padding: 20px 10px;
+      padding: 20px 15px;
     }
     /*Media Queries ------------------------------ */
     
     @media only screen and (max-width: 600px) {
+      .email-content,
       .email-body_inner,
       .email-footer {
         width: 100% !important;
@@ -422,7 +424,7 @@
     }
 
     .email-logo {
-      width: 144px;
+      width: 250px;
     }
 
     a {
@@ -430,6 +432,10 @@
       font-size: 18px;
       line-height: 24px;
       font-weight: 600;
+    }
+
+    .email-body_inner .f-fallback {
+      padding-top: 10px;
     }
     
     :root {
@@ -458,67 +464,7 @@
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h2>Hi {{$data['name']}},</h2>  
-
-                        <table>
-
-                            <tr class="first_row_design">
-
-                                <th>{{tr('s_no')}}</th>
-
-                                <th >{{tr('from_username')}}</th>
-
-                                <th>{{tr('to_username')}}</th>
-
-                                <th>{{tr('payment_id')}}</th>
-
-                                <th >{{tr('paid_amount')}}</th>
-
-                                <th >{{tr('admin_amount')}}</th>
-
-                                <th >{{tr('user_amount')}}</th>
-
-                                <th >{{tr('payment_mode')}}</th>
-
-                            </tr>
-
-                            {{$i=0}}
-
-                            @foreach($data as $chat_asset_payments)
-
-                                @foreach($chat_asset_payments as $chat_asset_payment)
-
-                                {{$i=$i+1}}
-
-                                <tr>
-
-                                    <td>{{$i}}</td>
-
-                                    <td>{{$chat_asset_payment->fromUser->name ?? tr('n_a')}}</td>
-
-                                    <td>{{$chat_asset_payment->toUser->name ?? tr('n_a')}}</td>
-
-                                    <td>{{$chat_asset_payment->payment_id ?: tr('n_a')}}</td>
-
-                                    <td>
-                                        {{$chat_asset_payment->amount_formatted ?: tr('n_a')}}
-                                    </td>
-
-                                    <td >{{$chat_asset_payment->admin_amount_formatted ?: tr('n_a')}}</td>
-
-                                    <td >{{$chat_asset_payment->user_amount_formatted ?: tr('n_a')}}</td>
-
-
-                                    <td >
-                                        {{ $chat_asset_payment->payment_mode }}
-                                    </td>
-
-                                </tr>
-
-                                @endforeach
-                            
-                            @endforeach
-                        </table>
+                        @yield('content')
                       </div>
                     </td>
                   </tr>
