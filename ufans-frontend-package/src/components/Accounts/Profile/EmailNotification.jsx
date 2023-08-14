@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Modal, Container, Row, Col, Button, Image, Media, Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Button, Form } from "react-bootstrap";
 import "./NewSettings.css";
-import { Link } from "react-router-dom";
 import SettingsSidebar from "./SettingsSidebar";
 import { connect } from "react-redux";
 import { saveEmailNotificationStart } from "../../../store/actions/UserAction";
 import { translate, t } from "react-multi-lang";
-import { Form as FORM, Formik, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup';
+import { Form as FORM, Formik, Field } from 'formik'
 
 const EmailNotification = (props) => {
   console.log('props', props.profile.data)
@@ -36,14 +34,6 @@ const EmailNotification = (props) => {
       label: 'Every 24 Hours',
     },
   ]
-
-  // const formikRef = useRef();
-
-  // useEffect(() => {
-  //   if (formikRef.current) {
-  //     formikRef.current.resetForm();
-  //   }
-  // }, [props.activeSec])
 
   useEffect(() => {
     if (Object.keys(props.profile.data).length > 0) {
@@ -298,10 +288,10 @@ const EmailNotification = (props) => {
                                 <Button
                                   className="settings-submit-btn"
                                   type="submit"
-                                  // disabled={props.changePassword.buttonDisable}
+                                  disabled={props.emailNotification.buttonDisable}
                                 >
-                                  {props.changePassword.loadingButtonContent != null
-                                    ? props.changePassword.loadingButtonContent
+                                  {props.emailNotification.loadingButtonContent != null
+                                    ? props.emailNotification.loadingButtonContent
                                     : t('submit')}
                                 </Button>
                               </div>
@@ -323,7 +313,7 @@ const EmailNotification = (props) => {
 
 const mapStateToPros = (state) => ({
   profile: state.users.profile,
-  changePassword: state.changePassword,
+  emailNotification: state.users.emailNotification,
 });
 
 function mapDispatchToProps(dispatch) {

@@ -4577,9 +4577,7 @@ class UserAccountApiController extends Controller
             
             DB::commit();
 
-            $code = $user->is_email_notification == YES ? 811 : 812;
-
-            return $this->sendResponse(api_success($code), $code, $data);
+            return $this->sendResponse(api_success(813), 813, $data);
 
         } catch (Exception $e) {
 

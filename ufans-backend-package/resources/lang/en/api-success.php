@@ -269,4 +269,6 @@ return [
     811 => "Email Notification Enabled...!",
 
     812 => "Email Notification Disabled...!",
+    
+    813 => "Email Notification has been Saved successfully!",
 ];

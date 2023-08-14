@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('content')
-<h2>Hi {{$data['name']}},</h2>
+<h3>Hi {{$data['name']}},</h3>
 
 <p>
     <b>{{tr('post_id')}} - {{$data['post_unique_id']}}</b>

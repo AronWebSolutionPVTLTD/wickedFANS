@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('content')
-<h2>Hi {{$data['name']}},</h2>
+<h3>Hi {{$data['name']}},</h3>
 
 <p>{{ tr('invoice_tag', Setting::get('site_name')) }}</p>
 

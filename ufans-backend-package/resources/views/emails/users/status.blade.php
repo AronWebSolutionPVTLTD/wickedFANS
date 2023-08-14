@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('content')
-<h2>Hi {{$data['name']}},</h2>  
+<h3>Hi {{$data['name']}},</h3>  
 
 <p>
     @if($data['status'] ==  tr('approved'))
