@@ -4397,4 +4397,57 @@ class UserAccountApiController extends Controller
         return $this->sendResponse($message = "", $success_code = "", $users);
     }
 
+    public function email_notification_save(Request $request) {
+        try {
+
+            DB::beginTransaction();
+
+            $rules = [ 
+                'new_likes' => [ 'numeric', Rule::in([YES, NO])],
+                'new_referral' => [ 'numeric', Rule::in([YES, NO])],
+                'new_subscriber' => [ 'numeric', Rule::in([YES, NO])],
+                'new_tip' => [ 'numeric', Rule::in([YES, NO])],
+                'renewal' => [ 'numeric', Rule::in([YES, NO])],
+                'new_posts' => [ 'numeric', Rule::in([YES, NO])],
+                'new_stream' => [ 'numeric', Rule::in([YES, NO])],
+                'new_message' => [ 'numeric', Rule::in([YES, NO])],
+                'new_likes_period' => 'numeric|gt:0',
+                'new_posts_period' => 'numeric|gt:0',
+                'new_message_period' => 'numeric|gt:0',
+            ];
+
+            Helper::custom_validator($request->all(), $rules);
+                
+            $user = User::find($request->id);
+
+            $user->new_likes = $request->new_likes ?? YES;
+            $user->new_referral = $request->new_referral ?? YES;
+            $user->new_subscriber = $request->new_subscriber ?? YES;
+            $user->new_tip = $request->new_tip ?? YES;
+            $user->renewal = $request->renewal ?? YES;
+            $user->new_posts = $request->new_posts ?? YES;
+            $user->new_stream = $request->new_stream ?? YES;
+            $user->new_message = $request->new_message ?? YES;
+            $user->new_likes_period = $request->new_likes_period ?? 24;
+            $user->new_posts_period = $request->new_posts_period ?? 24;
+            $user->new_message_period = $request->new_message_period ?? 12;
+
+            $user->save();
+
+            $data = User::firstWhere('id', $request->id);
+            
+            DB::commit();
+
+            $code = $user->is_email_notification == YES ? 811 : 812;
+
+            return $this->sendResponse(api_success($code), $code, $data);
+
+        } catch (Exception $e) {
+
+            DB::rollback();
+
+            return $this->sendError($e->getMessage(), $e->getCode());
+        }
+    }
+
 }

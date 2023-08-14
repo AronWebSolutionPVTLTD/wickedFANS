@@ -82,6 +82,7 @@ import ProfileIndex from "../Accounts/Profile/ProfileIndex";
 import EditProfile from "../Accounts/Profile/EditProfile";
 import MobileEditProfileIndex from "../Accounts/Profile/MobileEditProfileIndex";
 import ChangePassword from "../Accounts/Profile/ChangePassword";
+import EmailNotification from "../Accounts/Profile/EmailNotification";
 import DeleteAccount from "../Accounts/Profile/DeleteAccount";
 import TwoStepAuthentication from "../Accounts/Profile/TwoStepAuthentication";
 import SessionManagement from "../Accounts/Profile/SessionManagement";
@@ -713,6 +714,13 @@ class App extends Component {
             authentication={this.state.authentication}
             path={"/change-password"}
             component={ChangePassword}
+            layout={MainLayout}
+          />
+
+          <PrivateRoute
+            authentication={this.state.authentication}
+            path={"/email-notification"}
+            component={EmailNotification}
             layout={MainLayout}
           />
 

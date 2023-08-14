@@ -77,6 +77,9 @@ import {
   SAVE_TRIAL_LINK_OPTION_START,
   SAVE_TRIAL_LINK_OPTION_SUCCESS,
   SAVE_TRIAL_LINK_OPTION_FAILURE,
+  SAVE_EMAIL_NOTIFICATION_START,
+  SAVE_EMAIL_NOTIFICATION_SUCCESS,
+  SAVE_EMAIL_NOTIFICATION_FAILURE,
 } from "./ActionConstant";
 
 // Get user details actions.
@@ -656,6 +659,27 @@ export function saveTrialLinkOptionSuccess(data) {
 export function saveTrialLinkOptionFailure(error) {
   return {
     type: SAVE_TRIAL_LINK_OPTION_FAILURE,
+    error,
+  };
+}
+
+export function saveEmailNotificationStart(data) {
+  return {
+    type: SAVE_EMAIL_NOTIFICATION_START,
+    data,
+  };
+}
+
+export function saveEmailNotificationSuccess(data) {
+  return {
+    type: SAVE_EMAIL_NOTIFICATION_SUCCESS,
+    data,
+  };
+}
+
+export function saveEmailNotificationFailure(error) {
+  return {
+    type: SAVE_EMAIL_NOTIFICATION_FAILURE,
     error,
   };
 }

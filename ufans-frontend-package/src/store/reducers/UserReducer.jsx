@@ -73,6 +73,9 @@ import {
   SAVE_TRIAL_LINK_OPTION_START,
   SAVE_TRIAL_LINK_OPTION_SUCCESS,
   SAVE_TRIAL_LINK_OPTION_FAILURE,
+  SAVE_EMAIL_NOTIFICATION_START,
+  SAVE_EMAIL_NOTIFICATION_SUCCESS,
+  SAVE_EMAIL_NOTIFICATION_FAILURE,
 } from "../actions/ActionConstant";
 
 const initialState = {
@@ -235,6 +238,14 @@ const initialState = {
     loadingButtonContent: null,
     buttonDisable: false,
   },
+  emailNotification: {
+    data: {},
+    loading: true,
+    error: false,
+    inputData: {},
+    loadingButtonContent: null,
+    buttonDisable: false,
+  }
 };
 
 const userReducer = (state = initialState, action) => {
@@ -1127,7 +1138,7 @@ const userReducer = (state = initialState, action) => {
           buttonDisable: true,
         },
       };
-      case SAVE_TRIAL_LINK_OPTION_SUCCESS:
+    case SAVE_TRIAL_LINK_OPTION_SUCCESS:
       return {
         ...state,
         saveTrialLinkOption: {
@@ -1143,6 +1154,42 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         saveTrialLinkOption: {
+          data: {},
+          loading: true,
+          error: action.error,
+          inputData: {},
+          loadingButtonContent: null,
+          buttonDisable: false,
+        },
+      };
+    case SAVE_EMAIL_NOTIFICATION_START:
+      return {
+        ...state,
+        emailNotification: {
+          data: {},
+          loading: true,
+          error: false,
+          inputData: action.data,
+          loadingButtonContent: "Loading... Please wait.",
+          buttonDisable: true,
+        },
+      };
+    case SAVE_EMAIL_NOTIFICATION_SUCCESS:
+      return {
+        ...state,
+        emailNotification: {
+          data: action.data,
+          loading: false,
+          error: false,
+          inputData: {},
+          loadingButtonContent: null,
+          buttonDisable: false,
+        },
+      };
+    case SAVE_EMAIL_NOTIFICATION_FAILURE:
+      return {
+        ...state,
+        emailNotification: {
           data: {},
           loading: true,
           error: action.error,

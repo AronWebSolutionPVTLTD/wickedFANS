@@ -97,6 +97,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
 
         Route::post('change_password', 'Api\UserAccountApiController@change_password');
 
+        Route::post('email_notification_save', 'Api\UserAccountApiController@email_notification_save');
+
         Route::post('delete_account', 'Api\UserAccountApiController@delete_account');
 
         Route::post('logout', 'Api\UserAccountApiController@logout');

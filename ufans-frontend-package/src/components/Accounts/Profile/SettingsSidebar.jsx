@@ -357,6 +357,17 @@ const SettingsSidebar = (props) => {
                                 </Link>
                             </Media>
                             <Media as="li">
+                                <Link to="/email-notification">
+                                    <Image
+                                        className="new-setting-list-icon"
+                                        src={
+                                            window.location.origin + "/assets/images/new-settings/notification.svg"
+                                        }
+                                    />
+                                    {t("notifications")}
+                                </Link>
+                            </Media>
+                            <Media as="li">
                                 <Link to="/delete-account">
                                     <Image
                                         className="new-setting-list-icon"

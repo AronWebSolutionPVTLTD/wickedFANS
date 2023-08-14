@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Mail\MyMailable;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +49,8 @@ Route::group(['middleware' => 'web'], function() {
 
 	Route::any('live_video_coinpayment_success' , 'Api\CoinPaymentController@live_video_coinpayment_success')->name('live_video_coinpayment_success');
 
+});
+
+Route::get('/preview-email', function () {
+    return Mail::to('rexdev0211@gmail.com')->send(new MyMailable());
 });

@@ -46,6 +46,8 @@ import {
   saveTrialLinkOptionSuccess,
   saveTrialLinkOptionFailure,
   fetchUserDetailsStart,
+  saveEmailNotificationSuccess,
+  saveEmailNotificationFailure,
 } from "../actions/UserAction";
 
 import api from "../../Environment";
@@ -74,6 +76,7 @@ import {
   SAVE_FEATURE_STORY_START,
   DELETE_FEATURE_STORY_START,
   SAVE_TRIAL_LINK_OPTION_START,
+  SAVE_EMAIL_NOTIFICATION_START,
 } from "../actions/ActionConstant";
 
 import { createNotification } from "react-redux-notify";
@@ -982,6 +985,30 @@ function* twoStepAuthenticationCodeResendAPI(action) {
   }
 }
 
+function* saveEmailNotificationAPI(action) {
+  try {
+    const response = yield api.postMethod("email_notification_save", action.data);
+
+    if (response.data.success) {
+      yield put(saveEmailNotificationSuccess(response.data));
+      const notificationMessage = getSuccessNotificationMessage(
+        response.data.message
+      );
+      yield put(createNotification(notificationMessage));
+    } else {
+      yield put(saveEmailNotificationFailure(response.data.error));
+      const notificationMessage = getErrorNotificationMessage(
+        response.data.error
+      );
+      yield put(createNotification(notificationMessage));
+    }
+  } catch (error) {
+    yield put(saveEmailNotificationFailure(error));
+    const notificationMessage = getErrorNotificationMessage(error.message);
+    yield put(createNotification(notificationMessage));
+  }
+}
+
 export default function* pageSaga() {
   yield all([
     yield takeLatest(FETCH_USER_DETAILS_START, getUserDetailsAPI),
@@ -1014,5 +1041,6 @@ export default function* pageSaga() {
     yield takeLatest(SAVE_FEATURE_STORY_START, saveFeatureStoryAPI),
     yield takeLatest(DELETE_FEATURE_STORY_START, deleteFeatureStoryAPI),
     yield takeLatest(SAVE_TRIAL_LINK_OPTION_START, saveTrialLinkOptionAPI),
+    yield takeLatest(SAVE_EMAIL_NOTIFICATION_START, saveEmailNotificationAPI),
   ]);
 }
