@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { translate, t } from "react-multi-lang";
 import {
@@ -24,48 +24,55 @@ const TrialLinkModal = (props) => {
         } else {
             setSkip(false);
         }
-    }, [props.saveTrialLinkOption]);
+    }, [props.saveTrialLinkOption])
 
+    const nullData = ["", null, undefined, "light"];
+    
     return (
         <>
             <Modal
+                className={`modal-dialog-center withdraw-modal 
+                ${nullData.includes(localStorage.getItem("theme")) ?
+                        "" : "dark-theme-modal"
+                    }`}
+                size="md"
                 centered
-                size="lg"
-                className=""
                 show={props.trialLink}
                 onHide={props.closeModal}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>{t("free_trial_link")}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div className="trial-link-modal-body">
-                        <Form className="" method="post">
-                            <div>
-                                <Form.Group controlId="formBasicName" className="">
-                                    <Form.Control
-                                        type="text"
-                                        controlId="linkName"
-                                        className="form-control"
-                                        placeholder="Trial link name"
-                                        required
-                                        name="linkName"
-                                    />
-                                </Form.Group>
+                    <Form onSubmit={handleSubmit}>
+                        <Modal.Body>
+                            <div className="trial-modal-title">
+                                <h4>{t("free_trial_link")}</h4>
                             </div>
-                            <div className="trial-link-modal-offer">
-                                <Form.Group controlId="offerLimit">
-                                    <Form.Control
-                                        as="select"
-                                        controlId="offerLimit"
-                                        className="form-control"
+                            <div className="trial-modal-body-first">
+                                <input
+                                    className="floating-input"
+                                    type="text"
+                                    placeholder={t("trial_link_name")}
+                                    required
+                                    name="linkName"
+                                    onChange={(event) => {
+                                        setInputData({
+                                            ...inputData,
+                                            link_name: event.currentTarget.value,
+                                        });
+                                    }}
+                                />
+                            </div>
+                            <div className="trial-modal-body-second">
+                                <div className="trial-modal-body-second-limit">
+                                    <label for="offerLimit">Offer limit</label>
+                                    <select
+                                        id="offerLimit"
+                                        className="floating-input"
                                         style={{ marginRight: "10px" }}
                                         required
                                         name="offerLimit"
                                         onChange={(event) => {
                                             setInputData({
                                                 ...inputData,
-                                                offerLimit: event.currentTarget.value,
+                                                offer_limit: event.currentTarget.value,
                                             });
                                         }}
                                     >
@@ -81,19 +88,18 @@ const TrialLinkModal = (props) => {
                                         <option value="9">9 subscribers</option>
                                         <option value="10">10 subscribers</option>
                                         <option value="50">50 subscribers</option>
-                                    </Form.Control>
-                                </Form.Group>
-                                <Form.Group controlId="offerExpiration">
-                                    <Form.Control
-                                        as="select"
-                                        controlId="offerExpiration"
-                                        className="form-control"
+                                    </select>
+                                </div>
+                                <div className="trial-modal-body-second-expiration">
+                                    <label>Offer expiration</label>
+                                    <select
+                                        className="floating-input"
                                         required
                                         name="offerExpiration"
                                         onChange={(event) => {
                                             setInputData({
                                                 ...inputData,
-                                                offerExpiration: event.currentTarget.value,
+                                                offer_expiration: event.currentTarget.value,
                                             });
                                         }}
                                     >
@@ -128,72 +134,70 @@ const TrialLinkModal = (props) => {
                                         <option value="28">28 days</option>
                                         <option value="29">29 days</option>
                                         <option value="30">30 days</option>
-                                    </Form.Control>
-                                </Form.Group>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <Form.Group controlId="duration" className="">
-                                    <Form.Control
-                                        as="select"
-                                        controlId="freeTrialDuration"
-                                        className="form-control"
-                                        required
-                                        name="freeTrialDuration"
-                                        onChange={(event) => {
-                                            setInputData({
-                                                ...inputData,
-                                                freeTrialDuration: event.currentTarget.value,
-                                            });
-                                        }}
-                                    >
-                                        <option value="1">1 day</option>
-                                        <option value="3">3 days</option>
-                                        <option value="7">7 days</option>
-                                        <option value="14">14 days</option>
-                                        <option value="30">1 month</option>
-                                        <option value="90">3 months</option>
-                                    </Form.Control>
-                                </Form.Group>
+                            <div className="trial-modal-body-third">
+                                <label>Free trial duration</label>
+                                <select
+                                    className="floating-input"
+                                    required
+                                    name="freeTrialDuration"
+                                    onChange={(event) => {
+                                        setInputData({
+                                            ...inputData,
+                                            free_trial_duration: event.currentTarget.value,
+                                        });
+                                    }}
+                                >
+                                    <option value="1">1 day</option>
+                                    <option value="3">3 days</option>
+                                    <option value="7">7 days</option>
+                                    <option value="14">14 days</option>
+                                    <option value="30">1 month</option>
+                                    <option value="90">3 months</option>
+                                </select>
                             </div>
-                            <div>
+                            <div className="trial-modal-body-fourth">
+                                <select
+                                    className="floating-input"
+                                    required
+                                    name="isEverybody"
+                                    onChange={(event) => {
+                                        setInputData({
+                                            ...inputData,
+                                            is_everybody: event.currentTarget.value,
+                                        });
+                                    }}
+                                >
+                                    <option value="0">For new fans</option>
+                                    <option value="1">For everybody</option>
+                                </select>
+                            </div>
+                            <div className="trial-modal-body-des">
                                 <p>{t("trial_modal_note_first")}</p>
                                 <p>{t("trial_modal_note_second")}</p>
                             </div>
-                            <Modal.Footer>
-                                <div className="trial-link-modal-btn-sec">
-                                    <Button
-                                        type="button"
-                                        className="trial-link-modal-btn"
-                                        data-dismiss="modal"
-                                        disabled={props.saveTrialLinkOption.buttonDisable}
-                                        onClick={props.closeModal}
-                                    >
-                                        {t("cancel")}
-                                    </Button>
-                                </div>
-                                <div className="trial-link-modal-btn">
-                                    <Button
-                                        type="button"
-                                        className="trial-link-modal-btn"
-                                        data-dismiss="modal"
-                                        onClick={handleSubmit}
-                                        disabled={props.saveTrialLinkOption.buttonDisable}
-                                    >
-                                        {props.saveTrialLinkOption.loadingButtonContent ?
-                                            props.saveTrialLinkOption.loadingButtonContent :
-                                            t("create_link")}
-                                    </Button>
-                                </div>
-                            </Modal.Footer>
-                        </Form>
-                    </div>
-                </Modal.Body>
+                        </Modal.Body>
+                        <div className="trial-modal-footer">
+                            <button className="createBtn" onClick={handleSubmit}>
+                                {t("create_link")}
+                            </button>
+                            <button
+                                className="cancelBtn"
+                                onClick={() => props.setTrialLink(false)}
+                            >
+                                {t("modal_cancel")}
+                            </button>
+                        </div>
+                    </Form>
             </Modal>
         </>
     );
 };
 
 const mapStateToPros = (state) => ({
+    profile: state.users.profile,
     saveTrialLinkOption: state.users.saveTrialLinkOption,
 });
 

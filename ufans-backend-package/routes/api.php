@@ -113,6 +113,12 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
 
         Route::post('feature_story_delete', 'Api\UserAccountApiController@feature_story_delete');
 
+        Route::post('trial_link_option_save', 'Api\UserAccountApiController@trial_link_option_save');
+
+        Route::post('trial_link_option_delete', 'Api\UserAccountApiController@trial_link_option_delete');
+
+        Route::post('trial_link_check', 'Api\UserAccountApiController@trial_link_check');
+
         Route::post('lists_index', 'Api\UserAccountApiController@lists_index');
 
         Route::post('payments_index', 'Api\UserAccountApiController@payments_index');
@@ -439,6 +445,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.', 'middleware' => 'cors'], func
         Route::post('user_subscriptions_payment_by_stripe', 'Api\UserAccountApiController@user_subscriptions_payment_by_stripe');
 
         Route::post('user_subscriptions_payment_by_wallet', 'Api\UserAccountApiController@user_subscriptions_payment_by_wallet');
+
+        Route::post('user_free_trial_follow', 'Api\UserAccountApiController@user_free_trial_follow');
 
         Route::post('user_subscriptions_history', 'Api\UserAccountApiController@user_subscriptions_history');
 

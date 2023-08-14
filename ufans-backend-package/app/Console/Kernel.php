@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\PostFileRemoveCron::class,
         Commands\StopLiveVideoCron::class,
         Commands\StopLiveAudioCron::class,
+        Commands\TrialFollowingRemoveCron::class,
     ];
 
     /**
@@ -29,20 +30,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-
-           $schedule->command('PublishPost:cron')->hourly();
-
-           $schedule->command('SubscriptionPayment:cron')->daily();
-
-           $schedule->command('PostFileRemove:cron')->hourly();
-
-           $schedule->command('StopLiveVideo:cron')->everyMinute();
-
-           $schedule->command('StopLiveAudio:cron')->everyMinute();
-
-           $schedule->command('StopLiveStreaming:cron')->everyMinute();
-
+        $schedule->command('PublishPost:cron')->hourly();
+        $schedule->command('SubscriptionPayment:cron')->daily();
+        $schedule->command('TrialFollowingRemove:cron')->daily();
+        $schedule->command('PostFileRemove:cron')->hourly();
+        $schedule->command('StopLiveVideo:cron')->everyMinute();
+        $schedule->command('StopLiveAudio:cron')->everyMinute();
+        $schedule->command('StopLiveStreaming:cron')->everyMinute();
     }
 
     /**

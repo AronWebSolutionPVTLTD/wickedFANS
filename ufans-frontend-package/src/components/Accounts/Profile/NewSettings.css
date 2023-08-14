@@ -575,16 +575,119 @@
     cursor: pointer;
 }
 
-.trial-link-modal-offer {
+.trial-modal-title {
     display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px
 }
 
-.trial-link-modal-offer-limit {
-    border: 1px solid #9896A1;
+.trial-modal-title h4 {
+    font-weight: 600;
 }
 
-.trial-link-modal-btn-sec {
-    border: none !important;
-    background-color: #ffffff !important;
-    color: var(--primary-color) !important;
+.trial-modal-body-first {
+    margin-bottom: 16px;
+}
+
+.trial-modal-body-second {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.trial-modal-body-second-limit {
+    width: 50%;
+    margin-right: 10px;
+}
+
+.trial-modal-body-second-limit label {
+    font-size: 12px;
+    color: #79797c;
+}
+
+.trial-modal-body-second-expiration {
+    width: 50%;
+}
+
+.trial-modal-body-second-expiration label {    
+    font-size: 12px;
+    color: #79797c;
+}
+
+.trial-modal-body-third {
+    margin-bottom: 16px;
+}
+
+.trial-modal-body-third label {
+    font-size: 12px;
+    color: #79797c;
+}
+
+.trial-modal-body-fourth {
+    margin-bottom: 16px;
+}
+
+.trial-modal-body-des {
+    margin-bottom: 16px;
+}
+
+.trial-modal-body-des p {
+    margin: 0;  
+    font-size: 12px;
+}
+
+.trial-modal-footer {
+    float: right;
+    margin: 0 10px 10px;
+}
+
+.createBtn {
+    margin-right: 16px;
+    border: none;
+    background-color: #ffffff;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 18px;
+    padding: 8px;
+}
+
+.createBtn:hover {
+    background-color: #ededf0;
+}
+
+.cancelBtn {
+    margin-right: 10px;
+    border: none;
+    background-color: #ffffff;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 18px;
+    padding: 8px;
+}
+
+.cancelBtn:hover {
+    background-color: #ededf0;
+}
+
+.created-trial-header {
+    margin-bottom: 30px;
+}
+
+.created-trial-header p {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.created-trial-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.created-trial-body {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    border-bottom: 1px solid #6561e333;
+    margin-bottom: 30px;
 }

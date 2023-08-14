@@ -45,6 +45,10 @@ import {
   deleteFeatureStoryFailure,
   saveTrialLinkOptionSuccess,
   saveTrialLinkOptionFailure,
+  deleteTrialLinkOptionSuccess,
+  deleteTrialLinkOptionFailure,
+  fetchConfirmTrialLinkSuccess,
+  fetchConfirmTrialLinkFailure,
   fetchUserDetailsStart,
   saveEmailNotificationSuccess,
   saveEmailNotificationFailure,
@@ -77,6 +81,8 @@ import {
   DELETE_FEATURE_STORY_START,
   SAVE_TRIAL_LINK_OPTION_START,
   SAVE_EMAIL_NOTIFICATION_START,
+  DELETE_TRIAL_LINK_OPTION_START,
+  FETCH_CONFIRM_TRIAL_LINK_START,
 } from "../actions/ActionConstant";
 
 import { createNotification } from "react-redux-notify";
@@ -708,6 +714,60 @@ function* saveTrialLinkOptionAPI() {
   }
 }
 
+function* deleteTrialLinkOptionAPI() {
+  try {
+    const inputData = yield select(
+      (state) => state.users.deleteTrialLinkOption.inputData
+    );
+    const response = yield api.postMethod("trial_link_option_delete", inputData);
+    if (response.data.success) {
+      yield put(deleteTrialLinkOptionSuccess(response.data.data));
+      const notificationMessage = getSuccessNotificationMessage(
+        response.data.message
+      );
+      yield put(createNotification(notificationMessage));
+      yield put(fetchUserDetailsStart());
+    } else {
+      yield put(deleteTrialLinkOptionFailure(response.data.error));
+      const notificationMessage = getErrorNotificationMessage(
+        response.data.error
+      );
+      yield put(createNotification(notificationMessage));
+    }
+  } catch (error) {
+    yield put(deleteTrialLinkOptionFailure(error));
+    const notificationMessage = getErrorNotificationMessage(error.message);
+    yield put(createNotification(notificationMessage));
+  }
+}
+
+function* confirmTrialLinkAPI() {
+  try {
+    const inputData = yield select(
+      (state) => state.users.confirmTrialLink.inputData
+    );
+    const response = yield api.postMethod("trial_link_check", inputData);
+    if (response.data.success) {
+      yield put(fetchConfirmTrialLinkSuccess(response.data.data));
+      const notificationMessage = getSuccessNotificationMessage(
+        response.data.message
+      );
+      yield put(createNotification(notificationMessage));
+      yield put(fetchUserDetailsStart());
+    } else {
+      yield put(fetchConfirmTrialLinkFailure(response.data.error));
+      const notificationMessage = getErrorNotificationMessage(
+        response.data.error
+      );
+      yield put(createNotification(notificationMessage));
+    }
+  } catch (error) {
+    yield put(fetchConfirmTrialLinkFailure(error));
+    const notificationMessage = getErrorNotificationMessage(error.message);
+    yield put(createNotification(notificationMessage));
+  }
+}
+
 function* resetPasswordAPI() {
   try {
     const inputData = yield select(
@@ -1042,5 +1102,7 @@ export default function* pageSaga() {
     yield takeLatest(DELETE_FEATURE_STORY_START, deleteFeatureStoryAPI),
     yield takeLatest(SAVE_TRIAL_LINK_OPTION_START, saveTrialLinkOptionAPI),
     yield takeLatest(SAVE_EMAIL_NOTIFICATION_START, saveEmailNotificationAPI),
+    yield takeLatest(DELETE_TRIAL_LINK_OPTION_START, deleteTrialLinkOptionAPI),
+    yield takeLatest(FETCH_CONFIRM_TRIAL_LINK_START, confirmTrialLinkAPI),
   ]);
 }

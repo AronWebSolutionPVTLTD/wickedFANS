@@ -236,8 +236,14 @@ class PostRepository {
                 ->whereDate('expiry_date','>=', $current_date)
                 ->where('to_user_id', $post_user->id)
                 ->count();
+
+            if ($follower) {
+                $today = date('Y-m-d');
+                $date = $follower->updated_at;
+                $diff = abs(strtotime($today) - strtotime($date)) / (60 * 60 * 24);
+            }
             
-            if(!$check_user_subscription_payment) {
+            if(!$check_user_subscription_payment && (!$follower || ($follower->type == 'trial' && $diff >= $follower->trial_period))) {
 
                 $data['is_user_needs_pay'] = YES;
 
