@@ -2379,6 +2379,106 @@ class UserAccountApiController extends Controller
 
     }
 
+     /**
+     * @method trial_link_option_save()
+     *
+     * @uses Save Users Free Trial link
+     *
+     * @created Bhawya N
+     *
+     * @updated Bhawya N
+     *
+     * @param - 
+     *
+     * @return JSON Response
+     */
+    public function trial_link_option_save(Request $request) {
+
+        try {
+            DB::beginTransaction();
+
+            $rules = [
+                    'link_name' => 'required|string',
+                    'offer_limit' => 'required|integer',
+                    'offer_expiration' => 'required|integer',
+                    'free_trial_duration' => 'required|integer',
+                    'is_everybody' => 'required|integer'
+            ];
+            $custom_errors = [ 'regex' => api_error(265) ];
+            Helper::custom_validator($request->all(), $rules, $custom_errors);
+
+            $user = User::find($request->id);
+            $trial_code = \Str::random(10);
+            if(!$user) { 
+                throw new Exception(api_error(1002) , 1002);
+            }
+
+            $user->link_name = $request->link_name;
+            $user->offer_limit = $request->offer_limit;
+            $user->offer_expiration = $request->offer_expiration;
+            $user->free_trial_duration = $request->free_trial_duration;
+            $user->is_everybody = $request->is_everybody;
+            $user->trial_created = DB::raw('NOW()');
+            $user->trial_link =  Setting::get('frontend_url') ."/". $user->user_unique_id . "?trial=" . $trial_code;
+            $user->trial_code = $trial_code;
+
+            if($user->save()) {
+
+                DB::commit();
+                $data = User::find($user->id);
+                $user_category = CategoryDetail::where('user_id', $request->id)->where('type', CATEGORY_TYPE_PROFILE)->first();
+                $categories = selected(Category::Approved()->get(), $user_category->category_id ?? 0, 'id');
+                $data->categories = $categories;
+                $data->category_id = $user_category->category_id ?? 0;
+                $data->selected_category = $user_category ? Category::find($user_category->category_id) : emptyObject();
+                $data->monthly_amount = $user_subscription->monthly_amount ?? 0.00;
+                $data->yearly_amount = $user_subscription->yearly_amount ?? 0.00;
+                $data->payment_info = CommonRepo::subscriptions_user_payment_check($user, $request);
+                return $this->sendResponse($message = api_success(252), $success_code = 252, $data);
+            } else {    
+                throw new Exception(api_error(103), 103);
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+            return $this->sendError($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @method trial_link_option_delete()
+     *
+     * @uses Save Users Free Trial link
+     *
+     * @created Bhawya N
+     *
+     * @updated Bhawya N
+     *
+     * @param - 
+     *
+     * @return JSON Response
+     */
+    public function trial_link_option_delete(Request $request) {
+
+        try {
+            DB::beginTransaction();   
+            $user = User::find($request->id);
+            $user->link_name = null;
+            $user->offer_limit = null;
+            $user->offer_expiration = null;
+            $user->free_trial_duration = null;
+            $user->trial_created = null;
+            $user-> is_everybody = null;
+            $user-> trial_link = null;
+            $user-> trial_code = null;
+            $user->save();
+            DB::commit();
+            return $this->sendResponse(api_success(253), 253, $user);
+        } catch (Exception $e) {
+            DB::rollback();
+            return $this->sendError($e->getMessage(), $e->getCode());
+        }
+    }
+
     /** 
      * @method user_billing_accounts_list()
      *
@@ -3089,6 +3189,45 @@ class UserAccountApiController extends Controller
         
         }
 
+    }
+
+    public function user_free_trial_follow(Request $request) {
+        try {
+            DB::beginTransaction();
+
+            $rules = [
+                'user_unique_id' => 'required|exists:users,unique_id'
+            ];
+
+            Helper::custom_validator($request->all(), $rules, $custom_errors = []);
+
+            $user = User::findOrFail($request->id);
+            $followerInfo = User::where('users.unique_id', $request->user_unique_id)->first();
+            
+            if(!$followerInfo) {
+                throw new Exception(api_error(135), 135);
+            }
+            
+            $follower = \App\Models\Follower::where('status', YES)->where('follower_id', $request->id)->where('user_id', $followerInfo->id)->first();
+            if($follower) {
+                throw new Exception(api_error(137), 137);
+            }
+            $follower = \App\Models\Follower::where('follower_id', $request->id)->where('user_id', $followerInfo->id)->first() ?? new \App\Models\Follower;
+            $follower->user_id = $followerInfo->id;
+            $follower->follower_id = $request->id;
+            $follower->status = DEFAULT_TRUE;
+            $follower->type = 'trial';
+            $follower->trial_period = $followerInfo->free_trial_duration;
+            $follower->save();
+
+            DB::commit();
+            // return response()->json($response, 200);return $this->sendResponse($message = "", $code = "", $data);
+            return $this->sendResponse(api_success(140), 140, $follower);
+            
+        } catch(Exception $e) {
+            DB::rollback();
+            return $this->sendError($e->getMessage(), $e->getCode());
+        }
     }
 
     /**
@@ -4445,7 +4584,49 @@ class UserAccountApiController extends Controller
         } catch (Exception $e) {
 
             DB::rollback();
+        }
+    }   
 
+    //
+    public function trial_link_check(Request $request) {
+
+        try {
+            $user = User::find($request->id);
+            $trial = $request->trial;
+            $unique_id = $request->unique_id;
+            $trial_start_time = date('Y-m-d H:m:s');
+            $creator_id = $request->creator_id;
+            $following_count = \App\Models\Follower::where('user_id', $creator_id)->count();
+            
+            $followerInfo = User::where('unique_id', $unique_id)->first();
+
+            if(!$followerInfo) {
+                throw new Exception(api_error(135), 135);
+            }
+
+            if($followerInfo->trial_code != $trial) {
+                throw new Exception(api_error(268), 268);
+            }
+            
+            $follower = \App\Models\Follower::where('status', YES)->where('follower_id', $request->id)->where('user_id', $followerInfo->id)->first();
+            if($follower) {
+                throw new Exception(api_error(137), 137);
+            }
+            $follower = \App\Models\Follower::where('follower_id', $request->id)->where('user_id', $followerInfo->id)->first() ?? new \App\Models\Follower;
+            $follower->user_id = $followerInfo->id;
+            $follower->follower_id = $request->id;
+            $follower->status = DEFAULT_TRUE;
+            $follower->type = 'trial';
+            $follower->trial_period = $followerInfo->free_trial_duration;
+            $follower->trial_start_time = $trial_start_time;
+            $follower->trial_once = $follower->trial_once + 1;
+            $follower->save();
+            return $this->sendResponse(api_success(254), 254, [
+                'follower' => $follower, 
+                'following_count' => $following_count
+            ]);
+            
+        } catch(Exception $e) {
             return $this->sendError($e->getMessage(), $e->getCode());
         }
     }

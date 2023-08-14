@@ -80,6 +80,12 @@ import {
   SAVE_EMAIL_NOTIFICATION_START,
   SAVE_EMAIL_NOTIFICATION_SUCCESS,
   SAVE_EMAIL_NOTIFICATION_FAILURE,
+  DELETE_TRIAL_LINK_OPTION_START,
+  DELETE_TRIAL_LINK_OPTION_SUCCESS,
+  DELETE_TRIAL_LINK_OPTION_FAILURE,
+  FETCH_CONFIRM_TRIAL_LINK_START,
+  FETCH_CONFIRM_TRIAL_LINK_SUCCESS,
+  FETCH_CONFIRM_TRIAL_LINK_FAILURE,
 } from "./ActionConstant";
 
 // Get user details actions.
@@ -667,6 +673,13 @@ export function saveEmailNotificationStart(data) {
   return {
     type: SAVE_EMAIL_NOTIFICATION_START,
     data,
+  }
+}
+
+export function deleteTrialLinkOptionStart(data) {
+  return {
+    type: DELETE_TRIAL_LINK_OPTION_START,
+    data,
   };
 }
 
@@ -674,12 +687,47 @@ export function saveEmailNotificationSuccess(data) {
   return {
     type: SAVE_EMAIL_NOTIFICATION_SUCCESS,
     data,
+  }
+}
+
+export function deleteTrialLinkOptionSuccess(data) {
+  return {
+    type: DELETE_TRIAL_LINK_OPTION_SUCCESS,
+    data,
   };
 }
 
 export function saveEmailNotificationFailure(error) {
   return {
     type: SAVE_EMAIL_NOTIFICATION_FAILURE,
+    error,
+  }
+}
+
+export function deleteTrialLinkOptionFailure(error) {
+  return {
+    type: DELETE_TRIAL_LINK_OPTION_FAILURE,
+    error,
+  };
+}
+
+export function fetchConfirmTrialLinkStart(data) {
+  return {
+    type: FETCH_CONFIRM_TRIAL_LINK_START,
+    data,
+  };
+}
+
+export function fetchConfirmTrialLinkSuccess(data) {
+  return {
+    type: FETCH_CONFIRM_TRIAL_LINK_SUCCESS,
+    data,
+  };
+}
+
+export function fetchConfirmTrialLinkFailure(error) {
+  return {
+    type: FETCH_CONFIRM_TRIAL_LINK_FAILURE,
     error,
   };
 }

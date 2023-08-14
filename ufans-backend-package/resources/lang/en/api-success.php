@@ -238,6 +238,12 @@ return [
 
     251 => "Two Step Authentication Disabled Updated!!",
 
+    252 => "Free trial link created successfully!",
+
+    253 => "Free trial link deleted successfully!",
+
+    254 => "You followed this user for free trial. ",
+
     //Demo login success messages
 
     801 => 'Admin demo login credentials are already present',

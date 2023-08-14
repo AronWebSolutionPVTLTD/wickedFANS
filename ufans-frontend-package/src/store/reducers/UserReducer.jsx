@@ -76,6 +76,12 @@ import {
   SAVE_EMAIL_NOTIFICATION_START,
   SAVE_EMAIL_NOTIFICATION_SUCCESS,
   SAVE_EMAIL_NOTIFICATION_FAILURE,
+  DELETE_TRIAL_LINK_OPTION_START,
+  DELETE_TRIAL_LINK_OPTION_SUCCESS,
+  DELETE_TRIAL_LINK_OPTION_FAILURE,
+  FETCH_CONFIRM_TRIAL_LINK_START,
+  FETCH_CONFIRM_TRIAL_LINK_SUCCESS,
+  FETCH_CONFIRM_TRIAL_LINK_FAILURE,
 } from "../actions/ActionConstant";
 
 const initialState = {
@@ -239,6 +245,22 @@ const initialState = {
     buttonDisable: false,
   },
   emailNotification: {
+    data: {},
+    loading: true,
+    error: false,
+    inputData: {},
+    loadingButtonContent: null,
+    buttonDisable: false,
+  },  
+  deleteTrialLinkOption: {
+    data: {},
+    loading: true,
+    error: false,
+    inputData: {},
+    loadingButtonContent: null,
+    buttonDisable: false,
+  },
+  confirmTrialLink: {
     data: {},
     loading: true,
     error: false,
@@ -877,7 +899,6 @@ const userReducer = (state = initialState, action) => {
         },
       };
     case USERNAME_VALIDATION_FAILURE:
-      // console.log("action", action.error.data.error);
       return {
         ...state,
         validationInputData: {
@@ -1198,6 +1219,74 @@ const userReducer = (state = initialState, action) => {
           buttonDisable: false,
         },
       };
+      case DELETE_TRIAL_LINK_OPTION_START:
+        return {
+          ...state,
+          deleteTrialLinkOption: {
+            data: {},
+            loading: true,
+            error: false,
+            inputData: action.data,
+            loadingButtonContent: "Loading... Please wait.",
+            buttonDisable: true,
+          },
+        };
+      case DELETE_TRIAL_LINK_OPTION_SUCCESS:
+        return {
+          ...state,
+          deleteTrialLinkOption: {
+            data: action.data,
+            loading: false,
+            error: false,
+            inputData: {},
+            loadingButtonContent: null,
+            buttonDisable: false,
+          },
+        };
+      case DELETE_TRIAL_LINK_OPTION_FAILURE:
+        return {
+          ...state,
+          deleteTrialLinkOption: {
+            data: {},
+            loading: true,
+            error: action.error,
+            inputData: {},
+            loadingButtonContent: null,
+            buttonDisable: false,
+          },
+        };
+
+        case FETCH_CONFIRM_TRIAL_LINK_START:
+          return {
+            ...state,
+            confirmTrialLink: {
+              data: {},
+              loading: true,
+              error: false,
+              inputData: action.data,
+            },
+          };
+        case FETCH_CONFIRM_TRIAL_LINK_SUCCESS:
+          return {
+            ...state,
+            confirmTrialLink: {
+              data: action.data,
+              loading: false,
+              error: false,
+              inputData: {},
+            },
+          };
+
+        case FETCH_CONFIRM_TRIAL_LINK_FAILURE:
+          return {
+            ...state,
+            confirmTrialLink: {
+              data: {},
+              loading: true,
+              error: action.error,
+              inputData: {},
+            },
+          };
     default:
       return state;
   }

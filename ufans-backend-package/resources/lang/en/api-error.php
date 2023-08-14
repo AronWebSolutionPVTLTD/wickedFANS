@@ -311,4 +311,6 @@ return [
 
     267 => 'Wallet min balance limit (:other_key)',
 
+    268 => 'The trial not exists',
+
 ];

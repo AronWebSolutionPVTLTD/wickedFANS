@@ -276,6 +276,8 @@ class FollowersApiController extends Controller
             }
 
             $follower->status = FOLLOWER_EXPIRED;
+            $follower->type = null;
+            $follower->trial_period = null;
 
             $follower->save();
 

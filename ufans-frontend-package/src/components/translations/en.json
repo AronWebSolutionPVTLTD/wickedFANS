@@ -749,5 +749,8 @@
     "free_trial_link":"FREE TRIAL LINK",
     "trial_modal_note_first":"Promotional subscription $0.00 USD for selected duration.",
     "trial_modal_note_second":"User will not be subscripted automatically, only by choice.",
-    "create_link":"CREATE LINK"
+    "create_link":"CREATE LINK",
+    "trial_link_name":"Trial link name",
+    "modal_cancel":"CANCEL",
+    "trial_link_copied":"The trial link is successfully copied."
   }
