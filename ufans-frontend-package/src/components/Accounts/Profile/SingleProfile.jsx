@@ -333,7 +333,7 @@ const SingleProfile = (props) => {
                         <div className="user-cover-img-sec">
                           <Image
                             className="profile-user-cover-img"
-                            src={userDetails.data.user.cover}
+                            src={userDetails.data.user.cover ? userDetails.data.user.cover : "https://wickedfans.com/admin/public/images/ppv_image_placeholder.jpg"}
                             alt={userDetails.data.user.name}
                           />
                           <div className="profile-user-cover-header">
@@ -429,7 +429,7 @@ const SingleProfile = (props) => {
                         <div className="user-avatar-container">
                           <Image
                             className="user-avatar"
-                            src={userDetails.data.user.picture}
+                            src={userDetails.data.user.picture ? userDetails.data.user.picture : "https://wickedfans.com/admin/public/images/avatar-default.png"}
                             alt={userDetails.data.user.name}
                           />
                           {userDetails.data.user.is_user_live === 1 && (
@@ -1810,7 +1810,7 @@ const SingleProfile = (props) => {
             requestVideoCall={requestVideoCall}
             closePrivateCallModal={closePrivateCallModal}
             username={userDetails.data.user.username}
-            userPicture={userDetails.data.user.picture}
+            userPicture={userDetails.data.user.picture ? userDetails.data.user.picture : "https://wickedfans.com/admin/public/images/avatar-default.png"}
             videoAmount={userDetails.data.user.video_call_amount_formatted}
             name={userDetails.data.user.name}
             post_id={null}
@@ -1820,7 +1820,7 @@ const SingleProfile = (props) => {
             requestAudioCall={requestAudioCall}
             closePrivateCallModal={closePrivateCallModal}
             username={userDetails.data.user.username}
-            userPicture={userDetails.data.user.picture}
+            userPicture={userDetails.data.user.picture ? userDetails.data.user.picture : "https://wickedfans.com/admin/public/images/avatar-default.png"}
             AudioAmount={userDetails.data.user.audio_call_amount_formatted}
             name={userDetails.data.user.name}
             post_id={null}

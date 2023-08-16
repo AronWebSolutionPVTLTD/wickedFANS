@@ -113,7 +113,7 @@ const NewFeedSuggestionCard = (props) => {
           <Slider {...setting}>
             {props.postSug.data.users.map((user) => (
               <div key={user.user_id}>
-                <Link to={`/${user.user_unique_id}`}>
+                <a href={`/${user.user_unique_id}`}>
                   <div className="new-feed-suggestion-card">
                     <div className="new-feed-suggestion-bg-img-sec">
                       <Image
@@ -143,14 +143,14 @@ const NewFeedSuggestionCard = (props) => {
                             </span>
                           ) : null}
                         </h4>
-                        <Link>@{user.username}</Link>
+                        <span style={{ color: '#ddd' }}>@{user.username}</span>
                       </div>
                     </div>
                     <div className="new-user-feed-premium-sec">
                       <p>{user.user_account_type_formatted}</p>
                     </div>
                   </div>
-                </Link>
+                </a>
               </div>
             ))}
           </Slider>
