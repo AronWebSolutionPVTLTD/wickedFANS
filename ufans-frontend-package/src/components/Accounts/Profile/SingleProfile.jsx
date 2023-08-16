@@ -88,6 +88,7 @@ const SingleProfile = (props) => {
   const [imageCount, setImageCount] = useState(0);
   const [videoCount, setVideoCount] = useState(0);
   const [formattedDate, setFormattedDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   let followingCount = 0;
   let followingCounts = 0;
 
@@ -109,7 +110,7 @@ const SingleProfile = (props) => {
     const date = new Date();
     date.setMonth(monthNumber - 1);
   
-    return date.toLocaleString('en-US', { month: 'long' });
+    return date.toLocaleString('en-US', { month: 'short' });
   }
   
   useEffect(() => {
@@ -147,6 +148,18 @@ const SingleProfile = (props) => {
         }
       }
     }
+
+    if (props.profile.data.totalFollowings && props.userDetails.data.user) {
+      const end_date = new Date(newDate);
+      const yyyy = end_date.getFullYear();
+      let mm = end_date.getMonth() + 1;
+      let dd = end_date.getDate();
+
+      if (dd < 10) dd = '0' + dd;
+      if (mm < 10) mm = '0' + mm;
+
+      setEndDate(getMonthName(mm) + ' ' + dd + ', ' + yyyy);
+    }  
 
     setFormattedDate (newDate.toDateString());
 
@@ -741,8 +754,13 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                          {!props.userDetails.data.user.offer_expiration ?
+                                            <span>No expiration</span> :
+                                            <>
+                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                              <span>{endDate}</span>
+                                            </> 
+                                          }
                                         </div>
                                       </>
                                     }
@@ -777,8 +795,13 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                          {!props.userDetails.data.user.offer_expiration ?
+                                            <span>No expiration</span> :
+                                            <>
+                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                              <span>{endDate}</span>
+                                            </> 
+                                          }
                                         </div>
                                       </div>
                                     </div>
@@ -846,8 +869,13 @@ const SingleProfile = (props) => {
                                         /Month</span>
                                       </div>
                                       <div className="user-subscription-des">
-                                        <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                        <span>{props.userDetails.data.user?.trial_created}</span>
+                                        {!props.userDetails.data.user.offer_expiration ?
+                                          <span>No expiration</span> :
+                                          <>
+                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                            <span>{endDate}</span>
+                                          </> 
+                                        }
                                       </div>
                                     </div>
                                   </div>
@@ -882,8 +910,13 @@ const SingleProfile = (props) => {
                                             /Month</span>
                                           </div>
                                           <div className="user-subscription-des">
-                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                            <span>{props.userDetails.data.user?.trial_created}</span>
+                                            {!props.userDetails.data.user.offer_expiration ?
+                                              <span>No expiration</span> :
+                                              <>
+                                                <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                                <span>{endDate}</span>
+                                              </> 
+                                            }
                                           </div>
                                         </div>
                                       </div>
@@ -982,6 +1015,69 @@ const SingleProfile = (props) => {
                                     </div>
                                   )
                                 ) : null}
+
+                                {props.profile.data.totalFollowings.map((following) => 
+                                  following.user_id === props.userDetails.data.user.user_id && following.type === "trial" && props.userDetails.data.user.trial_created === null &&
+                                  <>
+                                    {userDetails.data.payment_info.unsubscribe_btn_status ==
+                                    1 && followingCounts !== 0 && (
+                                      <div className="user-subscription-plans-details">
+                                        <h3>Subscription Plans</h3>
+                                        <div className="user-subscription-btn-sec">
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={() => handleUnfollowModalShow()}
+                                          >
+                                            {t("unfollow")}
+                                          </div>
+                                        </div>
+                                        <Modal
+                                          show={showUnfollow}
+                                          onHide={handleUnfollowModalClose}
+                                          backdrop="static"
+                                          keyboard={false}
+                                          centered
+                                          className={`${localStorage.getItem("theme") !== "" &&
+                                            localStorage.getItem("theme") !== null &&
+                                            localStorage.getItem("theme") !== undefined &&
+                                            localStorage.getItem("theme") === "dark"
+                                            ? "dark-theme-modal"
+                                            : ""
+                                            }
+                                          `}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            {t("cancel_subscription_conformation")}
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              size="lg"
+                                              onClick={handleUnfollowModalClose}
+                                            >
+                                              {t("close")}
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              size="lg"
+                                              onClick={(event) =>
+                                                handleUnfollow(
+                                                  event,
+                                                  userDetails.data.user.user_id
+                                                )
+                                              }
+                                            >
+                                              {t("yes")}
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
 
                                 {props.profile.data.totalFollowings.map((following) => 
                                   following.user_id === props.userDetails.data.user.user_id && following.type !== "trial" && 
@@ -1428,8 +1524,13 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                          {!props.userDetails.data.user.offer_expiration ?
+                                            <span>No expiration</span> :
+                                            <>
+                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                              <span>{endDate}</span>
+                                            </> 
+                                          }
                                         </div>
                                       </>
                                     }
@@ -1464,8 +1565,13 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                          {!props.userDetails.data.user.offer_expiration ?
+                                            <span>No expiration</span> :
+                                            <>
+                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                              <span>{endDate}</span>
+                                            </> 
+                                          }
                                         </div>
                                       </div>
                                     </div>
@@ -1533,8 +1639,13 @@ const SingleProfile = (props) => {
                                         /Month</span>
                                       </div>
                                       <div className="user-subscription-des">
-                                        <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                        <span>{props.userDetails.data.user?.trial_created}</span>
+                                        {!props.userDetails.data.user.offer_expiration ?
+                                          <span>No expiration</span> :
+                                          <>
+                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                            <span>{endDate}</span>
+                                          </> 
+                                        }
                                       </div>
                                     </div>
                                   </div>
@@ -1569,8 +1680,13 @@ const SingleProfile = (props) => {
                                             /Month</span>
                                           </div>
                                           <div className="user-subscription-des">
-                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                            <span>{props.userDetails.data.user?.trial_created}</span>
+                                            {!props.userDetails.data.user.offer_expiration ?
+                                              <span>No expiration</span> :
+                                              <>
+                                                <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                                <span>{endDate}</span>
+                                              </> 
+                                            }
                                           </div>
                                         </div>
                                       </div>
@@ -1669,6 +1785,69 @@ const SingleProfile = (props) => {
                                     </div>
                                   )
                                 ) : null}
+
+                                {props.profile.data.totalFollowings.map((following) => 
+                                  following.user_id === props.userDetails.data.user.user_id && following.type === "trial" && props.userDetails.data.user.trial_created === null &&
+                                  <>
+                                    {userDetails.data.payment_info.unsubscribe_btn_status ==
+                                    1 && followingCounts !== 0 && (
+                                      <div className="user-subscription-plans-details">
+                                        <h3>Subscription Plans</h3>
+                                        <div className="user-subscription-btn-sec">
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={() => handleUnfollowModalShow()}
+                                          >
+                                            {t("unfollow")}
+                                          </div>
+                                        </div>
+                                        <Modal
+                                          show={showUnfollow}
+                                          onHide={handleUnfollowModalClose}
+                                          backdrop="static"
+                                          keyboard={false}
+                                          centered
+                                          className={`${localStorage.getItem("theme") !== "" &&
+                                            localStorage.getItem("theme") !== null &&
+                                            localStorage.getItem("theme") !== undefined &&
+                                            localStorage.getItem("theme") === "dark"
+                                            ? "dark-theme-modal"
+                                            : ""
+                                            }
+                                          `}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            {t("cancel_subscription_conformation")}
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              size="lg"
+                                              onClick={handleUnfollowModalClose}
+                                            >
+                                              {t("close")}
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              size="lg"
+                                              onClick={(event) =>
+                                                handleUnfollow(
+                                                  event,
+                                                  userDetails.data.user.user_id
+                                                )
+                                              }
+                                            >
+                                              {t("yes")}
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
 
                                 {props.profile.data.totalFollowings.map((following) => 
                                   following.user_id === props.userDetails.data.user.user_id && following.type !== "trial" && 
