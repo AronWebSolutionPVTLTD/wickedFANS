@@ -9,7 +9,12 @@ import {
 import { saveTrialLinkOptionStart } from "../../../store/actions/UserAction";
 
 const TrialLinkModal = (props) => {
-    const [inputData, setInputData] = useState({});
+    const [inputData, setInputData] = useState({
+        offer_limit: "0",
+        offer_expiration: "0",
+        free_trial_duration: "1",
+        is_everybody: "0"
+    });
     const [skip, setSkip] = useState(false);
 
     const handleSubmit = (event) => {
