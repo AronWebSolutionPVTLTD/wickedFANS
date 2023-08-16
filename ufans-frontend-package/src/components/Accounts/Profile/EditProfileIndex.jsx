@@ -1047,45 +1047,49 @@ const EditProfileIndex = (props) => {
                         <div className="create-trial-link-main-wrapper">
                           <div className="trial-link-option-card">
                             {props.profile.data.is_content_creator === 2 && props.profile.data.user_account_type_formatted === "Premium" &&
-                              props.profile.data.trial_created === null ?
                               <>
-                                <div className="create-trial-link-header">
-                                  <span>{t("trial_links")}</span>
-                                  <p>{t("create_trial_link_note")}</p>
-                                </div>
-                                <div className="create-trial-link-content">
-                                  <div className="create-trial-link-btn-sec">
-                                    <div
-                                        className="trial-link-btn"
-                                        onClick={() => handleTrialLinkModalShow()}
-                                    >
-                                        {t("create_new_free_trial_link")}
+                                {props.profile.data.trial_created === null ?
+                                  <>
+                                    <div className="create-trial-link-header">
+                                      <span>{t("trial_links")}</span>
+                                      <p>{t("create_trial_link_note")}</p>
                                     </div>
-                                  </div>
-                                </div>
-                              </> : 
-                              <>
-                                <div className="created-trial-header">
-                                  <p>Limited offer-Free trial for {props.profile.data.free_trial_duration} day{props.profile.data.free_trial_duration === 1 ? "" : "s"}!</p>
-                                  <span></span>
-                                </div>
-                                <div className="created-trial-body">
-                                  <span>Started</span>
-                                  <span>{props.profile.data.trial_created}</span>
-                                </div>
-                                <div className="created-trial-footer">
-                                  <CopyToClipboard text={props.profile.data.trial_link} onCopy={onCopy}>
-                                    <button className="createBtn">
-                                        COPY TRIAL LINK
-                                    </button>
-                                  </CopyToClipboard>
-                                  <button
-                                    className="cancelBtn"
-                                    onClick={handleRemoveTrialLink}
-                                  >
-                                    REMOVE                                      
-                                  </button>
-                                </div>
+                                    <div className="create-trial-link-content">
+                                      <div className="create-trial-link-btn-sec">
+                                        <div
+                                            className="trial-link-btn"
+                                            onClick={() => handleTrialLinkModalShow()}
+                                        >
+                                            {t("create_new_free_trial_link")}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </> : 
+                                  <>
+                                    <div className="created-trial-header">
+                                      <p>{props.profile.data.link_name}</p>
+                                      <p>Limited offer-Free trial for {props.profile.data.free_trial_duration} day{props.profile.data.free_trial_duration === 1 ? "" : "s"}!</p>
+                                      <span></span>
+                                    </div>
+                                    <div className="created-trial-body">
+                                      <span>Started</span>
+                                      <span>{props.profile.data.trial_created}</span>
+                                    </div>
+                                    <div className="created-trial-footer">
+                                      <CopyToClipboard text={props.profile.data.trial_link} onCopy={onCopy}>
+                                        <button className="createBtn">
+                                            COPY TRIAL LINK
+                                        </button>
+                                      </CopyToClipboard>
+                                      <button
+                                        className="cancelBtn"
+                                        onClick={handleRemoveTrialLink}
+                                      >
+                                        REMOVE                                      
+                                      </button>
+                                    </div>
+                                  </>
+                                }
                               </>
                             }
                           </div>

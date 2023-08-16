@@ -2831,7 +2831,9 @@ class UserAccountApiController extends Controller
             $user->is_user_live = $user_live_videos->count() ? IS_STREAMING_YES : IS_STREAMING_NO;
 
             $user->ongoing_live_video = $user_live_videos->first();
-
+            $follower = Follower::where('user_id', $user->id)->where('follower_id', $request->id)->first();
+            $can_trial = $follower ? ($follower->status == 0 && $follower->trial_once == null ? true : false) : true;
+            $data['can_trial'] = $can_trial;
             return $this->sendResponse($message = "", $code = "", $data);
 
         } catch(Exception $e) {

@@ -73,7 +73,6 @@ const SingleProfile = (props) => {
   const trial = useSearchParams('trial');
   
   const [skipRender, setSkipRender] = useState(true);
-  const [badgeStatus, setBadgeStatus] = useState(0);
   const [activeSec, setActiveSec] = useState("all");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [requestVideoCall, setRequestVideoCall] = useState(false);
@@ -88,10 +87,9 @@ const SingleProfile = (props) => {
   const [allCount, setAllCount] = useState(0);
   const [imageCount, setImageCount] = useState(0);
   const [videoCount, setVideoCount] = useState(0);
-  const [endDate, setEndDate] = useState("");
-  const [trialStartTime, setTrialStartTime] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
   let followingCount = 0;
+  let followingCounts = 0;
 
   const [subscriptionData, setSubscriptionData] = useState({
     is_free: 0,
@@ -100,8 +98,10 @@ const SingleProfile = (props) => {
     amount_formatted: 0,
   });
   const [currentDate, setCurrentDate] = useState(new Date());
-  const trialCreated = new Date(props.userDetails.data.user?.trial_created);
-  const newDate = new Date(trialCreated.setDate(trialCreated.getDate() + props.userDetails.data.user?.offer_expiration));
+  const [trialOnce, setTrialOnce] = useState(null);
+
+  const trial_created = new Date(props.userDetails.data.user?.trial_created);
+  const newDate = new Date(trial_created.setDate(trial_created.getDate() + props.userDetails.data.user?.offer_expiration));
   
   const toggleVisibility = () => { };
 
@@ -151,47 +151,14 @@ const SingleProfile = (props) => {
     setFormattedDate (newDate.toDateString());
 
     if (props.profile.data.totalFollowings && props.userDetails.data.user) {
-      props.profile.data.totalFollowings.map((following) => {
-        following.user_id === props.userDetails.data.user.user_id &&
-          followingCount ++;
-      })
 
-      props.profile.data.totalFollowings.forEach((following) => {
-        if (following.user_id === props.userDetails.data.user.user_id) {
-          let trial_started = new Date(following.trial_start_time);
-          let dd = trial_started.getDate();
-          let mm = trial_started.getMonth() + 1;
-          let yyyy = trial_started.getFullYear();
-          
-          if (dd < 10) {
-              dd = '0' + dd;
+      {props.profile.data.totalFollowings.map((following) => {
+        if(following.user_id === props.userDetails.data.user.user_id) {
+            followingCounts ++;
+            setTrialOnce(following.trial_once);
           }
-          if (mm < 10) {
-              mm = '0' + mm;
-          }
-          setTrialStartTime(getMonthName(mm) + ' ' + dd + ' ' + yyyy);
-        }
-      });
-    }
-
-    if (props.profile.data.totalFollowings && props.userDetails.data.user) {
-      props.profile.data.totalFollowings.forEach((following) => {
-        if (following.user_id === props.userDetails.data.user.user_id) {
-          let trialStart = new Date(following.trial_start_time);
-          let endedDate = new Date(trialStart.setDate(trialStart.getDate() + following.trial_period));//props.userDetails.data.user?.free_trial_duration
-          let d = endedDate.getDate();
-          let m = endedDate.getMonth() + 1;
-          let y = endedDate.getFullYear();
-          
-          if (d < 10) {
-              d = '0' + d;
-          }
-          if (m < 10) {
-              m = '0' + m;
-          }
-          setEndDate(getMonthName(m) + ' ' + d + ' ' + y);
-        }})
-    }
+      })}
+     }
   }, [props.profile.data.totalFollowings, props.userDetails.data])
 
   useMemo(() => {
@@ -718,19 +685,20 @@ const SingleProfile = (props) => {
                       </div>
                       {props.userDetails.data.user?.is_everybody === 1 ? 
                         <>
-                          {props.profile.data.totalFollowings && props.userDetails.data && 
+                          {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
                             <>
-                              {props.userDetails.data.user.trial_created !== null && trialCreated < currentDate < newDate &&
-                                <>
-                                  {props.profile.data.totalFollowings.map((following) => {
-                                    following.user_id === props.userDetails.data.user.user_id &&
-                                      followingCount ++;
-                                  })}
-                                  {followingCount === 0 && props.confirmTrialLink.data.following_count !== props.userDetails.data.user.offer_limit ?
-                                    <div className="profile-subscription">
-                                      <div className="user-subscription-plans-details">
+                              {props.profile.data.totalFollowings.map((following) => {
+                                if(following.user_id === props.userDetails.data.user.user_id) {
+                                  followingCounts ++;
+                                }
+                              })}
+                              {followingCounts === 0 ?
+                                <div className="profile-subscription">
+                                  <div className="user-subscription-plans-details">
+                                    {(trialOnce === null || trialOnce === 0) && (props.userDetails.data.user.offer_limit === 0 || props.confirmTrialLink.data.following_count < props.userDetails.data.user.offer_limit) ? 
+                                      <>
                                         <h3>SUBSCRIPTION</h3>
-                                          <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
+                                        <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
                                         <span>Offer ends {formattedDate}</span>
                                         <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
                                           <a
@@ -747,114 +715,199 @@ const SingleProfile = (props) => {
                                                 .monthly_amount_formatted
                                             }{" "}
                                             /Month</span>
-                                      </div>
-                                    </div> : 
-                                    <>
-                                      {props.profile.data.totalFollowings.map((following) => 
-                                        following.type === "trial" &&
-                                        <div className="profile-subscription">
-                                          <div className="user-subscription-plans-details">
-                                            <h3>SUBSCRIPTION</h3>
-                                            {props.profile.data.totalFollowings.map((following, ind) => 
-                                              following.user_id === props.userDetails.data.user.user_id ?
-                                                <p key={ind}>Free trial for {following.trial_period} day{following.trial_period === 1 ? "" : "s"}!</p> : ""
-                                            ) //props.userDetails.data.user.free_trial_duration
-                                            }
-                                            <div className="user-subscription-plans-details-start">
-                                              <span>Started</span>
-                                              <span>{trialStartTime}</span>
-                                            </div>
-                                            <div className="user-subscription-plans-details-end">
-                                              <span>End</span>
-                                              <span>{endDate}</span>
-                                            </div>
-                                          </div>
+                                      </>
+                                      : 
+                                      <>
+                                        <h3>SUBSCRIPTION</h3>
+                                        <div
+                                          className="subscription-btn1"
+                                          style={{ display: "flex", justifyContent: "space-between" }}
+                                          onClick={(event) =>
+                                            subscriptionPayment(
+                                              event,
+                                              "months",
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount,
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            )
+                                          }
+                                        >
+                                          <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                          <span style={{ fontSize: "1.4rem" }}>{
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          }{" "}
+                                          /Month</span>
                                         </div>
-                                      )}
-                                    </>
-                                  }
+                                        <div className="user-subscription-des">
+                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                        </div>
+                                      </>
+                                    }
+                                  </div>
+                                </div>
+                                : 
+                                <>
+                                  {props.profile.data.totalFollowings.map((following) => 
+                                    following.user_id === props.userDetails.data.user.user_id && following.type === "trial" &&
+                                    <div className="profile-subscription">
+                                      <div className="user-subscription-plans-details">
+                                        <h3>SUBSCRIPTION</h3>
+                                        <div
+                                          className="subscription-btn1"
+                                          style={{ display: "flex", justifyContent: "space-between" }}
+                                          onClick={(event) =>
+                                            subscriptionPayment(
+                                              event,
+                                              "months",
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount,
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            )
+                                          }
+                                        >
+                                          <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                          <span style={{ fontSize: "1.4rem" }}>{
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          }{" "}
+                                          /Month</span>
+                                        </div>
+                                        <div className="user-subscription-des">
+                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
                                 </>
                               }
                             </>
                           }
                         </> : 
                         <>
-                          {props.profile.data.totalFollowings && props.userDetails.data &&
-                            <>
-                              {props.userDetails.data.user.trial_created !== null && trialCreated < currentDate < newDate && 
-                                <>
-                                  {props.profile.data.totalFollowings.map((following) => {
-                                    following.user_id === props.userDetails.data.user.user_id &&
-                                      followingCount ++;
-                                  })}
-                                  {followingCount === 0 && 
-                                    <>
-                                      {props.profile.data.totalFollowings.map((following) => 
-                                        <>
-                                          {following.trial_once === null && props.confirmTrialLink.data.following_count !== props.userDetails.data.user.offer_limit ?
-                                            <div className="profile-subscription">
-                                              <div className="user-subscription-plans-details">
-                                                <h3>SUBSCRIPTION</h3>
-                                                  <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
-                                                <span>Offer ends {formattedDate}</span>
-                                                <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
-                                                  <a
-                                                    href={props.userDetails.data.user.trial_link}
-                                                    className="subscription-btn1"
-                                                    style={{ display: 'flex', justifyContent: 'space-between' }}
-                                                  >
-                                                    <span>SUBSCRIBE</span>
-                                                    <span>FREE for {props.userDetails.data.user.free_trial_duration} day{props.userDetails?.data.user.free_trial_duration > 1 ? 's' : ''}!</span>
-                                                  </a>
-                                                </div>
-                                                <span>Regular price {
-                                                      userDetails.data.payment_info.subscription_info
-                                                        .monthly_amount_formatted
-                                                    }{" "}
-                                                    /Month</span>
-                                              </div>
-                                            </div> : 
-                                            <>
-                                              {following.type === "trial" && following.user_id === props.userDetails.data.user.user_id &&
-                                                <div className="profile-subscription">
-                                                  <div className="user-subscription-plans-details">
-                                                    <h3>SUBSCRIPTION</h3>
-                                                        <p>Free trial for {following.trial_period} day{following.trial_period === 1 ? "" : "s"}!</p>
-                                                    <div className="user-subscription-plans-details-start">
-                                                      <span>Started</span>
-                                                      <span>{trialStartTime}</span>
-                                                    </div>
-                                                    <div className="user-subscription-plans-details-end">
-                                                      <span>End</span>
-                                                      <span>{endDate}</span>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              }
-                                            </>
-                                          }
-                                        </>
-                                      )}
-                                    </>
-                                  }
-                                </>
-                              }
-                            </>
-                          }
-                        </>
+                        {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
+                          <>
+                            {props.profile.data.totalFollowings.map((following) => {
+                              if(following.user_id === props.userDetails.data.user.user_id) {
+                                  followingCounts ++;
+                                }
+                            })}
+                            {followingCounts === 0 ? 
+                              <>
+                                {(trialOnce === null || trialOnce === 0) && (props.userDetails.data.user.offer_limit === 0 || props.confirmTrialLink.data.following_count < props.userDetails.data.user.offer_limit) && props.userDetails.data.can_trial ?
+                                  <div className="profile-subscription">
+                                    <div className="user-subscription-plans-details">
+                                      <h3>SUBSCRIPTION</h3>
+                                        <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
+                                      <span>Offer ends {formattedDate}</span>
+                                      <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
+                                        <a
+                                          href={props.userDetails.data.user.trial_link}
+                                          className="subscription-btn1"
+                                          style={{ display: 'flex', justifyContent: 'space-between' }}
+                                        >
+                                          <span>SUBSCRIBE</span>
+                                          <span>FREE for {props.userDetails.data.user.free_trial_duration} day{props.userDetails?.data.user.free_trial_duration > 1 ? 's' : ''}!</span>
+                                        </a>
+                                      </div>
+                                      <span>Regular price {
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          }{" "}
+                                          /Month</span>
+                                    </div>
+                                  </div> :
+                                  <div className="profile-subscription">
+                                    <div className="user-subscription-plans-details">
+                                      <h3>SUBSCRIPTION</h3>
+                                      <div
+                                        className="subscription-btn1"
+                                        style={{ display: "flex", justifyContent: "space-between" }}
+                                        onClick={(event) =>
+                                          subscriptionPayment(
+                                            event,
+                                            "months",
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount,
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          )
+                                        }
+                                      >
+                                        <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                        <span style={{ fontSize: "1.4rem" }}>{
+                                          userDetails.data.payment_info.subscription_info
+                                            .monthly_amount_formatted
+                                        }{" "}
+                                        /Month</span>
+                                      </div>
+                                      <div className="user-subscription-des">
+                                        <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                        <span>{props.userDetails.data.user?.trial_created}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </> :
+                              <>
+                                {props.profile.data.totalFollowings.map((following) => 
+                                  <>
+                                    {following.user_id === props.userDetails.data.user.user_id && following.type === "trial" &&
+                                      <div className="profile-subscription">
+                                        <div className="user-subscription-plans-details">
+                                          <h3>SUBSCRIPTION</h3>
+                                          <div
+                                            className="subscription-btn1"
+                                            style={{ display: "flex", justifyContent: "space-between" }}
+                                            onClick={(event) =>
+                                              subscriptionPayment(
+                                                event,
+                                                "months",
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount,
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount_formatted
+                                              )
+                                            }
+                                          >
+                                            <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                            <span style={{ fontSize: "1.4rem" }}>{
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            }{" "}
+                                            /Month</span>
+                                          </div>
+                                          <div className="user-subscription-des">
+                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                            <span>{props.userDetails.data.user?.trial_created}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    }
+                                  </>
+                                )}
+                              </>
+                            }
+                          </>
+                        }
+                      </>
                       }
                       <div className="profile-subscription">
                         {props.profile.data.totalFollowings && props.userDetails.data && 
                           <>
                             {props.profile.data.totalFollowings.map((following) => {
                               following.user_id === props.userDetails.data.user.user_id &&
-                                followingCount ++;
+                                followingCounts ++;
                             })}
                             {userDetails.data.is_block_user == 0 ? (
                               <>
                                 {userDetails.data.payment_info.is_user_needs_pay == 1 &&
                                   userDetails.data.payment_info.unsubscribe_btn_status ==
-                                  0 && followingCount === 0  ? (
+                                  0 && followingCounts === 0  ? (
                                   userDetails.data.payment_info.is_free_account == 0 ? (
                                     <div className="user-subscription-plans-details">
                                       <h3>Subscription Plans</h3>
@@ -931,10 +984,10 @@ const SingleProfile = (props) => {
                                 ) : null}
 
                                 {props.profile.data.totalFollowings.map((following) => 
-                                  following.type !== "trial" && following.user_id === props.userDetails.data.user.user_id &&
+                                  following.user_id === props.userDetails.data.user.user_id && following.type !== "trial" && 
                                   <>
                                     {userDetails.data.payment_info.unsubscribe_btn_status ==
-                                    1 && followingCount !== 0 && (
+                                    1 && followingCounts !== 0 && (
                                       <div className="user-subscription-plans-details">
                                         <h3>Subscription Plans</h3>
                                         <div className="user-subscription-btn-sec">
@@ -1207,9 +1260,9 @@ const SingleProfile = (props) => {
                                 <>
                                   {props.profile.data.totalFollowings.map((following) => {
                                     following.user_id === props.userDetails.data.user.user_id &&
-                                      followingCount ++;
+                                      followingCounts ++;
                                   })}
-                                  {followingCount === 0 ?
+                                  {followingCounts === 0 ?
                                     <div className="user-subscription-btn-sec" style={{display: "flex", justifyContent: "center", width: "100%", margin: "0 20px"}}>
                                       <div
                                         className="subscription-btn1"
@@ -1317,70 +1370,102 @@ const SingleProfile = (props) => {
                       )}
                     </div>
                     <div className="new-home-page-right col-lg-4 col-xl-6">
-                      {props.userDetails.data.user.trial_created !== null && trialCreated < currentDate < newDate &&
+                      {props.userDetails.data.user?.is_everybody === 1 ? 
                         <>
-                          {props.profile.data.totalFollowings && props.userDetails.data && 
+                          {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
                             <>
                               {props.profile.data.totalFollowings.map((following) => {
-                                following.user_id === props.userDetails.data.user.user_id &&
-                                  followingCount ++;
+                                if(following.user_id === props.userDetails.data.user.user_id) {
+                                  followingCounts ++;
+                                }
                               })}
-                              {followingCount === 0 && props.confirmTrialLink.data.following_count !== props.userDetails.data.user.offer_limit ?
+                              {followingCounts === 0 ?
                                 <div className="profile-subscription">
                                   <div className="user-subscription-plans-details">
-                                    <h3>SUBSCRIPTION</h3>
-                                    <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
-                                    <span>Offer ends {formattedDate}</span>
-                                    <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
-                                      <div
-                                        className="subscription-btn1"
-                                        style={{ display: 'flex', justifyContent: 'space-between' }}
-                                        onClick={(event) => {
-                                          if (localStorage.getItem("userId")) {
-                                            props.dispatch(
-                                              followUserStart({
-                                                user_id: userDetails.data.user.user_id
-                                              })
-                                            );
-                                          } else {
-                                            const notificationMessage =
-                                              getErrorNotificationMessage(
-                                                t("login_to_continue")
-                                              );
-                                            props.dispatch(
-                                              createNotification(notificationMessage)
-                                            );
+                                    {(trialOnce === null || trialOnce === 0) && (props.userDetails.data.user.offer_limit === 0 || props.confirmTrialLink.data.following_count < props.userDetails.data.user.offer_limit) ? 
+                                      <>
+                                        <h3>SUBSCRIPTION</h3>
+                                        <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
+                                        <span>Offer ends {formattedDate}</span>
+                                        <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
+                                          <a
+                                            href={props.userDetails.data.user.trial_link}
+                                            className="subscription-btn1"
+                                            style={{ display: 'flex', justifyContent: 'space-between' }}
+                                          >
+                                            <span>SUBSCRIBE</span>
+                                            <span>FREE for {props.userDetails.data.user.free_trial_duration} day{props.userDetails?.data.user.free_trial_duration > 1 ? 's' : ''}!</span>
+                                          </a>
+                                        </div>
+                                        <span>Regular price {
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            }{" "}
+                                            /Month</span>
+                                      </>
+                                      : 
+                                      <>
+                                        <h3>SUBSCRIPTION</h3>
+                                        <div
+                                          className="subscription-btn1"
+                                          style={{ display: "flex", justifyContent: "space-between" }}
+                                          onClick={(event) =>
+                                            subscriptionPayment(
+                                              event,
+                                              "months",
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount,
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            )
                                           }
-                                        }}
-                                      >
-                                        <span>SUBSCRIBE</span>
-                                          <span>FREE for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</span>
-                                      </div>
-                                    </div>
-                                    <span>Regular price {
-                                          userDetails.data.payment_info.subscription_info
-                                            .monthly_amount_formatted
-                                        }{" "}
-                                        /Month</span>
+                                        >
+                                          <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                          <span style={{ fontSize: "1.4rem" }}>{
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          }{" "}
+                                          /Month</span>
+                                        </div>
+                                        <div className="user-subscription-des">
+                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                          <span>{props.userDetails.data.user?.trial_created}</span>
+                                        </div>
+                                      </>
+                                    }
                                   </div>
-                                </div> :
+                                </div>
+                                : 
                                 <>
                                   {props.profile.data.totalFollowings.map((following) => 
-                                    following.type === "trial" && following.user_id === props.userDetails.data.user.user_id &&
+                                    following.user_id === props.userDetails.data.user.user_id && following.type === "trial" &&
                                     <div className="profile-subscription">
                                       <div className="user-subscription-plans-details">
                                         <h3>SUBSCRIPTION</h3>
-                                        {/* {props.profile.data.totalFollowings.map((following, ind) =>  */}
-                                            <p>Free trial for {following.trial_period} day{following.trial_period === 1 ? "" : "s"}!</p>
-                                        {/* ) props.userDetails.data.user.free_trial_duration */}
-                                        {/* } */}
-                                        <div className="user-subscription-plans-details-start">
-                                          <span>Started</span>
-                                          <span>{trialStartTime}</span>
+                                        <div
+                                          className="subscription-btn1"
+                                          style={{ display: "flex", justifyContent: "space-between" }}
+                                          onClick={(event) =>
+                                            subscriptionPayment(
+                                              event,
+                                              "months",
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount,
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            )
+                                          }
+                                        >
+                                          <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                          <span style={{ fontSize: "1.4rem" }}>{
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          }{" "}
+                                          /Month</span>
                                         </div>
-                                        <div className="user-subscription-plans-details-end">
-                                          <span>End</span>
-                                          <span>{endDate}</span>
+                                        <div className="user-subscription-des">
+                                          <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                          <span>{props.userDetails.data.user?.trial_created}</span>
                                         </div>
                                       </div>
                                     </div>
@@ -1389,20 +1474,127 @@ const SingleProfile = (props) => {
                               }
                             </>
                           }
-                        </>
+                        </> : 
+                        <>
+                        {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
+                          <>
+                            {props.profile.data.totalFollowings.map((following) => {
+                              if(following.user_id === props.userDetails.data.user.user_id) {
+                                  followingCounts ++;
+                                }
+                            })}
+                            {followingCounts === 0 ? 
+                              <>
+                                {(trialOnce === null || trialOnce === 0) && (props.userDetails.data.user.offer_limit === 0 || props.confirmTrialLink.data.following_count < props.userDetails.data.user.offer_limit) && props.userDetails.data.can_trial ?
+                                  <div className="profile-subscription">
+                                    <div className="user-subscription-plans-details">
+                                      <h3>SUBSCRIPTION</h3>
+                                        <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
+                                      <span>Offer ends {formattedDate}</span>
+                                      <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
+                                        <a
+                                          href={props.userDetails.data.user.trial_link}
+                                          className="subscription-btn1"
+                                          style={{ display: 'flex', justifyContent: 'space-between' }}
+                                        >
+                                          <span>SUBSCRIBE</span>
+                                          <span>FREE for {props.userDetails.data.user.free_trial_duration} day{props.userDetails?.data.user.free_trial_duration > 1 ? 's' : ''}!</span>
+                                        </a>
+                                      </div>
+                                      <span>Regular price {
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          }{" "}
+                                          /Month</span>
+                                    </div>
+                                  </div> :
+                                  <div className="profile-subscription">
+                                    <div className="user-subscription-plans-details">
+                                      <h3>SUBSCRIPTION</h3>
+                                      <div
+                                        className="subscription-btn1"
+                                        style={{ display: "flex", justifyContent: "space-between" }}
+                                        onClick={(event) =>
+                                          subscriptionPayment(
+                                            event,
+                                            "months",
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount,
+                                            userDetails.data.payment_info.subscription_info
+                                              .monthly_amount_formatted
+                                          )
+                                        }
+                                      >
+                                        <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                        <span style={{ fontSize: "1.4rem" }}>{
+                                          userDetails.data.payment_info.subscription_info
+                                            .monthly_amount_formatted
+                                        }{" "}
+                                        /Month</span>
+                                      </div>
+                                      <div className="user-subscription-des">
+                                        <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                        <span>{props.userDetails.data.user?.trial_created}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                }
+                              </> :
+                              <>
+                                {props.profile.data.totalFollowings.map((following) => 
+                                  <>
+                                    {following.user_id === props.userDetails.data.user.user_id && following.type === "trial" &&
+                                      <div className="profile-subscription">
+                                        <div className="user-subscription-plans-details">
+                                          <h3>SUBSCRIPTION</h3>
+                                          <div
+                                            className="subscription-btn1"
+                                            style={{ display: "flex", justifyContent: "space-between" }}
+                                            onClick={(event) =>
+                                              subscriptionPayment(
+                                                event,
+                                                "months",
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount,
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount_formatted
+                                              )
+                                            }
+                                          >
+                                            <span style={{ fontSize: "1.4rem" }}>RENEW</span>
+                                            <span style={{ fontSize: "1.4rem" }}>{
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            }{" "}
+                                            /Month</span>
+                                          </div>
+                                          <div className="user-subscription-des">
+                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
+                                            <span>{props.userDetails.data.user?.trial_created}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    }
+                                  </>
+                                )}
+                              </>
+                            }
+                          </>
+                        }
+                      </>
                       }
                       <div className="profile-subscription">
                         {props.profile.data.totalFollowings && props.userDetails.data && 
                           <>
                             {props.profile.data.totalFollowings.map((following) => {
                               following.user_id === props.userDetails.data.user.user_id &&
-                                followingCount ++;
+                                followingCounts ++;
                             })}
                             {userDetails.data.is_block_user == 0 ? (
                               <>
                                 {userDetails.data.payment_info.is_user_needs_pay == 1 &&
                                   userDetails.data.payment_info.unsubscribe_btn_status ==
-                                  0 && followingCount === 0 ? (
+                                  0 && followingCounts === 0 ? (
                                   userDetails.data.payment_info.is_free_account == 0 ? (
                                     <div className="user-subscription-plans-details">
                                       <h3>Subscription Plans</h3>
@@ -1478,63 +1670,68 @@ const SingleProfile = (props) => {
                                   )
                                 ) : null}
 
-                                {userDetails.data.payment_info.unsubscribe_btn_status ==
-                                  1 && followingCount !== 0 && (
-                                    <div className="user-subscription-plans-details">
-                                      <h3>Subscription Plans</h3>
-                                      <div className="user-subscription-btn-sec">
-                                        <div
-                                          className="subscription-btn1"
-                                          onClick={() => handleUnfollowModalShow()}
-                                        >
-                                          {t("unfollow")}
+                                {props.profile.data.totalFollowings.map((following) => 
+                                  following.user_id === props.userDetails.data.user.user_id && following.type !== "trial" && 
+                                  <>
+                                    {userDetails.data.payment_info.unsubscribe_btn_status ==
+                                    1 && followingCounts !== 0 && (
+                                      <div className="user-subscription-plans-details">
+                                        <h3>Subscription Plans</h3>
+                                        <div className="user-subscription-btn-sec">
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={() => handleUnfollowModalShow()}
+                                          >
+                                            {t("unfollow")}
+                                          </div>
                                         </div>
-                                      </div>
-                                      <Modal
-                                        show={showUnfollow}
-                                        onHide={handleUnfollowModalClose}
-                                        backdrop="static"
-                                        keyboard={false}
-                                        centered
-                                        className={`${localStorage.getItem("theme") !== "" &&
-                                          localStorage.getItem("theme") !== null &&
-                                          localStorage.getItem("theme") !== undefined &&
-                                          localStorage.getItem("theme") === "dark"
-                                          ? "dark-theme-modal"
-                                          : ""
-                                          }
-                                        `}
-                                      >
-                                        <Modal.Header closeButton>
-                                          <Modal.Title>{t("unsubscribe")}</Modal.Title>
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                          {t("cancel_subscription_conformation")}
-                                        </Modal.Body>
-                                        <Modal.Footer>
-                                          <Button
-                                            variant="secondary"
-                                            size="lg"
-                                            onClick={handleUnfollowModalClose}
-                                          >
-                                            {t("close")}
-                                          </Button>
-                                          <Button
-                                            variant="primary"
-                                            size="lg"
-                                            onClick={(event) =>
-                                              handleUnfollow(
-                                                event,
-                                                userDetails.data.user.user_id
-                                              )
+                                        <Modal
+                                          show={showUnfollow}
+                                          onHide={handleUnfollowModalClose}
+                                          backdrop="static"
+                                          keyboard={false}
+                                          centered
+                                          className={`${localStorage.getItem("theme") !== "" &&
+                                            localStorage.getItem("theme") !== null &&
+                                            localStorage.getItem("theme") !== undefined &&
+                                            localStorage.getItem("theme") === "dark"
+                                            ? "dark-theme-modal"
+                                            : ""
                                             }
-                                          >
-                                            {t("yes")}
-                                          </Button>
-                                        </Modal.Footer>
-                                      </Modal>
-                                    </div>
-                                  )}
+                                          `}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            {t("cancel_subscription_conformation")}
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              size="lg"
+                                              onClick={handleUnfollowModalClose}
+                                            >
+                                              {t("close")}
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              size="lg"
+                                              onClick={(event) =>
+                                                handleUnfollow(
+                                                  event,
+                                                  userDetails.data.user.user_id
+                                                )
+                                              }
+                                            >
+                                              {t("yes")}
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
                             </>
                             ) : (
                               <div className="user-subscription-plans-details">

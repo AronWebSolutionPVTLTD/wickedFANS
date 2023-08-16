@@ -204,7 +204,11 @@ class CommonRepository {
 
 
             // Check the user already following the selected users
-            $follower = \App\Models\Follower::where('status', YES)->where('follower_id', $request->id)->where('user_id', $request->user_id)->first();
+            $follower = \App\Models\Follower::where('status', YES)
+                        ->where('follower_id', $request->id)
+                        ->where('user_id', $request->user_id)
+                        ->whereNull('type')
+                        ->first();
 
             if($follower) {
 
@@ -215,11 +219,11 @@ class CommonRepository {
             $follower = \App\Models\Follower::where('follower_id', $request->id)->where('user_id', $request->user_id)->first() ?? new \App\Models\Follower;
 
             $follower->user_id = $request->user_id;
-
             $follower->follower_id = $request->id;
-
             $follower->status = DEFAULT_TRUE;
-
+            $follower->type = null;
+            $follower->trial_period = null;
+            $follower->trial_start_time = null;
             $follower->save();
 
             DB::commit();

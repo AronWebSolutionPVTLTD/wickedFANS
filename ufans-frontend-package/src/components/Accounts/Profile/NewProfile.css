@@ -327,6 +327,16 @@
     padding: 2em 0;
 }
 
+.user-subscription-des {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.user-subscription-des span {
+    font-size: 1.3rem;
+}
+
 .subscription-outline-btn {
     border: 1px solid var(--primary-color);
     padding: 8px 30px;
