@@ -984,6 +984,69 @@ const SingleProfile = (props) => {
                                 ) : null}
 
                                 {props.profile.data.totalFollowings.map((following) => 
+                                  following.user_id === props.userDetails.data.user.user_id && following.type === "trial" && props.userDetails.data.user.trial_created === null &&
+                                  <>
+                                    {userDetails.data.payment_info.unsubscribe_btn_status ==
+                                    1 && followingCounts !== 0 && (
+                                      <div className="user-subscription-plans-details">
+                                        <h3>Subscription Plans</h3>
+                                        <div className="user-subscription-btn-sec">
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={() => handleUnfollowModalShow()}
+                                          >
+                                            {t("unfollow")}
+                                          </div>
+                                        </div>
+                                        <Modal
+                                          show={showUnfollow}
+                                          onHide={handleUnfollowModalClose}
+                                          backdrop="static"
+                                          keyboard={false}
+                                          centered
+                                          className={`${localStorage.getItem("theme") !== "" &&
+                                            localStorage.getItem("theme") !== null &&
+                                            localStorage.getItem("theme") !== undefined &&
+                                            localStorage.getItem("theme") === "dark"
+                                            ? "dark-theme-modal"
+                                            : ""
+                                            }
+                                          `}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            {t("cancel_subscription_conformation")}
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              size="lg"
+                                              onClick={handleUnfollowModalClose}
+                                            >
+                                              {t("close")}
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              size="lg"
+                                              onClick={(event) =>
+                                                handleUnfollow(
+                                                  event,
+                                                  userDetails.data.user.user_id
+                                                )
+                                              }
+                                            >
+                                              {t("yes")}
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+
+                                {props.profile.data.totalFollowings.map((following) => 
                                   following.user_id === props.userDetails.data.user.user_id && following.type !== "trial" && 
                                   <>
                                     {userDetails.data.payment_info.unsubscribe_btn_status ==
@@ -1669,6 +1732,69 @@ const SingleProfile = (props) => {
                                     </div>
                                   )
                                 ) : null}
+
+                                {props.profile.data.totalFollowings.map((following) => 
+                                  following.user_id === props.userDetails.data.user.user_id && following.type === "trial" && props.userDetails.data.user.trial_created === null &&
+                                  <>
+                                    {userDetails.data.payment_info.unsubscribe_btn_status ==
+                                    1 && followingCounts !== 0 && (
+                                      <div className="user-subscription-plans-details">
+                                        <h3>Subscription Plans</h3>
+                                        <div className="user-subscription-btn-sec">
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={() => handleUnfollowModalShow()}
+                                          >
+                                            {t("unfollow")}
+                                          </div>
+                                        </div>
+                                        <Modal
+                                          show={showUnfollow}
+                                          onHide={handleUnfollowModalClose}
+                                          backdrop="static"
+                                          keyboard={false}
+                                          centered
+                                          className={`${localStorage.getItem("theme") !== "" &&
+                                            localStorage.getItem("theme") !== null &&
+                                            localStorage.getItem("theme") !== undefined &&
+                                            localStorage.getItem("theme") === "dark"
+                                            ? "dark-theme-modal"
+                                            : ""
+                                            }
+                                          `}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            {t("cancel_subscription_conformation")}
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              size="lg"
+                                              onClick={handleUnfollowModalClose}
+                                            >
+                                              {t("close")}
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              size="lg"
+                                              onClick={(event) =>
+                                                handleUnfollow(
+                                                  event,
+                                                  userDetails.data.user.user_id
+                                                )
+                                              }
+                                            >
+                                              {t("yes")}
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
 
                                 {props.profile.data.totalFollowings.map((following) => 
                                   following.user_id === props.userDetails.data.user.user_id && following.type !== "trial" && 
