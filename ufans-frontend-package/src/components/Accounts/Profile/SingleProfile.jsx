@@ -1025,55 +1025,44 @@ const SingleProfile = (props) => {
                                         <h3>Subscription Plans</h3>
                                         <div className="user-subscription-btn-sec">
                                           <div
-                                            className="subscription-btn1"
-                                            onClick={() => handleUnfollowModalShow()}
+                                            className="subscription-outline-btn"
+                                            onClick={(event) =>
+                                              subscriptionPayment(
+                                                event,
+                                                "months",
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount,
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount_formatted
+                                              )
+                                            }
                                           >
-                                            {t("unfollow")}
+                                            {
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            }{" "}
+                                            /Month
+                                          </div>
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={(event) =>
+                                              subscriptionPayment(
+                                                event,
+                                                "years",
+                                                userDetails.data.payment_info.subscription_info
+                                                  .yearly_amount,
+                                                userDetails.data.payment_info.subscription_info
+                                                  .yearly_amount_formatted
+                                              )
+                                            }
+                                          >
+                                            {
+                                              userDetails.data.payment_info.subscription_info
+                                                .yearly_amount_formatted
+                                            }{" "}
+                                            /Year
                                           </div>
                                         </div>
-                                        <Modal
-                                          show={showUnfollow}
-                                          onHide={handleUnfollowModalClose}
-                                          backdrop="static"
-                                          keyboard={false}
-                                          centered
-                                          className={`${localStorage.getItem("theme") !== "" &&
-                                            localStorage.getItem("theme") !== null &&
-                                            localStorage.getItem("theme") !== undefined &&
-                                            localStorage.getItem("theme") === "dark"
-                                            ? "dark-theme-modal"
-                                            : ""
-                                            }
-                                          `}
-                                        >
-                                          <Modal.Header closeButton>
-                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
-                                          </Modal.Header>
-                                          <Modal.Body>
-                                            {t("cancel_subscription_conformation")}
-                                          </Modal.Body>
-                                          <Modal.Footer>
-                                            <Button
-                                              variant="secondary"
-                                              size="lg"
-                                              onClick={handleUnfollowModalClose}
-                                            >
-                                              {t("close")}
-                                            </Button>
-                                            <Button
-                                              variant="primary"
-                                              size="lg"
-                                              onClick={(event) =>
-                                                handleUnfollow(
-                                                  event,
-                                                  userDetails.data.user.user_id
-                                                )
-                                              }
-                                            >
-                                              {t("yes")}
-                                            </Button>
-                                          </Modal.Footer>
-                                        </Modal>
                                       </div>
                                     )}
                                   </>
@@ -1795,55 +1784,44 @@ const SingleProfile = (props) => {
                                         <h3>Subscription Plans</h3>
                                         <div className="user-subscription-btn-sec">
                                           <div
-                                            className="subscription-btn1"
-                                            onClick={() => handleUnfollowModalShow()}
+                                            className="subscription-outline-btn"
+                                            onClick={(event) =>
+                                              subscriptionPayment(
+                                                event,
+                                                "months",
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount,
+                                                userDetails.data.payment_info.subscription_info
+                                                  .monthly_amount_formatted
+                                              )
+                                            }
                                           >
-                                            {t("unfollow")}
+                                            {
+                                              userDetails.data.payment_info.subscription_info
+                                                .monthly_amount_formatted
+                                            }{" "}
+                                            /Month
+                                          </div>
+                                          <div
+                                            className="subscription-btn1"
+                                            onClick={(event) =>
+                                              subscriptionPayment(
+                                                event,
+                                                "years",
+                                                userDetails.data.payment_info.subscription_info
+                                                  .yearly_amount,
+                                                userDetails.data.payment_info.subscription_info
+                                                  .yearly_amount_formatted
+                                              )
+                                            }
+                                          >
+                                            {
+                                              userDetails.data.payment_info.subscription_info
+                                                .yearly_amount_formatted
+                                            }{" "}
+                                            /Year
                                           </div>
                                         </div>
-                                        <Modal
-                                          show={showUnfollow}
-                                          onHide={handleUnfollowModalClose}
-                                          backdrop="static"
-                                          keyboard={false}
-                                          centered
-                                          className={`${localStorage.getItem("theme") !== "" &&
-                                            localStorage.getItem("theme") !== null &&
-                                            localStorage.getItem("theme") !== undefined &&
-                                            localStorage.getItem("theme") === "dark"
-                                            ? "dark-theme-modal"
-                                            : ""
-                                            }
-                                          `}
-                                        >
-                                          <Modal.Header closeButton>
-                                            <Modal.Title>{t("unsubscribe")}</Modal.Title>
-                                          </Modal.Header>
-                                          <Modal.Body>
-                                            {t("cancel_subscription_conformation")}
-                                          </Modal.Body>
-                                          <Modal.Footer>
-                                            <Button
-                                              variant="secondary"
-                                              size="lg"
-                                              onClick={handleUnfollowModalClose}
-                                            >
-                                              {t("close")}
-                                            </Button>
-                                            <Button
-                                              variant="primary"
-                                              size="lg"
-                                              onClick={(event) =>
-                                                handleUnfollow(
-                                                  event,
-                                                  userDetails.data.user.user_id
-                                                )
-                                              }
-                                            >
-                                              {t("yes")}
-                                            </Button>
-                                          </Modal.Footer>
-                                        </Modal>
                                       </div>
                                     )}
                                   </>
