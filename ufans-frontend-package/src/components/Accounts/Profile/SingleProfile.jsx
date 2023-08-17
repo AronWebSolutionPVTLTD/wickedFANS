@@ -712,7 +712,7 @@ const SingleProfile = (props) => {
                                       <>
                                         <h3>SUBSCRIPTION</h3>
                                         <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
-                                        <span>Offer ends {formattedDate}</span>
+                                        <span>Offer ends {endDate}</span>
                                         <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
                                           <a
                                             href={props.userDetails.data.user.trial_link}
@@ -755,7 +755,7 @@ const SingleProfile = (props) => {
                                         </div>
                                         <div className="user-subscription-des">
                                           {!props.userDetails.data.user.offer_expiration ?
-                                            <span>No expiration</span> :
+                                            "" :
                                             <>
                                               <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                               <span>{endDate}</span>
@@ -796,7 +796,7 @@ const SingleProfile = (props) => {
                                         </div>
                                         <div className="user-subscription-des">
                                           {!props.userDetails.data.user.offer_expiration ?
-                                            <span>No expiration</span> :
+                                            "" :
                                             <>
                                               <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                               <span>{endDate}</span>
@@ -826,7 +826,7 @@ const SingleProfile = (props) => {
                                     <div className="user-subscription-plans-details">
                                       <h3>SUBSCRIPTION</h3>
                                         <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
-                                      <span>Offer ends {formattedDate}</span>
+                                      <span>Offer ends {endDate}</span>
                                       <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
                                         <a
                                           href={props.userDetails.data.user.trial_link}
@@ -870,7 +870,7 @@ const SingleProfile = (props) => {
                                       </div>
                                       <div className="user-subscription-des">
                                         {!props.userDetails.data.user.offer_expiration ?
-                                          <span>No expiration</span> :
+                                          "" :
                                           <>
                                             <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                             <span>{endDate}</span>
@@ -911,7 +911,7 @@ const SingleProfile = (props) => {
                                           </div>
                                           <div className="user-subscription-des">
                                             {!props.userDetails.data.user.offer_expiration ?
-                                              <span>No expiration</span> :
+                                              "" :
                                               <>
                                                 <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                                 <span>{endDate}</span>
@@ -1020,7 +1020,7 @@ const SingleProfile = (props) => {
                                   following.user_id === props.userDetails.data.user.user_id && following.type === "trial" && props.userDetails.data.user.trial_created === null &&
                                   <>
                                     {userDetails.data.payment_info.unsubscribe_btn_status ==
-                                    1 && followingCounts !== 0 && (
+                                    0 && followingCounts !== 0 && (
                                       <div className="user-subscription-plans-details">
                                         <h3>Subscription Plans</h3>
                                         <div className="user-subscription-btn-sec">
@@ -1482,7 +1482,7 @@ const SingleProfile = (props) => {
                                       <>
                                         <h3>SUBSCRIPTION</h3>
                                         <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
-                                        <span>Offer ends {formattedDate}</span>
+                                        <span>Offer ends {endDate}</span>
                                         <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
                                           <a
                                             href={props.userDetails.data.user.trial_link}
@@ -1525,7 +1525,7 @@ const SingleProfile = (props) => {
                                         </div>
                                         <div className="user-subscription-des">
                                           {!props.userDetails.data.user.offer_expiration ?
-                                            <span>No expiration</span> :
+                                            "" :
                                             <>
                                               <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                               <span>{endDate}</span>
@@ -1566,7 +1566,7 @@ const SingleProfile = (props) => {
                                         </div>
                                         <div className="user-subscription-des">
                                           {!props.userDetails.data.user.offer_expiration ?
-                                            <span>No expiration</span> :
+                                            "" :
                                             <>
                                               <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                               <span>{endDate}</span>
@@ -1596,7 +1596,7 @@ const SingleProfile = (props) => {
                                     <div className="user-subscription-plans-details">
                                       <h3>SUBSCRIPTION</h3>
                                         <p>Limited offer-Free trial for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"}!</p>
-                                      <span>Offer ends {formattedDate}</span>
+                                      <span>Offer ends {endDate}</span>
                                       <div className="user-subscription-btn-sec" style={{ paddingBottom: '1em' }}>
                                         <a
                                           href={props.userDetails.data.user.trial_link}
@@ -1640,7 +1640,7 @@ const SingleProfile = (props) => {
                                       </div>
                                       <div className="user-subscription-des">
                                         {!props.userDetails.data.user.offer_expiration ?
-                                          <span>No expiration</span> :
+                                          "" :
                                           <>
                                             <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                             <span>{endDate}</span>
@@ -1681,7 +1681,7 @@ const SingleProfile = (props) => {
                                           </div>
                                           <div className="user-subscription-des">
                                             {!props.userDetails.data.user.offer_expiration ?
-                                              <span>No expiration</span> :
+                                              "" :
                                               <>
                                                 <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
                                                 <span>{endDate}</span>
@@ -1790,7 +1790,7 @@ const SingleProfile = (props) => {
                                   following.user_id === props.userDetails.data.user.user_id && following.type === "trial" && props.userDetails.data.user.trial_created === null &&
                                   <>
                                     {userDetails.data.payment_info.unsubscribe_btn_status ==
-                                    1 && followingCounts !== 0 && (
+                                    0 && followingCounts !== 0 && (
                                       <div className="user-subscription-plans-details">
                                         <h3>Subscription Plans</h3>
                                         <div className="user-subscription-btn-sec">
