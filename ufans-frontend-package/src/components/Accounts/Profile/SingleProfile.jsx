@@ -87,8 +87,8 @@ const SingleProfile = (props) => {
   const [allCount, setAllCount] = useState(0);
   const [imageCount, setImageCount] = useState(0);
   const [videoCount, setVideoCount] = useState(0);
-  const [formattedDate, setFormattedDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [newDate, setNewDate] = useState(null);
   let followingCount = 0;
   let followingCounts = 0;
 
@@ -102,7 +102,6 @@ const SingleProfile = (props) => {
   const [trialOnce, setTrialOnce] = useState(null);
 
   const trial_created = new Date(props.userDetails.data.user?.trial_created);
-  const newDate = new Date(trial_created.setDate(trial_created.getDate() + props.userDetails.data.user?.offer_expiration));
   
   const toggleVisibility = () => { };
 
@@ -150,28 +149,32 @@ const SingleProfile = (props) => {
     }
 
     if (props.profile.data.totalFollowings && props.userDetails.data.user) {
-      const end_date = new Date(newDate);
-      const yyyy = end_date.getFullYear();
-      let mm = end_date.getMonth() + 1;
-      let dd = end_date.getDate();
-
-      if (dd < 10) dd = '0' + dd;
-      if (mm < 10) mm = '0' + mm;
-
-      setEndDate(getMonthName(mm) + ' ' + dd + ', ' + yyyy);
-    }  
-
-    setFormattedDate (newDate.toDateString());
-
-    if (props.profile.data.totalFollowings && props.userDetails.data.user) {
-
-      {props.profile.data.totalFollowings.map((following) => {
+      props.profile.data.totalFollowings.map((following) => {
         if(following.user_id === props.userDetails.data.user.user_id) {
             followingCounts ++;
             setTrialOnce(following.trial_once);
           }
-      })}
-     }
+      })
+    }
+
+    if (props.profile.data.totalFollowings && props.userDetails.data.user) {
+      props.profile.data.totalFollowings.map((following) => {
+        if(following.user_id == props.userDetails.data.user.user_id) {
+          const trialDate = new Date(following.trial_start_time);
+          trialDate.setDate(trialDate.getDate() + props.userDetails.data.user?.free_trial_duration);
+          setNewDate(trialDate);
+
+          const yyyy = trialDate.getFullYear();
+          let mm = trialDate.getMonth() + 1;
+          let dd = trialDate.getDate();
+
+          if (dd < 10) dd = '0' + dd;
+          if (mm < 10) mm = '0' + mm;
+
+          setEndDate(getMonthName(mm) + ' ' + dd + ', ' + yyyy);
+        }
+      })
+    }
   }, [props.profile.data.totalFollowings, props.userDetails.data])
 
   useMemo(() => {
@@ -754,13 +757,8 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          {!props.userDetails.data.user.offer_expiration ?
-                                            "" :
-                                            <>
-                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                              <span>{endDate}</span>
-                                            </> 
-                                          }
+                                          <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                          <span>{endDate}</span>
                                         </div>
                                       </>
                                     }
@@ -795,13 +793,8 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          {!props.userDetails.data.user.offer_expiration ?
-                                            "" :
-                                            <>
-                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                              <span>{endDate}</span>
-                                            </> 
-                                          }
+                                          <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                          <span>{endDate}</span>
                                         </div>
                                       </div>
                                     </div>
@@ -869,13 +862,8 @@ const SingleProfile = (props) => {
                                         /Month</span>
                                       </div>
                                       <div className="user-subscription-des">
-                                        {!props.userDetails.data.user.offer_expiration ?
-                                          "" :
-                                          <>
-                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                            <span>{endDate}</span>
-                                          </> 
-                                        }
+                                        <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                        <span>{endDate}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -910,13 +898,8 @@ const SingleProfile = (props) => {
                                             /Month</span>
                                           </div>
                                           <div className="user-subscription-des">
-                                            {!props.userDetails.data.user.offer_expiration ?
-                                              "" :
-                                              <>
-                                                <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                                <span>{endDate}</span>
-                                              </> 
-                                            }
+                                            <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                            <span>{endDate}</span>
                                           </div>
                                         </div>
                                       </div>
@@ -1513,13 +1496,8 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          {!props.userDetails.data.user.offer_expiration ?
-                                            "" :
-                                            <>
-                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                              <span>{endDate}</span>
-                                            </> 
-                                          }
+                                          <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                          <span>{endDate}</span>
                                         </div>
                                       </>
                                     }
@@ -1554,13 +1532,8 @@ const SingleProfile = (props) => {
                                           /Month</span>
                                         </div>
                                         <div className="user-subscription-des">
-                                          {!props.userDetails.data.user.offer_expiration ?
-                                            "" :
-                                            <>
-                                              <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                              <span>{endDate}</span>
-                                            </> 
-                                          }
+                                          <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                          <span>{endDate}</span>
                                         </div>
                                       </div>
                                     </div>
@@ -1628,13 +1601,8 @@ const SingleProfile = (props) => {
                                         /Month</span>
                                       </div>
                                       <div className="user-subscription-des">
-                                        {!props.userDetails.data.user.offer_expiration ?
-                                          "" :
-                                          <>
-                                            <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                            <span>{endDate}</span>
-                                          </> 
-                                        }
+                                        <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                        <span>{endDate}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -1669,13 +1637,8 @@ const SingleProfile = (props) => {
                                             /Month</span>
                                           </div>
                                           <div className="user-subscription-des">
-                                            {!props.userDetails.data.user.offer_expiration ?
-                                              "" :
-                                              <>
-                                                <span>Free for {props.userDetails.data.user.offer_expiration} day{props.userDetails.data.user.offer_expiration === 1 ? "" : "s"} expires</span>
-                                                <span>{endDate}</span>
-                                              </> 
-                                            }
+                                            <span>Free for {props.userDetails.data.user.free_trial_duration} day{props.userDetails.data.user.free_trial_duration === 1 ? "" : "s"} expires</span>
+                                            <span>{endDate}</span>
                                           </div>
                                         </div>
                                       </div>
