@@ -102,6 +102,7 @@ const SingleProfile = (props) => {
   const [trialOnce, setTrialOnce] = useState(null);
 
   const trial_created = new Date(props.userDetails.data.user?.trial_created);
+  const expireDate = new Date(trial_created.setDate(trial_created.getDate() + props.userDetails.data.user?.offer_expiration))
   
   const toggleVisibility = () => { };
 
@@ -701,7 +702,7 @@ const SingleProfile = (props) => {
                       </div>
                       {props.userDetails.data.user?.is_everybody === 1 ? 
                         <>
-                          {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
+                          {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= expireDate &&
                             <>
                               {props.profile.data.totalFollowings.map((following) => {
                                 if(following.user_id === props.userDetails.data.user.user_id) {
@@ -805,7 +806,7 @@ const SingleProfile = (props) => {
                           }
                         </> : 
                         <>
-                        {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
+                        {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= expireDate &&
                           <>
                             {props.profile.data.totalFollowings.map((following) => {
                               if(following.user_id === props.userDetails.data.user.user_id) {
@@ -1440,7 +1441,7 @@ const SingleProfile = (props) => {
                     <div className="new-home-page-right col-lg-4 col-xl-6">
                       {props.userDetails.data.user?.is_everybody === 1 ? 
                         <>
-                          {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
+                          {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= expireDate &&
                             <>
                               {props.profile.data.totalFollowings.map((following) => {
                                 if(following.user_id === props.userDetails.data.user.user_id) {
@@ -1544,7 +1545,7 @@ const SingleProfile = (props) => {
                           }
                         </> : 
                         <>
-                        {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= newDate &&
+                        {props.profile.data.totalFollowings && props.userDetails.data && props.userDetails.data.user.trial_created !== null && trial_created <= currentDate <= expireDate &&
                           <>
                             {props.profile.data.totalFollowings.map((following) => {
                               if(following.user_id === props.userDetails.data.user.user_id) {
