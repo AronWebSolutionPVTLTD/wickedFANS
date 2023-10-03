@@ -14,8 +14,8 @@ const MainLayout = (props) => {
       localStorage.getItem("theme") !== null &&
       localStorage.getItem("theme") !== undefined &&
       localStorage.getItem("theme") === "dark" ?
-      true
-      : false
+      false
+      : true
   );
 
   const toggleClass = () => {
