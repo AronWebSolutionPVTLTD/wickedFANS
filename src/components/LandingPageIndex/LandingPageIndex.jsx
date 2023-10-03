@@ -274,19 +274,19 @@ setShow(type)
       <div className="wf-wapper">
         <div className="wf-body">
           <div className="wf-form-container">
-            <div className="wf-logo-wrap text-center mb-5 mt-md-5">
-              {/* <Image
-                src="assets/images/logo@4x.png"
+            <div className="wf-logo-wrap text-center mb-5 mt-md-5 d-flex justify-content-center">
+              <Image
+                src="/images/logo@4x.png"
                 alt="Logo"
                 className="wf-logo"
-              /> */}
+              />
             </div>
             <div className="forms-fields">
               <div id="main">
                 <div id="first">
                   {show === "login" ? (
                     <>
-                         <div className="Now_MADE">
+                         {/* <div className="Now_MADE">
                         <Button
                           variant="primary"
                           className="d-flex align-items-center signupBtn"
@@ -307,7 +307,7 @@ setShow(type)
                         <div className="line"></div>
                         <div className="or-text">OR</div>
                         <div className="line"></div>
-                      </div>
+                      </div> */}
                       <Formik
                         isInitialValid={false}
                         initialValues={{
@@ -430,7 +430,7 @@ setShow(type)
 
                   {show === "signup" ? (
                     <>
-                      <div className="Now_MADE">
+                      {/* <div className="Now_MADE">
                         <Button
                           variant="primary"
                           className="d-flex align-items-center signupBtn"
@@ -452,7 +452,7 @@ setShow(type)
                         <div className="line"></div>
                         <div className="or-text">OR</div>
                         <div className="line"></div>
-                      </div>
+                      </div> */}
                       <Formik
                         isInitialValid={false}
                         initialValues={{
