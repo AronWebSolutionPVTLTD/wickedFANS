@@ -1,129 +1,119 @@
-import React, { Component } from "react";
 import { createBrowserHistory as createHistory } from "history";
-import { Router, Switch, Route, Redirect } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
-import AuthLayout from "../layouts/AuthLayout";
+import React, { Component } from "react";
+import configuration from "react-global-configuration";
+import { Helmet } from "react-helmet";
+import { Redirect, Route, Switch } from "react-router-dom";
+import FanIndex from "../Accounts/FansFollowing/Fans/FanIndex";
+import FollowingIndex from "../Accounts/FansFollowing/Following/FollowingIndex";
+import FavoritesIndex from "../Accounts/Favorites/FavoritesIndex";
+import ListIndex from "../Accounts/List/ListIndex";
+import Logout from "../Accounts/Logout";
+import AddBankIndex from "../Accounts/Payments/AddBankIndex";
+import BankingIndex from "../Accounts/Payments/BankingIndex";
+import BillingAccountIndex from "../Accounts/Payments/BillingAccountIndex";
+import CardsIndex from "../Accounts/Payments/CardsIndex";
+import PaymentsIndex from "../Accounts/Payments/PaymentsIndex";
 import OldEditProfile from "../Accounts/Profile/OldEditProfile";
 import OldProfileIndex from "../Accounts/Profile/OldProfileIndex";
-import NotFoundIndex from "../NotFound/NotFoundIndex";
-import { Helmet } from "react-helmet";
-import configuration from "react-global-configuration";
-import { apiConstants } from "../Constant/constants";
-import LandingPageLoader from "../Loader/LandingPageLoader";
-import EmptyLayout from "../layouts/EmptyLayout";
-import LandingPageIndex from "../LandingPageIndex/LandingPageIndex";
-import HomePageIndex from "../Home/HomePageIndex";
-import MessageIndex from "../Messages/MessageIndex";
-import BookmarksIndex from "../Bookmarks/BookmarksIndex";
+import SingleProfile from "../Accounts/Profile/SingleProfile";
+import UploadProfilePicture from "../Accounts/Profile/UploadProfilePicture";
+import BecomeAContentCreatorIndex from "../BecomeAContentCreator/BecomeAContentCreatorIndex";
+import BookmarkAudio from "../Bookmarks/BookmarkAudio";
 import BookmarkPhoto from "../Bookmarks/BookmarkPhoto";
 import BookmarkVideo from "../Bookmarks/BookmarkVideo";
-import BookmarkAudio from "../Bookmarks/BookmarkAudio";
-import ModelViewProfile from "../Model/ModelViewProfile";
-import FollowingIndex from "../Accounts/FansFollowing/Following/FollowingIndex";
-import ListIndex from "../Accounts/List/ListIndex";
-import NotificationIndex from "../Notification/NotificationIndex";
-import CreatePostIndex from "../Post/CreatePost/CreatePostIndex";
-import FavoritesIndex from "../Accounts/Favorites/FavoritesIndex";
-import PaymentsIndex from "../Accounts/Payments/PaymentsIndex";
-import BankingIndex from "../Accounts/Payments/BankingIndex";
-import CardsIndex from "../Accounts/Payments/CardsIndex";
-import AddBankIndex from "../Accounts/Payments/AddBankIndex";
-import Logout from "../Accounts/Logout";
-import Wallet from "../Wallet/Wallet";
-import BillingAccountIndex from "../Accounts/Payments/BillingAccountIndex";
-import DocumentUploadIndex from "../DocumentUpload/DocumentUploadIndex";
-import StaticPage from "../StaticPage/StaticPage";
-import FanIndex from "../Accounts/FansFollowing/Fans/FanIndex";
-import PostView from "../Post/PostView";
+import BookmarksIndex from "../Bookmarks/BookmarksIndex";
 import CategoryUsers from "../Categories/CategoryUsers";
-import ResetPassword from "../LandingPageIndex/ResetPassword";
-import UploadProfilePicture from "../Accounts/Profile/UploadProfilePicture";
-import UserChatIndex from "../UserChat/UserChatIndex";
-import UserChatMobileRoom from "../UserChat/UserChatMobileRoom";
 import CategoryListingIndex from "../CategoryListing/CategoryListingIndex";
-import SingleProfile from "../Accounts/Profile/SingleProfile";
-import Explore from "../Post/Explore/Explore";
+import { apiConstants } from "../Constant/constants";
 import DashboardContentCreator from "../DashboardContentCreator/DashboardContentCreator";
-import BecomeAContentCreatorIndex from "../BecomeAContentCreator/BecomeAContentCreatorIndex";
-import EcomIndex from "../Ecom/EcomIndex";
+import DocumentUploadIndex from "../DocumentUpload/DocumentUploadIndex";
 import EcomCartIndex from "../Ecom/EcomCartIndex";
+import EcomCategoryIndex from "../Ecom/EcomCategoryIndex";
+import EcomIndex from "../Ecom/EcomIndex";
 import EcomPaymentIndex from "../Ecom/EcomPaymentIndex";
 import EcomPaymentMethod from "../Ecom/EcomPaymentMethod";
-import EcomCategoryIndex from "../Ecom/EcomCategoryIndex";
-import SingleProduct from "../Ecom/Product/SingleProduct";
 import OrderList from "../Ecom/Orders/OrderList";
-import OrderView from "../Ecom/Orders/OrderView";
 import OrderTransaction from "../Ecom/Orders/OrderTransaction";
+import OrderView from "../Ecom/Orders/OrderView";
 import AddProduct from "../Ecom/Product/AddProduct";
 import EditProduct from "../Ecom/Product/EditProduct";
 import ProductList from "../Ecom/Product/ProductList";
-import ExploreIndex from "../Post/Explore/ExploreIndex";
+import SingleProduct from "../Ecom/Product/SingleProduct";
+import HomePageIndex from "../Home/HomePageIndex";
 import StoriesIndex from "../Home/Stories/StoriesIndex";
+import LandingPageIndex from "../LandingPageIndex/LandingPageIndex";
+import ResetPassword from "../LandingPageIndex/ResetPassword";
+import NotFoundIndex from "../NotFound/NotFoundIndex";
+import NotificationIndex from "../Notification/NotificationIndex";
+import CreatePostIndex from "../Post/CreatePost/CreatePostIndex";
+import ExploreIndex from "../Post/Explore/ExploreIndex";
+import PostView from "../Post/PostView";
+import StaticPage from "../StaticPage/StaticPage";
+import UserChatIndex from "../UserChat/UserChatIndex";
+import UserChatMobileRoom from "../UserChat/UserChatMobileRoom";
 import VerificationIndex from "../Verification/VerificationIndex";
 import VerificationResultIndex from "../Verification/VerificationResultIndex";
+import Wallet from "../Wallet/Wallet";
+import AuthLayout from "../layouts/AuthLayout";
+import MainLayout from "../layouts/MainLayout";
 // import RegisterVerifyIndex from "../Verification/RegisterVerifyIndex";
 
-import UserLiveVideosIndex from "../LiveVideos/UserLiveVideosIndex";
+import BlockedUserIndex from "../Accounts/BlockedUser/BlockedUserIndex";
+import JoinLiveVideoIndex from "../LiveVideos/JoinLiveVideoIndex";
 import LiveVideosIndex from "../LiveVideos/LiveVideosIndex";
 import SingleLiveVideosIndex from "../LiveVideos/SingleLiveVideosIndex";
-import JoinLiveVideoIndex from "../LiveVideos/JoinLiveVideoIndex";
-import AudioCallRequestSentIndex from "../OneToOneStreaming/AudioCallRequestList/AudioCallRequestSentIndex";
-import VideoCallRequestSentIndex from "../OneToOneStreaming/VideoCallRequestList/VideoCallRequestSentIndex";
-import VideoCallHistoryIndex from "../OneToOneStreaming/VideoCallRequestList/VideoCallHistoryIndex";
+import UserLiveVideosIndex from "../LiveVideos/UserLiveVideosIndex";
 import AudioCallHistoryIndex from "../OneToOneStreaming/AudioCallRequestList/AudioCallHistoryIndex";
-import AudioCallRequestReceivedIndex from "../OneToOneStreaming/AudioCallRequestList/AudioCallRequestReceivedIndex";
-import VideoCallRequestReceivedIndex from "../OneToOneStreaming/VideoCallRequestList/VideoCallRequestReceivedIndex";
-import VideoCallIndex from "../OneToOneStreaming/VideoCallIndex";
 import AudioCallIndex from "../OneToOneStreaming/AudioCallRequestList/AudioCallIndex";
+import AudioCallRequestReceivedIndex from "../OneToOneStreaming/AudioCallRequestList/AudioCallRequestReceivedIndex";
+import AudioCallRequestSentIndex from "../OneToOneStreaming/AudioCallRequestList/AudioCallRequestSentIndex";
+import VideoCallIndex from "../OneToOneStreaming/VideoCallIndex";
+import VideoCallHistoryIndex from "../OneToOneStreaming/VideoCallRequestList/VideoCallHistoryIndex";
+import VideoCallRequestReceivedIndex from "../OneToOneStreaming/VideoCallRequestList/VideoCallRequestReceivedIndex";
+import VideoCallRequestSentIndex from "../OneToOneStreaming/VideoCallRequestList/VideoCallRequestSentIndex";
 import ReferralsIndex from "../Referrals/ReferralsIndex";
-import BlockedUserIndex from "../Accounts/BlockedUser/BlockedUserIndex";
 
-import ProfileIndex from "../Accounts/Profile/ProfileIndex";
-import EditProfile from "../Accounts/Profile/EditProfile";
-import MobileEditProfileIndex from "../Accounts/Profile/MobileEditProfileIndex";
-import ChangePassword from "../Accounts/Profile/ChangePassword";
-import EmailNotification from "../Accounts/Profile/EmailNotification";
-import DeleteAccount from "../Accounts/Profile/DeleteAccount";
-import TwoStepAuthentication from "../Accounts/Profile/TwoStepAuthentication";
-import SessionManagement from "../Accounts/Profile/SessionManagement";
 import AvailabilityStatus from "../Accounts/Profile/AvailabilityStatus";
+import ChangePassword from "../Accounts/Profile/ChangePassword";
+import DeleteAccount from "../Accounts/Profile/DeleteAccount";
+import EditProfile from "../Accounts/Profile/EditProfile";
+import EmailNotification from "../Accounts/Profile/EmailNotification";
+import MobileEditProfileIndex from "../Accounts/Profile/MobileEditProfileIndex";
+import ProfileIndex from "../Accounts/Profile/ProfileIndex";
+import SessionManagement from "../Accounts/Profile/SessionManagement";
+import TwoStepAuthentication from "../Accounts/Profile/TwoStepAuthentication";
 
 import {
-  setTranslations,
-  setDefaultLanguage,
-  translate,
   setLanguage,
+  setTranslations
 } from "react-multi-lang";
-import en from "../translations/en.json";
-import es from "../translations/es.json";
-import VideoCallList from "../VideoCalls/VideoCallList";
-import StoriesSliderModal from "../Home/StoriesSliderModal";
-import ScrollToTop from "../helper/ScrollToTop";
-import SingleProductOrders from "../Ecom/Product/SingleProductOrders";
 import ProductGallery from "../Ecom/Product/ProductGallery";
-import { onMessageListener } from "../../firebase";
-import NewExploreIndex from "../Post/NewExplore/NewExploreIndex";
-import NewExploreCategoryIndex from "../Post/NewExplore/NewExploreCategoryIndex";
-import LiveStreamingIndex from "../LiveStreaming/LiveStreamingIndex";
+import SingleProductOrders from "../Ecom/Product/SingleProductOrders";
 import LiveStreamingFreeUser from "../LiveStreaming/LiveStreamingFreeUser";
+import LiveStreamingIndex from "../LiveStreaming/LiveStreamingIndex";
 import LiveStreamingPaidUser from "../LiveStreaming/LiveStreamingPaidUser";
 import LiveStreamingFreeModal from "../LiveStreaming/Modal/LiveStreamingFreeModal";
 import LiveStreamingPaidModal from "../LiveStreaming/Modal/LiveStreamingPaidModal";
-import NewVideoCallIndex from "../VideoAudioCall/NewVideoCallIndex";
-import NewAudioCallIndex from "../VideoAudioCall/NewAudioCallIndex";
+import NewHomeIndex from "../NewHome/NewHomeIndex";
+import NewExploreCategoryIndex from "../Post/NewExplore/NewExploreCategoryIndex";
+import NewExploreIndex from "../Post/NewExplore/NewExploreIndex";
 import NewAudioCallChatIndex from "../VideoAudioCall/NewAudioCallChatIndex";
 import NewAudioCallChatUserDetailsIndex from "../VideoAudioCall/NewAudioCallChatUserDetailsIndex";
-import NewHomeIndex from "../NewHome/NewHomeIndex";
+import NewAudioCallIndex from "../VideoAudioCall/NewAudioCallIndex";
+import NewVideoCallIndex from "../VideoAudioCall/NewVideoCallIndex";
+import ScrollToTop from "../helper/ScrollToTop";
+import en from "../translations/en.json";
+import es from "../translations/es.json";
 
+import MobileChatRoom from "../Chat/MobileChatRoom";
+import NewChatIndex from "../Chat/NewChatIndex";
 import AllLiveStreaming from "../LiveStreaming/AllLiveStreaming";
 import NewJoinLiveVideoIndex from "../LiveStreaming/NewJoinLiveVideoIndex";
-import NewSingleCommentIndex from "../NewHome/NewSingleView/NewSingleCommentIndex";
-import NewSingleStoryIndex from "../NewHome/NewSingleView/NewSingleStoryIndex";
-import NewEcomIndex from "../NewEcom/NewEcomIndex";
-import NewChatIndex from "../Chat/NewChatIndex";
-import MobileChatRoom from "../Chat/MobileChatRoom";
 import VideoAudioCallRequestIndex from "../LiveStreaming/VideoAudioCallRequest/VideoAudioCallRequestIndex";
+import NewEcomIndex from "../NewEcom/NewEcomIndex";
+import NewSingleStoryIndex from "../NewHome/NewSingleView/NewSingleStoryIndex";
 import NewWalletIndex from "../NewWallet/NewWalletIndex";
+import { MainLanding } from "../LandingPageIndex/MainLanding";
 
 setTranslations({ en, es });
 
@@ -248,8 +238,14 @@ class App extends Component {
         <ScrollToTop />
         <Switch>
           <AppRoute
-            path={"/"}
+            path={"/authentication/:type"}
             component={LandingPageIndex}
+            exact
+            layout={AuthLayout}
+          />
+          <AppRoute
+            path={"/"}
+            component={MainLanding}
             exact
             layout={AuthLayout}
           />

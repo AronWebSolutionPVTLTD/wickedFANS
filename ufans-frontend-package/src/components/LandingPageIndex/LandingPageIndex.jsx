@@ -6,6 +6,8 @@ import SocialButton from "../helper/SocialButton";
 import { translate, t } from "react-multi-lang";
 import { connect } from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
+import "./signup.css";
+
 import {
   forgotPasswordStart,
   userLoginStart,
@@ -32,6 +34,9 @@ import * as Yup from "yup";
 import { ConnectedFocusError } from "focus-formik-error";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { gapi } from "gapi-script";
+import { FaTwitter } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { useParams } from "react-router-dom/cjs/react-router-dom";
 
 const LandingPageIndex = (props) => {
   const [show, setShow] = useState("login");
@@ -58,6 +63,11 @@ const LandingPageIndex = (props) => {
   const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
 
   const history = useHistory();
+ const {type} = useParams();
+useEffect(()=>{
+console.log(" y t i  o  p",type);
+setShow(type)
+},[type])
 
   useEffect(() => {
     let userId = localStorage.getItem("userId");
@@ -70,13 +80,12 @@ const LandingPageIndex = (props) => {
     if (configuration.get("configData.is_referral_enabled") == 1) {
       const query = new URLSearchParams(props.location.search);
       const referral = query.get("referral");
-
       if (referral) {
         setReferralCode(referral);
         setShow("signup");
       }
     }
-
+    console.log(show);
     if (isAndroid == true) {
       setAdditionalDetails({
         ...additionalDetails,
@@ -97,7 +106,7 @@ const LandingPageIndex = (props) => {
       });
     }
   }, []);
-
+  console.log(referralCode);
   const [validationError, setValidationError] = useState("NO");
 
   // useEffect(() => {
@@ -128,9 +137,8 @@ const LandingPageIndex = (props) => {
     email: Yup.string()
       .email(t("invalid_email"))
       .required(t("email_is_required")),
-    password: Yup.string()
-      .required(t("password_is_required"))
-      .matches(/^(?=.*[a-zA-Z0-9])(?=.{6,})/, t("password_required_note")),
+    password: Yup.string().required(t("password_is_required")),
+    // .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{9,30}$/, t("password_required_note")),
   });
 
   const handleLogin = (values) => {
@@ -150,7 +158,10 @@ const LandingPageIndex = (props) => {
       .required(t("email_is_required")),
     password: Yup.string()
       .required(t("password_is_required"))
-      .matches(/^(?=.*[a-zA-Z0-9])(?=.{6,})/, t("password_required_note")),
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{9,30}$/,
+        t("password_required_note")
+      ),
   });
 
   const handleSignup = (values) => {
@@ -160,6 +171,7 @@ const LandingPageIndex = (props) => {
       referral_code: referralCode,
       device_unique_id: deviceUniqueId,
     };
+    console.log(newValues);
     props.dispatch(userRegisterStart(newValues));
   };
 
@@ -259,319 +271,122 @@ const LandingPageIndex = (props) => {
   };
   return (
     <>
-      <div className="login-section">
-        <Container>
-          <Row>
-            <Col
-              lg={6}
-              xl={6}
-              md={12}
-              sm={12}
-              xs={12}
-              className="hidden-xs iphone-slide-area resp-btm-lg flex-49"
-            >
-              {/* <div className="dm-width">
-                <div className="dm-device">
-                  <div className="device">
-                    <div className="screen">
-                      <div className="slider">
-                        <div className="slider__item slider__item--1">
-                          <img
-                            src={
-                              window.location.origin +
-                              "/assets/images/login-slider-1.jpg"
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="slider__item slider__item--2">
-                          {" "}
-                          <img
-                            src={
-                              window.location.origin +
-                              "/assets/images/login-slider-2.jpg"
-                            }
-                            alt=""
-                          />
-                        </div>
-                        <div className="slider__item slider__item--3"></div>
-                        <div className="slider__item slider__item--4"></div>
-                        <div className="slider__item slider__item--5"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-              <div className="auth-img-left-sec">
-                <Image
-                  src={window.location.origin + "/assets/images/auth-img.png"}
-                  alt=""
-                  className="auth-left-img"
-                />
-              </div>
-            </Col>
-            <Col lg={6} xl={6} md={12} sm={12} xs={12}>
-              <div className="sign-in form-section">
-                <div className="sign-in-logo">
-                  <Image
-                    src={`${configuration.get("configData.site_logo")}`}
-                    width="237"
-                  />
-                </div>
-                {/* <p className="login-tagline">
-                  {configuration.get("configData.tag_name")}
-                </p> */}
-                <div className="forms-fields">
-                  {configuration.get("configData.FB_CLIENT_ID") ? (
-                    <SocialButton
-                      provider="facebook"
-                      appId={configuration.get("configData.FB_CLIENT_ID")}
-                      onLoginSuccess={handleFacebookLogin}
-                      onLoginFailure={handleSocialLoginFailure}
-                      className="social-button"
-                      id="facebook-connect"
-                    >
-                      <span>
-                        {t("signup")} / {t("login_with_facebook")}
-                      </span>
-                    </SocialButton>
-                  ) : (
-                    ""
-                  )}
-
-                  {configuration.get("configData.GOOGLE_CLIENT_ID") ? (
-                    <SocialButton
-                      provider="google"
-                      key={"google"}
-                      appId={configuration.get("configData.GOOGLE_CLIENT_ID")}
-                      onLoginSuccess={handleGoogleLogin}
-                      onLoginFailure={handleSocialLoginFailure}
-                      className="social-button"
-                      id="google-connect"
-                    >
-                      <span>
-                        {t("signup")} / {t("login_with_google")}
-                      </span>
-                    </SocialButton>
-                  ) : (
-                    ""
-                  )}
-                  {/* <Link to="#" className="social-button" id="twitter-connect">
-                    <span>Sign Up / Login with Twitter</span>
-                  </Link>
-                  <Link to="#" className="social-button" id="google-connect">
-                    <span>Sign Up / Login with Google</span>
-                  </Link> */}
-
-                  {configuration.get("configData.GOOGLE_CLIENT_ID") ||
-                  configuration.get("configData.FB_CLIENT_ID") ? (
-                    <span className="or-line">
-                      <span>or</span>
-                    </span>
-                  ) : (
-                    <span classsName="login-or-hide"></span>
-                  )}
-                  <div id="main">
-                    <div id="first">
-                      {show === "login" ? (
-                        // <Form
-                        //   onSubmit={handleLogin}
-                        //   method="post"
-                        //   autoComplete="off"
-                        // >
-                        //   <Form.Group controlId="loginemail">
-                        //     <Form.Control
-                        //       type="text"
-                        //       controlId="loginemail"
-                        //       placeholder="E-mail"
-                        //       required
-                        //       value={loginInputData.email}
-                        //       name="email"
-                        //       autoComplete="nope"
-                        //       onChange={(event) =>
-                        //         setLoginInputData({
-                        //           ...loginInputData,
-                        //           email: event.currentTarget.value,
-                        //         })
-                        //       }
-                        //     />
-                        //   </Form.Group>
-
-                        //   <Form.Group controlId="formBasicPassword">
-                        //     <Form.Control
-                        //       type="password"
-                        //       controlId="loginpassword"
-                        //       placeholder="Password"
-                        //       required
-                        //       autocomplete="off"
-                        //       value={loginInputData.password}
-                        //       name="password"
-                        //       onChange={(event) =>
-                        //         setLoginInputData({
-                        //           ...loginInputData,
-                        //           password: event.currentTarget.value,
-                        //         })
-                        //       }
-                        //     />
-                        //   </Form.Group>
-                        //     <ReCAPTCHA
-                        //       sitekey={configuration.get("configData.NOCAPTCHA_SITE_KEY")}
-                        //       onChange={onChange}
-                        //     />
-                        //   <div className="forget-password">
-                        //     <p id="one">
-                        //       <Link
-                        //         to="#"
-                        //         type="button"
-                        //         className="forgot-link"
-                        //         onClick={(event) => {
-                        //           event.preventDefault();
-                        //           setShow("forgotpassword");
-                        //         }}
-                        //       >
-                        //         {" "}
-                        //         {t("forgot_password")}{" "}
-                        //       </Link>
-                        //     </p>
-                        //   </div>
-                        //   <div className="">
-                        //     <Button
-                        //       id="login"
-                        //       type="submit"
-                        //       onClick={handleLogin}
-                        //       className="btn gradient-btn gradientcolor"
-                        //       disabled={isCaptchaEnabled == 0 || props.login.buttonDisable}
-                        //     >
-                        //       {props.login.loadingButtonContent !== null
-                        //         ? props.login.loadingButtonContent
-                        //         : "Login"}
-                        //     </Button>
-                        //   </div>
-                        //   <p id="two">{t("do_not_have_an_account")}</p>
-                        //   <p>
-                        //     <Link
-                        //       className="signup"
-                        //       to="#"
-                        //       id="signup"
-                        //       onClick={(event) => {
-                        //         event.preventDefault();
-                        //         setShow("signup");
-                        //       }}
-                        //     >
-                        //       {" "}
-                        //       {t("signup_for")}{" "}
-                        //       {configuration.get("configData.site_name")}
-                        //     </Link>
-                        //   </p>
-                        // </Form>
-                        <Formik
-                          initialValues={{
-                            email: configuration.get(
-                              "configData.demo_user_email"
-                            ),
-                            password: configuration.get(
-                              "configData.demo_user_password"
-                            ),
-                          }}
-                          validationSchema={loginSchema}
-                          onSubmit={(values) => handleLogin(values)}
+      <div className="wf-wapper">
+        <div className="wf-body">
+          <div className="wf-form-container">
+            <div className="wf-logo-wrap text-center mb-5 mt-md-5">
+              {/* <Image
+                src="assets/images/logo@4x.png"
+                alt="Logo"
+                className="wf-logo"
+              /> */}
+            </div>
+            <div className="forms-fields">
+              <div id="main">
+                <div id="first">
+                  {show === "login" ? (
+                    <>
+                         <div className="Now_MADE">
+                        <Button
+                          variant="primary"
+                          className="d-flex align-items-center signupBtn"
+                          style={{ marginBottom: "16px" }}
                         >
-                          {({
-                            touched,
-                            errors,
-                            isSubmitting,
-                            setFieldValue,
-                          }) => (
-                            <Form noValidate>
-                              {/* <ConnectedFocusError /> */}
-                              <div class="form-group">
+                          <FaTwitter size={24} className="mr-2" />
+                          Continue with Twitter
+                        </Button>
+                        <Button
+                          variant="primary"
+                          className="d-flex align-items-center signupBtn cntGoogle"
+                        >
+                          <FcGoogle size={24} className="mr-2" />
+                          Continue with Google
+                        </Button>
+                      </div>
+                      <div className="or-divider">
+                        <div className="line"></div>
+                        <div className="or-text">OR</div>
+                        <div className="line"></div>
+                      </div>
+                      <Formik
+                        isInitialValid={false}
+                        initialValues={{
+                          email: configuration.get(
+                            "configData.demo_user_email"
+                          ),
+                          password: configuration.get(
+                            "configData.demo_user_password"
+                          ),
+                        }}
+                        validationSchema={loginSchema}
+                        onSubmit={(values) => handleLogin(values)}
+                      >
+                        {({ touched, errors, isSubmitting, setFieldValue }) => (
+                          <Form noValidate>
+                            <div class="form-group mb-4">
+                              <div className="form-floating">
                                 <Field
                                   type="email"
                                   name="email"
-                                  placeholder="E-mail Address"
                                   className="form-control"
                                 />
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="email"
-                                  className="text-danger text-right"
-                                />
+                                <label className="form-label">
+                                  Email <span>*</span>
+                                </label>
                               </div>
-                              <div className="form-group">
-                                <div class="input-group">
-                                  <Field
-                                    type={
-                                      loginPasswordVisible ? "text" : "password"
+                              <ErrorMessage
+                                component={"div"}
+                                name="email"
+                                className="text-left fs-14 fw-medium px-2"
+                                style={{ textAlign: "left" }}
+                              />
+                            </div>
+                            <div className="form-group mb-3">
+                              <div class="form-floating">
+                                <Field
+                                  type={
+                                    loginPasswordVisible ? "text" : "password"
+                                  }
+                                  name="password"
+                                  className="form-control"
+                                />
+                                <div class="input-group-append">
+                                  <div
+                                    onClick={() =>
+                                      setLoginPasswordVisible(
+                                        !loginPasswordVisible
+                                      )
                                     }
-                                    name="password"
-                                    placeholder="Password"
-                                    className="form-control"
-                                  />
-                                  <div class="input-group-append">
-                                    <button
-                                      onClick={() =>
-                                        setLoginPasswordVisible(
-                                          !loginPasswordVisible
-                                        )
-                                      }
-                                      class="btn password-eye"
-                                      type="button"
-                                    >
-                                      {loginPasswordVisible ? (
-                                        <i className="fas fa-eye-slash align-self-center"></i>
-                                      ) : (
-                                        <i className="fas fa-eye align-self-center"></i>
-                                      )}
-                                    </button>
+                                    class="password-eye"
+                                  >
+                                    {loginPasswordVisible ? (
+                                      <i className="fas fa-eye-slash align-self-center"></i>
+                                    ) : (
+                                      <i className="fas fa-eye align-self-center"></i>
+                                    )}
                                   </div>
                                 </div>
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="password"
-                                  className="text-danger text-right"
-                                />
+                                <label className="form-label">
+                                  Password <span>*</span>
+                                </label>
                               </div>
+                              <ErrorMessage
+                                component={"div"}
+                                name="password"
+                                className="text-left fs-14 fw-medium px-2"
+                                style={{ textAlign: "left" }}
+                              />
+                            </div>
 
-                              <div className="forget-password">
-                                <p id="one">
-                                  <Link
-                                    to="#"
-                                    type="button"
-                                    className="forgot-link"
-                                    onClick={(event) => {
-                                      event.preventDefault();
-                                      setShow("forgotpassword");
-                                      window.scrollTo({
-                                        top: 0,
-                                        behavior: "smooth",
-                                      });
-                                    }}
-                                  >
-                                    {" "}
-                                    {t("forgot_password")}{" "}
-                                  </Link>
-                                </p>
-                              </div>
-
-                              <Button
-                                type="submit"
-                                className="btn gradient-btn gradientcolor"
-                                disabled={props.login.buttonDisable}
-                              >
-                                {props.login.loadingButtonContent !== null
-                                  ? props.login.loadingButtonContent
-                                  : t("login")}
-                              </Button>
-
-                              <p id="two">{t("do_not_have_an_account")}</p>
-                              <p>
+                            <div className="forget-password mb-4">
+                              <p className="text-right">
                                 <Link
-                                  className="signup primary"
                                   to="#"
-                                  id="signup"
+                                  type="button"
+                                  className="link-text fs-16 fw-semibold"
                                   onClick={(event) => {
                                     event.preventDefault();
-                                    setShow("signup");
+                                    setShow("forgotpassword");
                                     window.scrollTo({
                                       top: 0,
                                       behavior: "smooth",
@@ -579,34 +394,83 @@ const LandingPageIndex = (props) => {
                                   }}
                                 >
                                   {" "}
-                                  {t("signup_for")}{" "}
-                                  {configuration.get("configData.site_name")}
+                                  {t("forgot_password")}{" "}
                                 </Link>
                               </p>
-                            </Form>
-                          )}
-                        </Formik>
-                      ) : null}
-                      {show === "signup" ? (
-                        <Formik
-                          initialValues={{
-                            name: "",
-                            username: "",
-                            email: "",
-                            password: "",
-                          }}
-                          validationSchema={registerSchema}
-                          onSubmit={(values) => handleSignup(values)}
+                            </div>
+
+                            <Button
+                              type="submit"
+                              className="btn wf-submit"
+                              disabled={props.login.buttonDisable}
+                            >
+                              {props.login.loadingButtonContent !== null
+                                ? props.login.loadingButtonContent
+                                : t("login")}
+                            </Button>
+
+                            <div className="my-5 text-center">
+                              <p className="fs-16 fw-semibold">
+                                {t("do_not_have_an_account")}
+                                <Link
+                                  className="signup primary fs-16 fw-semibold"
+                                  to="/authentication/signup"
+                                  id="signup"
+                                >
+                                  {" "}
+                                  {t("signup")}
+                                </Link>
+                              </p>
+                            </div>
+                          </Form>
+                        )}
+                      </Formik>
+                    </>
+                  ) : null}
+
+                  {show === "signup" ? (
+                    <>
+                      <div className="Now_MADE">
+                        <Button
+                          variant="primary"
+                          className="d-flex align-items-center signupBtn"
+                          style={{ marginBottom: "16px" }}
                         >
-                          {({
-                            touched,
-                            errors,
-                            isSubmitting,
-                            setFieldValue,
-                          }) => (
-                            <Form noValidate>
-                              {/* <ConnectedFocusError /> */}
-                              <div class="form-group">
+                          <FaTwitter size={24} className="mr-2" />
+                          Continue with Twitter
+                        </Button>
+                        <Button
+                          variant="primary"
+                          className="d-flex align-items-center signupBtn cntGoogle"
+                        >
+                          <FcGoogle size={24} className="mr-2" />
+                          Continue with Google
+                        </Button>
+                      </div>
+
+                      <div className="or-divider">
+                        <div className="line"></div>
+                        <div className="or-text">OR</div>
+                        <div className="line"></div>
+                      </div>
+                      <Formik
+                        isInitialValid={false}
+                        initialValues={{
+                          name: "",
+                          username: "",
+                          email: "",
+                          password: "",
+                        }}
+                        validationSchema={registerSchema}
+                        onSubmit={(values) => {
+                          console.log(values);
+                          handleSignup(values);
+                        }}
+                      >
+                        {({ touched, errors, isSubmitting, setFieldValue }) => (
+                          <Form noValidate>
+                            <div class="form-group mb-4">
+                              <div className="form-floating">
                                 <Field
                                   type="text"
                                   name="name"
@@ -614,14 +478,20 @@ const LandingPageIndex = (props) => {
                                   className="form-control"
                                   autoComplete="off"
                                 />
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="name"
-                                  className="text-danger text-right"
-                                />
+                                <label className="form-label">
+                                  Name <span>*</span>
+                                </label>
                               </div>
+                              <ErrorMessage
+                                component={"div"}
+                                name="name"
+                                className="text-left fs-14 fw-medium px-2"
+                                style={{ textAlign: "left" }}
+                              />
+                            </div>
 
-                              <div class="form-group">
+                            <div class="form-group mb-4">
+                              <div className="form-floating">
                                 <Field
                                   type="text"
                                   name="username"
@@ -630,291 +500,316 @@ const LandingPageIndex = (props) => {
                                   validate={handleUsernameValidation}
                                   autoComplete="off"
                                 />
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="username"
-                                  className="text-danger text-right"
-                                />
-                                {props.validation.isInValid &&
-                                isvalidUserName ? (
-                                  <div class="text-danger text-right">
-                                    {props.validation.errorMessage ??
-                                      t("username_already_taken")}
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                                {props.validation.isValid && isvalidUserName ? (
-                                  <div class="text-success text-right">
-                                    {t("looks_good")}
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
+                                <label className="form-label">
+                                  Username <span>*</span>
+                                </label>
                               </div>
-
-                              <div class="form-group">
-                                <Field
-                                  type="email"
-                                  name="email"
-                                  placeholder={t("email_address")}
-                                  className="form-control mb-3"
-                                  autoComplete="off"
-                                />
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="email"
-                                  className="text-danger text-right"
-                                />
-                              </div>
-
-                              <div className="form-group">
-                                <div class="input-group">
-                                  <Field
-                                    type={
-                                      loginPasswordVisible ? "text" : "password"
-                                    }
-                                    name="password"
-                                    placeholder={t("password")}
-                                    className="form-control mb-3"
-                                    autoComplete="off"
-                                  />
-                                  <div class="input-group-append">
-                                    <button
-                                      onClick={() =>
-                                        setLoginPasswordVisible(
-                                          !loginPasswordVisible
-                                        )
-                                      }
-                                      class="btn password-eye"
-                                      type="button"
-                                    >
-                                      {loginPasswordVisible ? (
-                                        <i className="fas fa-eye-slash align-self-center"></i>
-                                      ) : (
-                                        <i className="fas fa-eye align-self-center"></i>
-                                      )}
-                                    </button>
-                                  </div>
+                              <ErrorMessage
+                                component={"div"}
+                                name="username"
+                                className="text-left fs-14 fw-medium px-2"
+                                style={{ textAlign: "left" }}
+                              />
+                              {props.validation.isInValid && isvalidUserName ? (
+                                <div class="text-left fs-14 fw-medium px-2">
+                                  {props.validation.errorMessage ??
+                                    t("username_already_taken")}
                                 </div>
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="password"
-                                  className="text-danger text-right"
-                                />
-                              </div>
+                              ) : (
+                                ""
+                              )}
+                              {props.validation.isValid && isvalidUserName ? (
+                                <div class="text-success text-right fs-14 fw-medium px-2">
+                                  {t("looks_good")}
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                            </div>
 
-                              {configuration.get(
-                                "configData.is_referral_enabled"
-                              ) == 1 ? (
-                                <>
-                                  <div class="form-group">
-                                    <Field
-                                      type="text"
-                                      name="referral_code"
-                                      placeholder={t("referral_code_optional")}
-                                      value={referralCode}
-                                      className="form-control mb-3"
-                                      onChange={(e) =>
-                                        setReferralCode(e.target.value)
-                                      }
-                                    />
-                                    <ErrorMessage
-                                      component={"div"}
-                                      name="referral_code"
-                                      className="text-danger text-right"
-                                    />
-                                    <div className="check-referral-link">
-                                      <a
-                                        href="#"
-                                        onClick={checkReferralCode}
-                                        className="primary"
-                                      >
-                                        {t("check_referral_code_valid")}
-                                      </a>
-                                    </div>
-                                  </div>
-                                </>
-                              ) : null}
-                              <div className="round">
-                                <p className="terms text-center">
-                                  {t("signing_up_confirmation")} <br></br>
-                                  <Link
-                                    to={`/page/terms`}
-                                    target="_blank"
-                                    className="primary"
-                                  >
-                                    {t("terms_of_service")}
-                                  </Link>{" "}
-                                  {t("and")}{" "}
-                                  <Link
-                                    to={`/page/privacy`}
-                                    target="_blank"
-                                    className="primary"
-                                  >
-                                    {t("privacy_policy")}
-                                  </Link>
-                                  .
-                                </p>
-                              </div>
-
-                              <Button
-                                type="submit"
-                                className="btn gradient-btn gradientcolor"
-                                disabled={props.signup.buttonDisable}
-                              >
-                                {props.signup.loadingButtonContent !== null
-                                  ? props.signup.loadingButtonContent
-                                  : "Sign Up"}
-                              </Button>
-
-                              <p id="two">{t("already_have_an_account")}</p>
-                              <p>
-                                <Link
-                                  className="signup primary"
-                                  href="#"
-                                  id="signin"
-                                  onClick={(event) => {
-                                    event.preventDefault();
-                                    setShow("login");
-                                    window.scrollTo({
-                                      top: 0,
-                                      behavior: "smooth",
-                                    });
-                                  }}
-                                >
-                                  {" "}
-                                  {t("login_for")}{" "}
-                                  {configuration.get("configData.site_name")}
-                                </Link>
-                              </p>
-                            </Form>
-                          )}
-                          {/* <ReCAPTCHA
-                              sitekey={configuration.get("configData.NOCAPTCHA_SITE_KEY")}
-                              onChange={onChange}
-                          />
-                          <Form.Group
-                            controlId="formBasicName"
-                            className="round"
-                          >
-                            <p className="terms">
-                              {t("signing_up_confirmation")}{" "}
-                              <br></br>
-                              <Link to={`/page/terms`} target="_blank">
-                                {t("terms_of_service")}
-                              </Link>{" "}
-                              {t("and")}{" "}
-                              <Link to={`/page/privacy`} target="_blank">
-                                {t("privacy_policy")}
-                              </Link>
-                              .
-                            </p>
-                          </Form.Group>
-
-                          <Form.Group controlId="formBasicName">
-                            <Button
-                              id="register"
-                              type="submit"
-                              onClick={handleSignup}
-                              className="btn gradient-btn gradientcolor"
-                              disabled={isCaptchaEnabled == 0 || props.login.buttonDisable}
-                            >
-                              {props.signup.loadingButtonContent !== null
-                                ? props.signup.loadingButtonContent
-                                : "SIGN UP"}
-                            </Button>
-                          </Form.Group>
-                          <p id="two">{t("already_have_an_account")}</p>
-                          <p>
-                            <Link
-                              className="signup"
-                              href="#"
-                              id="signin"
-                              onClick={(event) => {
-                                event.preventDefault();
-                                setShow("login");
-                              }}
-                            >
-                              {" "}
-                              {t("login_for")}{" "}
-                              {configuration.get("configData.site_name")}
-                            </Link>
-                          </p>
-                        </Form> */}
-                        </Formik>
-                      ) : null}
-                      {show === "forgotpassword" ? (
-                        <Formik
-                          initialValues={{
-                            email: "",
-                          }}
-                          validationSchema={forgotPasswordSchema}
-                          onSubmit={(values) => handleForgotPassword(values)}
-                        >
-                          {({
-                            touched,
-                            errors,
-                            isSubmitting,
-                            setFieldValue,
-                          }) => (
-                            <Form noValidate>
-                              {/* <ConnectedFocusError /> */}
-                              <div class="form-group">
+                            <div class="form-group mb-4">
+                              <div className="form-floating">
                                 <Field
                                   type="email"
                                   name="email"
                                   placeholder={t("email_address")}
                                   className="form-control"
+                                  autoComplete="off"
                                 />
-                                <ErrorMessage
-                                  component={"div"}
-                                  name="email"
-                                  className="text-danger text-right"
-                                />
+                                <label className="form-label">
+                                  Email <span>*</span>
+                                </label>
                               </div>
-                              <Button
-                                type="submit"
-                                className="btn gradient-btn gradientcolor"
-                                disabled={props.forgotPassword.buttonDisable}
-                              >
-                                {props.forgotPassword.loadingButtonContent !==
-                                null
-                                  ? props.forgotPassword.loadingButtonContent
-                                  : t("request_reset_link")}
-                              </Button>
+                              <ErrorMessage
+                                component={"div"}
+                                name="email"
+                                className="text-left fs-14 fw-medium px-2"
+                                style={{ textAlign: "left" }}
+                              />
+                            </div>
 
-                              <p id="two">{t("already_have_an_account")}</p>
-                              <p>
+                            <div className="form-group mb-4">
+                              <div className="form-floating">
+                                <Field
+                                  type={
+                                    loginPasswordVisible ? "text" : "password"
+                                  }
+                                  name="password"
+                                  placeholder={t("password")}
+                                  className="form-control"
+                                  autoComplete="off"
+                                />
+                                <div class="input-group-append">
+                                  <div
+                                    onClick={() =>
+                                      setLoginPasswordVisible(
+                                        !loginPasswordVisible
+                                      )
+                                    }
+                                    className="password-eye"
+                                  >
+                                    {loginPasswordVisible ? (
+                                      <i className="fas fa-eye-slash align-self-center"></i>
+                                    ) : (
+                                      <i className="fas fa-eye align-self-center"></i>
+                                    )}
+                                  </div>
+                                </div>
+                                <label className="form-label">
+                                  Password <span>*</span>
+                                </label>
+                              </div>
+                              <ErrorMessage
+                                component={"div"}
+                                name="password"
+                                className="text-left fs-14 fw-medium px-2"
+                                style={{ textAlign: "left" }}
+                              />
+                            </div>
+
+                            {configuration.get(
+                              "configData.is_referral_enabled"
+                            ) == 1 ? (
+                              <>
+                                <div class="form-group mb-4">
+                                  <div className="form-floating">
+                                    <Field
+                                      type="text"
+                                      name="referral_code"
+                                      placeholder={t("referral_code_optional")}
+                                      value={referralCode}
+                                      className="form-control"
+                                      onChange={(e) =>
+                                        setReferralCode(e.target.value)
+                                      }
+                                    />
+                                    <label className="form-label">
+                                      Referral Code
+                                    </label>
+                                  </div>
+                                  <ErrorMessage
+                                    component={"div"}
+                                    name="referral_code"
+                                    className="text-danger text-right fs-14 fw-medium"
+                                  />
+                                  <div className="check-referral-link pt-0">
+                                    <a
+                                      href="#"
+                                      onClick={checkReferralCode}
+                                      className="primary fs-16 fw-semibold"
+                                    >
+                                      {t("check_referral_code_valid")}
+                                    </a>
+                                  </div>
+                                </div>
+                              </>
+                            ) : null}
+                            <Button
+                              type="submit"
+                              className="btn wf-submit"
+                              disabled={props.signup.buttonDisable}
+                            >
+                              {props.signup.loadingButtonContent !== null
+                                ? props.signup.loadingButtonContent
+                                : "Sign up"}
+                            </Button>
+
+                            <div className="my-1 text-center">
+                              <p className="text-center fs-13 ">
+                                {t("signing_up_confirmation")}{" "}
                                 <Link
-                                  className="signup primary"
-                                  to="#"
+                                  to={`/page/terms`}
+                                  target="_blank"
+                                  className="primary fw-semibold"
+                                >
+                                  {t("terms_conditions")}
+                                </Link>{" "}
+                                {t("and")}{" "}
+                                <Link
+                                  to={`/page/privacy`}
+                                  target="_blank"
+                                  className="primary fw-semibold"
+                                >
+                                  {t("privacy_policy")}
+                                </Link>
+                                {", "}
+                                {t("age")}
+                              </p>
+                            </div>
+
+                            <div className="my-5 text-center">
+                              <p className="fs-16 fw-semibold">
+                                {t("already_have_an_account")}
+                                <Link
+                                  className="signup primary fs-16 fw-semibold"
+                                  to="/authentication/login"
                                   id="signin"
-                                  onClick={(event) => {
-                                    event.preventDefault();
-                                    setShow("login");
-                                    window.scrollTo({
-                                      top: 0,
-                                      behavior: "smooth",
-                                    });
-                                  }}
                                 >
                                   {" "}
-                                  {t("login_for")}{" "}
-                                  {configuration.get("configData.site_name")}
+                                  {t("login")}
                                 </Link>
                               </p>
-                            </Form>
-                          )}
-                        </Formik>
-                      ) : null}
-                    </div>
-                  </div>
+                            </div>
+                          </Form>
+                        )}
+                      </Formik>
+                    </>
+                  ) : null}
+                  {show === "forgotpassword" ? (
+                    <Formik
+                      initialValues={{
+                        email: "",
+                      }}
+                      validationSchema={forgotPasswordSchema}
+                      onSubmit={(values) => handleForgotPassword(values)}
+                    >
+                      {({ touched, errors, isSubmitting, setFieldValue }) => (
+                        <Form noValidate>
+                          {/* <ConnectedFocusError /> */}
+                          <div class="form-group mb-4">
+                            <div className="form-floating">
+                              <Field
+                                type="email"
+                                name="email"
+                                placeholder={t("email_address")}
+                                className="form-control"
+                              />
+                              <label className="form-label">
+                                Email <span>*</span>
+                              </label>
+                            </div>
+                            <ErrorMessage
+                              component={"div"}
+                              name="email"
+                              className="text-danger text-right fs-14 fw-medium"
+                            />
+                          </div>
+                          <Button
+                            type="submit"
+                            className="btn wf-submit"
+                            disabled={props.forgotPassword.buttonDisable}
+                          >
+                            {props.forgotPassword.loadingButtonContent !== null
+                              ? props.forgotPassword.loadingButtonContent
+                              : t("request_reset_link")}
+                          </Button>
+                          <div className="my-5 text-center">
+                            <p className="fs-16 fw-semibold">
+                              {t("already_have_an_account")}
+                              <Link
+                                className="signup primary fs-16 fw-semibold"
+                                to="#"
+                                id="signin"
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  setShow("login");
+                                  window.scrollTo({
+                                    top: 0,
+                                    behavior: "smooth",
+                                  });
+                                }}
+                              >
+                                {" "}
+                                {t("login")}
+                                {/* {t("login_for")}{" "} */}
+                                {/* {configuration.get("configData.site_name")} */}
+                              </Link>
+                            </p>
+                          </div>
+                        </Form>
+                      )}
+                    </Formik>
+                  ) : null}
                 </div>
               </div>
-            </Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+        </div>
+         {/* Footer */}
+        <div className="wf-footer">
+          <div className="wf-container">
+            <ul className="list-unstyled d-flex flex-wrap gap-3 footer--links align-items-center justify-content-center mb-1">
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  Terms and Conditions
+                </Link>
+              </li>
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  Community Guidelines
+                </Link>
+              </li>
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  Support
+                </Link>
+              </li>
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  FAQ
+                </Link>
+              </li>
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  DMCA
+                </Link>
+              </li>
+              <li className="d-flex align-items-center">
+                <Link to="#" className="fs-12 fw-medium text-white">
+                  USC 2257
+                </Link>
+              </li>
+              <li
+                className="d-flex align-items-center"
+                style={{ maxHeight: "33px" }}
+              >
+                <span className="fs-12 fw-medium d-flex align-items-center gap-2">
+                  We accept:
+                  <Image
+                    src="/images/visa-logo.png"
+                    alt="visa"
+                    className="wf-visa-icon"
+                  />
+                  <Image
+                    src="/images/master-card.png"
+                    alt="master card"
+                    className="wf-master-icon"
+                  />
+                </span>
+              </li>
+            </ul>
+
+            <p className="text-center text-white fs-12 fw-medium">
+              &copy; 2023 Shift Holding Ltd. 2nd Floor College House, 17 King
+              Edwards Road, Rulslip, london, United Kingdom, HA4 7AE
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

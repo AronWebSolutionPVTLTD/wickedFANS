@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
   <g id="additional-info" transform="translate(-1 -1)">
     <g id="_02_Additional_Add_New" data-name="02 Additional, Add, New">
-      <path id="Path_1" data-name="Path 1" d="M4,21H15v2H4a3,3,0,0,1-3-3V4A3,3,0,0,1,4,1H15a1,1,0,0,1,.8.4l3,4A1,1,0,0,1,19,6v5H17V6.33L14.5,3H4A1,1,0,0,0,3,4V20A1,1,0,0,0,4,21Zm19-4H19V13H17v4H13v2h4v4h2V19h4ZM14,6H6V8h8ZM6,12h6V10H6Z" fill="#e44499"/>
+      <path id="Path_1" data-name="Path 1" d="M4,21H15v2H4a3,3,0,0,1-3-3V4A3,3,0,0,1,4,1H15a1,1,0,0,1,.8.4l3,4A1,1,0,0,1,19,6v5H17V6.33L14.5,3H4A1,1,0,0,0,3,4V20A1,1,0,0,0,4,21Zm19-4H19V13H17v4H13v2h4v4h2V19h4ZM14,6H6V8h8ZM6,12h6V10H6Z" fill="#B8113C"/>
     </g>
   </g>
 </svg>

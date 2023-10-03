@@ -6,7 +6,6 @@ import store from "./store";
 import { createBrowserHistory as createHistory } from "history";
 import "react-redux-notify/dist/ReactReduxNotify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 const history = createHistory();
 class App extends Component {
   render() {

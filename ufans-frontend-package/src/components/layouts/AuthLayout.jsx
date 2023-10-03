@@ -13,14 +13,15 @@ const AuthLayout = (props) => {
       : false
   );
   return (
-    <body className={`${themeState ? "dark-mode" : ""}`}>
-      <Notify position="TopRight" />
-      <AuthHeader />
-      <div className="landing-main-wrapper">
+    <div className={`${themeState ? "dark-mode" : ""}`}>
+    <Notify position="TopRight" />
+       {/* <AuthHeader /> */}
+      <div >  
         {React.cloneElement(props.children)}
       </div>
-      <LandingFooter />
-    </body>
+      {/* className="landing-main-wrapper" */}
+     {/* <LandingFooter /> */}
+   </div>
   )
 }
 
