@@ -331,14 +331,13 @@ setShow(type)
                                   className="form-control"
                                 />
                                 <label className="form-label">
-                                  Email <span>*</span>
+                                  Emails <span>*</span>
                                 </label>
                               </div>
                               <ErrorMessage
                                 component={"div"}
                                 name="email"
-                                className="text-left fs-14 fw-medium px-2"
-                                style={{ textAlign: "left" }}
+                                className="text-left fs-14 fw-medium px-2 error_msg"
                               />
                             </div>
                             <div className="form-group mb-3">
@@ -373,8 +372,7 @@ setShow(type)
                               <ErrorMessage
                                 component={"div"}
                                 name="password"
-                                className="text-left fs-14 fw-medium px-2"
-                                style={{ textAlign: "left" }}
+                                className="text-left fs-14 fw-medium px-2 error_msg"
                               />
                             </div>
 
@@ -485,8 +483,7 @@ setShow(type)
                               <ErrorMessage
                                 component={"div"}
                                 name="name"
-                                className="text-left fs-14 fw-medium px-2"
-                                style={{ textAlign: "left" }}
+                                className="text-left fs-14 fw-medium px-2 error_msg"
                               />
                             </div>
 
@@ -507,11 +504,11 @@ setShow(type)
                               <ErrorMessage
                                 component={"div"}
                                 name="username"
-                                className="text-left fs-14 fw-medium px-2"
+                                className="text-left fs-14 fw-medium px-2 error_msg"
                                 style={{ textAlign: "left" }}
                               />
                               {props.validation.isInValid && isvalidUserName ? (
-                                <div class="text-left fs-14 fw-medium px-2">
+                                <div class="text-left fs-14 fw-medium px-2 error_msg">
                                   {props.validation.errorMessage ??
                                     t("username_already_taken")}
                                 </div>
@@ -543,8 +540,7 @@ setShow(type)
                               <ErrorMessage
                                 component={"div"}
                                 name="email"
-                                className="text-left fs-14 fw-medium px-2"
-                                style={{ textAlign: "left" }}
+                                className="text-left fs-14 fw-medium px-2 error_msg"
                               />
                             </div>
 
@@ -582,8 +578,7 @@ setShow(type)
                               <ErrorMessage
                                 component={"div"}
                                 name="password"
-                                className="text-left fs-14 fw-medium px-2"
-                                style={{ textAlign: "left" }}
+                                className="text-left fs-14 fw-medium px-2 error_msg"
                               />
                             </div>
 
@@ -616,7 +611,7 @@ setShow(type)
                                     <a
                                       href="#"
                                       onClick={checkReferralCode}
-                                      className="primary fs-16 fw-semibold"
+                                      className="primary fs-14 px-2 fw-semibold"
                                     >
                                       {t("check_referral_code_valid")}
                                     </a>
@@ -748,7 +743,7 @@ setShow(type)
          {/* Footer */}
         <div className="wf-footer">
           <div className="wf-container">
-            <ul className="list-unstyled d-flex flex-wrap gap-3 footer--links align-items-center justify-content-center mb-1">
+            <ul className="list-unstyled d-flex flex-wrap gap-x-3 footer--links align-items-center justify-content-center mb-1">
               <li className="d-flex align-items-center">
                 <Link to="#" className="fs-12 fw-medium text-white">
                   Terms and Conditions
@@ -788,7 +783,7 @@ setShow(type)
                 className="d-flex align-items-center"
                 style={{ maxHeight: "33px" }}
               >
-                <span className="fs-12 fw-medium d-flex align-items-center gap-2">
+                <span className="fs-12 fw-medium d-flex align-items-center ml-2 gap-2">
                   We accept:
                   <Image
                     src="/images/visa-logo.png"
