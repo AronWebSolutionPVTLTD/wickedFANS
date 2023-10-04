@@ -1384,3 +1384,6 @@ img.mobile-shp2{display: none;}
 .accordion-item>button{
     padding:0px 18px;
 }
+.error_msg {
+    color: #b8113c;
+}
