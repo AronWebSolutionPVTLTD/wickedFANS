@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AuthHeader from "./Header/AuthHeader";
 import { Notify } from "react-redux-notify";
 import LandingFooter from "./Footer/LandingFooter";
+import { TumblrShareButton } from "react-share";
 
 const AuthLayout = (props) => {
   const [themeState, setThemeState] = useState(
@@ -12,8 +13,9 @@ const AuthLayout = (props) => {
       true
       : false
   );
+  console.log(themeState,"dfgdfklgnk")
   return (
-    <div className={`${themeState ? "dark-mode" : ""}`}>
+    <div className={`${!themeState ? "dark-mode" : ""}`}>
     <Notify position="TopRight" />
        {/* <AuthHeader /> */}
       <div >  

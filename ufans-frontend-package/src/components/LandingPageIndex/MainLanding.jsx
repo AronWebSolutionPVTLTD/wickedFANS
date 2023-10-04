@@ -50,6 +50,13 @@ export const MainLanding = () => {
     slidesToScroll: 1,
     responsive: [
       {
+        breakpoint: 991,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1
+        }
+      },
+      {
         breakpoint: 575,
         settings: {
           slidesToShow: 2,
@@ -72,14 +79,16 @@ export const MainLanding = () => {
         breakpoint: 767,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1
+          slidesToScroll: 1,
+          dots: false,
         }
       },
       {
         breakpoint: 575,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
+          slidesToScroll: 1,
+          dots: false,
         }
       }
     ]
@@ -168,7 +177,7 @@ export const MainLanding = () => {
               <div className="coinbase">
                 <img src="images/coinbase.png" alt="coinbase" />
               </div>
-              <Link to="" className="btn-main">
+              <Link to="/authentication/signup" className="btn-main">
                 Become a Creator
               </Link>
             </div>
@@ -414,10 +423,10 @@ export const MainLanding = () => {
                 such as credit cards or cryptocurrency.
               </p>
               <div className="btn-group">
-                <Link to="" className="btn-main">
+                <Link to="/authentication/signup" className="btn-main">
                   Become a Creator
                 </Link>
-                <Link to="" className="btn-main browsebtn">
+                <Link to="/authentication/signup" className="btn-main browsebtn">
                   start browing
                 </Link>
               </div>
@@ -445,10 +454,10 @@ export const MainLanding = () => {
                   take control of your earnings
                 </p>
                 <div className="btn-group">
-                  <Link to="" className="btn-main">
+                  <Link to="/authentication/signup" className="btn-main">
                     Become a Creator
                   </Link>
-                  <Link to="" className="btn-main browsebtn">
+                  <Link to="/authentication/signup" className="btn-main browsebtn">
                     start browing
                   </Link>
                 </div>
@@ -746,10 +755,10 @@ export const MainLanding = () => {
                   <img src="images/coinbase.png" alt="coinbase" />
                 </div>
                 <div className="btn-group">
-                  <Link to="" className="btn-main">
+                  <Link to="/authentication/signup" className="btn-main">
                     Become a Creator
                   </Link>
-                  <Link to="" className="btn-main browsebtn">
+                  <Link to="/authentication/signup" className="btn-main browsebtn">
                     start browing
                   </Link>
                 </div>

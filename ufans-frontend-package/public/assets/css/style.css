@@ -11980,3 +11980,6 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 .dark-mode .wf-footer a,.dark-mode .wf-footer p {
   color: #fff !important;
 }
+ul.enter-nav li a.signupbtn:hover {
+  color: #B8113C !important;
+}

@@ -229,13 +229,16 @@ ul.enter-nav li a:hover{
     /* background: #fff;
     color: #B8113C; */
     opacity: 0.5;
+    color: inherit !important;
 }
 
 ul.enter-nav li:last-child a:hover{
     /* background: transparent;
     color: #fff; */
 }
-
+ul.enter-nav li a.signupbtn:hover {
+    color: #B8113C  !important;
+}
 header.nav-new{
     background: #B8113C; /* #fff */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);

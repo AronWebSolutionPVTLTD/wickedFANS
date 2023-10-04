@@ -84,7 +84,7 @@ a {
 }
 
 html body {
-    font-family: 'Roobert';
+    font-family: 'Roobert' !important;
     font-size: 14px;
     font-weight: 400;
     color: #000;
@@ -177,6 +177,7 @@ header .navbar-light .navbar-nav .nav-link {
     font-weight:400;
     transition: 0.4s linear;
     -webkit-transition: 0.4s linear;
+    border-bottom: 1px solid transparent;
 }
 header .navbar .navbar-nav li a:focus,
 header .navbar .navbar-nav li a:hover,
@@ -191,8 +192,9 @@ header .navbar .navbar-nav .active a:hover {
 header .navbar-light .navbar-nav .nav-link.active,
 header .navbar-light .navbar-nav .nav-link:focus,
 header .navbar-light .navbar-nav .nav-link:hover {
-    color: #fff; /* EA3D9F */
+    color: #fff !important; /* EA3D9F */
     border-bottom: 1px solid #fff;
+    opacity: 0.5;
 }
 
 header ul.enter-nav{
@@ -228,13 +230,16 @@ ul.enter-nav li a:hover{
     /* background: #fff;
     color: #B8113C; */
     opacity: 0.5;
+    color: inherit !important;
 }
 
 ul.enter-nav li:last-child a:hover{
     /* background: transparent;
     color: #fff; */
 }
-
+ul.enter-nav li a.signupbtn:hover {
+    color: #B8113C !important;
+}
 header.nav-new{
     background: #B8113C; /* #fff */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
@@ -333,7 +338,7 @@ img.banner-shp2{
     /* background: #FFBBE2;
     color: #111; */
     opacity: 0.6;
-    color: #fff;
+    color: #fff !important;
 }
 
 .coinbase {
@@ -704,7 +709,10 @@ img.ambassadors-shp2{
     color: #fff; */
     opacity: 0.6;
 }
-
+.creation-data .btn-group .btn-main.browsebtn:hover {
+    opacity: 0.6;
+    color: #000 !important;
+}
 .signup-wrp{
     padding: 130px 0 110px;
     position: relative;
@@ -1166,7 +1174,7 @@ footer{
 }
 .social-box a:hover{
     background: #B8113C;
-    color: #fff;
+    color: #fff !important;
     border-color: #B8113C;
 }
 .social-box a:hover img{
@@ -1383,4 +1391,7 @@ img.mobile-shp2{display: none;}
 }
 .accordion-item>button{
     padding:0px 18px;
+}
+.error_msg {
+    color: #b8113c;
 }
