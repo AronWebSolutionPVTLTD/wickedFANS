@@ -474,7 +474,10 @@
 	ul.enter-nav li a{padding: 10px 15px;font-size: 15px; color: #B8113C; background-color: #fff; border: 1px solid #B8113C; width: 125px;}
 	ul.enter-nav li a.signupbtn { background: #B8113C; color: #fff; border: 1px solid #B8113C;}
 	ul.enter-nav li:last-child a:hover {  color: #fdfdfd; opacity: 0.6; }
-	ul.enter-nav li a:hover {  color: #B8113C; opacity: 0.6; }
+	ul.enter-nav li a:hover {  color: inherit !important; opacity: 0.6; }
+	ul.enter-nav li a.signupbtn:hover {
+		color: #B8113C !important;
+	}
 	img.banner-shp1,img.banner-shp2{display: none;}
 	img.mobile-shp1{position: absolute;top: 50%;left: 0;right: 0;transform: translateY(-50%);display: block;margin: 0 auto;width: 100%;}
 	img.why-shp1{top: 0%;}
