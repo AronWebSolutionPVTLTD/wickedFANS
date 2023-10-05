@@ -331,7 +331,7 @@ setShow(type)
                                   className="form-control"
                                 />
                                 <label className="form-label">
-                                  Emails <span>*</span>
+                                  Email <span>*</span>
                                 </label>
                               </div>
                               <ErrorMessage
