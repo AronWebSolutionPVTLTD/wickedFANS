@@ -1,0 +1,13 @@
+/node_modules
+dist/
+.arcconfig
+package-lock.json
+/.vscode
+/build
+build/
+.env
+.env.local
+.env.production
+.yarn.lock
+*.DS_Store
+

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="416" height="352" viewBox="0 0 416 352">
+  <g id="add-bank" transform="translate(0 -32)">
+    <g id="Group_1" data-name="Group 1">
+      <path id="Path_20" data-name="Path 20" d="M241.6,320H80A80.1,80.1,0,0,1,0,240V112A80.1,80.1,0,0,1,80,32H304a80.1,80.1,0,0,1,80,80V224a16,16,0,0,1-32,0V112a48,48,0,0,0-48-48H80a48,48,0,0,0-48,48V240a48,48,0,0,0,48,48H241.6a16,16,0,1,1,0,32Z" fill="#B8113C"/>
+      <path id="Path_21" data-name="Path 21" d="M320,384a96,96,0,1,1,96-96A96,96,0,0,1,320,384Zm0-160a64,64,0,1,0,64,64A64,64,0,0,0,320,224Z" fill="#B8113C"/>
+      <path id="Path_22" data-name="Path 22" d="M192,144H96a16,16,0,0,1,0-32h96a16,16,0,0,1,0,32Z" fill="#B8113C"/>
+      <path id="Path_23" data-name="Path 23" d="M160,207.136H96a16,16,0,1,1,0-32h64a16,16,0,0,1,0,32Z" fill="#B8113C"/>
+      <path id="Path_24" data-name="Path 24" d="M320,336a16,16,0,0,1-16-16V256a16,16,0,0,1,32,0v64A16,16,0,0,1,320,336Z" fill="#B8113C"/>
+      <path id="Path_25" data-name="Path 25" d="M352,304H288a16,16,0,0,1,0-32h64a16,16,0,0,1,0,32Z" fill="#B8113C"/>
+    </g>
+  </g>
+</svg>
