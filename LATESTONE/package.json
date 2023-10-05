@@ -1,7 +1,9 @@
 {
   "name": "fx-frontend-base",
   "version": "0.1.0",
-  "private": true,
+  "private": true,,"engines": {
+  "node": "16.x"
+},
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
     "@emoji-mart/data": "^1.1.0",
